@@ -1,7 +1,7 @@
 import pyglet
 
-from menu.gamemenu import GameMenu
+from game.streetrender import Game
 
 if __name__ == "__main__":
-    GameMenu()
+    Game()
     pyglet.app.run()
