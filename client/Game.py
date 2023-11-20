@@ -2,17 +2,22 @@ import pygame
 from button import Button
 
 pygame.init()
+
+#Default Fensterwerte
 screen_width = 1280
 screen_height = 720
 fps = 60
 timer = pygame.time.Clock
 screen = pygame.display.set_mode([screen_width, screen_height])
 pygame.display.set_caption("OG Racer")
+
 BLACK, WHITE = (0, 0, 0), (255, 255, 255)
 
 
 class Game:
     run = True
+
+    # game loop, das spiel läuft solange run = True
     def game_loop(self):
 
         self.main_menu = True
@@ -22,7 +27,8 @@ class Game:
 
 
         while self.run:
-            #timer.tick(fps)
+
+            #Gibt die fenster aus
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.run = False
@@ -37,8 +43,10 @@ class Game:
                     self.draw_options_()
                 pygame.display.update()
 
+    #Initialisierung des Main Menu
     def draw_menu(self):
 
+        #Deafault werte für die Buttons
         font_size = 40
 
         left_buttonx = screen_width / 2 - screen_width / 3
@@ -54,17 +62,18 @@ class Game:
         button_image_hover = '../images/button-pressed.png'
         button_size = 2
 
-
+        #Hintergundbild erstellen und ausgeben
         self.background_image = pygame.image.load("../images/background.png")
         # Calculate the new propotional hight
         self.new_hight = int((self.background_image.get_width() / screen_width) * screen_height)
         self.background_image = pygame.transform.scale(self.background_image, (screen_width, self.new_hight))
         screen.blit(self.background_image, (0, 0))
 
-        # right
+        # right button
         self.button_multi = Button(x=right_buttonx, y=right_buttony, image=button_image, size=button_size, hover=button_image_hover)
         self.multi = self.button_multi.draw(screen)
         self.button_multi.text(screen=screen, text="Multiplayer", size=font_size, color=WHITE)
+        #übergibt dem Gameloop welches Fensster offen ist
         if self.multi:
             print("pressed")
             self.main_menu = False
@@ -72,8 +81,8 @@ class Game:
             self.multiplay = True
             self.options = False
 
-        # middel
-        self.button_options = Button(x= middle_buttonx, y= middle_buttony, image=button_image, size=button_size, hover= button_image_hover)
+        # middel button
+        self.button_options = Button(x=middle_buttonx, y=middle_buttony, image=button_image, size=button_size, hover= button_image_hover)
         self.b_options = self.button_options.draw(screen)
         self.button_options.text(screen=screen, text="Options", size=font_size, color=WHITE)
         if self.b_options:
@@ -83,8 +92,8 @@ class Game:
             self.multiplay = False
             self.options = True
 
-        # left
-        self.button_start = Button(x= left_buttonx, y= left_buttony, image=button_image, size=button_size, hover= button_image_hover)
+        # left button
+        self.button_start = Button(x=left_buttonx, y=left_buttony, image=button_image, size=button_size, hover= button_image_hover)
         self.start = self.button_start.draw(screen)
         self.button_start.text(screen=screen, text="Singleplayer" , size= font_size, color= WHITE)
         if self.start:
@@ -95,11 +104,11 @@ class Game:
             self.options = False
 
 
-
+    #Initialisierung des Singleplayers
     def draw_singleplayer(self):
         pass
 
-
+    # Initialisierung des Multiplayers
     def draw_multiplay(self):
 
         screen.fill(BLACK)
@@ -109,8 +118,7 @@ class Game:
         self.background_image = pygame.transform.scale(self.background_image, (screen_width, self.new_hight))
         screen.blit(self.background_image, (0, 0))
 
-
-
+    # Initialisierung der Einstellungen/Options
     def draw_options_(self):
 
         screen.fill(BLACK)
@@ -119,7 +127,6 @@ class Game:
         self.new_hight = int((self.background_image.get_width() / screen_width) * screen_height)
         self.background_image = pygame.transform.scale(self.background_image, (screen_width, self.new_hight))
         screen.blit(self.background_image, (0, 0))
-
 
     def back_to_meun(self):
         pass

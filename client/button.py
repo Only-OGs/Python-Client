@@ -3,22 +3,30 @@ import pygame
 
 class Button:
 
+
+    ''' Erstellt einen neuen Button, mit hover effekt.
+    :param int x: X Kordinate
+    :param int y: Y Kordinate
+    :param str image: pfad zum default button
+    :param int size: skalierungsfaktor
+    :param str hover: pfad zum hover button
+    '''
     def __init__(self, x, y, image, size, hover):
         skalierungsfaktor = size
         self.x = x
         self.y = y
         self.url = image
         pos = pygame.mouse.get_pos()
-        #new button background image
+        #Button hintergrundbild
         self.button_image = pygame.image.load(self.url).convert_alpha()
         #Hover effect
         self.button_rect = self.button_image.get_rect()
         self.button_rect.center = (x,y)
         if self.button_rect.collidepoint(pos):
             self.button_image = pygame.image.load(hover).convert_alpha()
-        #new ankerpoint set
+        #initiallisiere den neuen Ankerpunkt
         self.new_anker = (self.button_image.get_width() // 2, self.button_image.get_height())
-        #resizing the picture
+        #neue größe des Bildes anpassen
         self.new_width = int(self.button_image.get_width() * skalierungsfaktor)
         self.new_hight = int(self.button_image.get_height() * skalierungsfaktor)
         self.button_image = pygame.transform.scale(self.button_image, (self.new_width, self.new_hight))
@@ -27,6 +35,12 @@ class Button:
         self.rect.center = (x, y)
         self.clicked = False
 
+    ''' Erstellt den Text für einen Button.
+        :param screen: default screen übergeben
+        :param str text: beschriftung
+        :param int size: größe des schrift
+        :param color color: farbe
+    '''
 
     def text(self, screen, text, size, color):
         font = pygame.font.SysFont(None, size)
@@ -35,7 +49,9 @@ class Button:
         text_rect.center = (self.x, self.y)
         screen.blit(img, (self.x - 90, self.y - 15))
 
-
+    ''' Erstellt die Funktionalität hinter dem button.
+            :param screen: default screen übergeben
+    '''
     def draw(self,screen):
         self.screen = screen
         action = False
