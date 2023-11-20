@@ -3,13 +3,19 @@ import pygame
 
 class Button:
 
-    def __init__(self, x, y, image, size, text, font_size):
-        self.x, self.y = x, y
+    def __init__(self, x, y, image, size, hover):
         skalierungsfaktor = size
-        self.text = text
-        self.image = image
+        self.x = x
+        self.y = y
+        self.url = image
+        pos = pygame.mouse.get_pos()
         #new button background image
-        self.button_image = pygame.image.load(self.image).convert_alpha()
+        self.button_image = pygame.image.load(self.url).convert_alpha()
+        #Hover effect
+        self.button_rect = self.button_image.get_rect()
+        self.button_rect.center = (x,y)
+        if self.button_rect.collidepoint(pos):
+            self.button_image = pygame.image.load(hover).convert_alpha()
         #new ankerpoint set
         self.new_anker = (self.button_image.get_width() // 2, self.button_image.get_height())
         #resizing the picture
@@ -21,16 +27,16 @@ class Button:
         self.rect.center = (x, y)
         self.clicked = False
 
-        font = pygame.font.Font('freesansbold.ttf', font_size)
-        text_surface = font.render(self.text, True, ('black'))
-        text_rect = text_surface.get_rect()
+
+    def text(self, screen, text, size, color):
+        font = pygame.font.SysFont(None, size)
+        img = font.render(text, True, color)
+        text_rect = img.get_rect()
         text_rect.center = (self.x, self.y)
-        #self.screen.blit(text_surface, text_rect)
+        screen.blit(img, (self.x - 90, self.y - 15))
 
 
-
-
-    def draw(self,screen,click_image):
+    def draw(self,screen):
         self.screen = screen
         action = False
         pos = pygame.mouse.get_pos()
