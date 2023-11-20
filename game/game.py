@@ -2,6 +2,7 @@ import math
 
 import pygame, sys
 
+from game.player import Player
 from game.util import Util
 
 
@@ -49,10 +50,14 @@ class Game:
         pygame.init()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((self.width, self.height))
+        self.player_sprite_group = pygame.sprite.Group()
         self.reset_road()
         self.game_loop()
 
+    # main loop wo alles passiert
     def game_loop(self):
+        self.create_player()
+
         while True:
 
             for event in pygame.event.get():
@@ -83,6 +88,7 @@ class Game:
             pygame.display.update()
             self.clock.tick(self.fps)
 
+    # unser KeyInputHandler, hier werden die Keyinputs überprüft und das auto dementsprechend bewegt
     def update(self, dt):
         self.position = Util.increase(self.position, dt * self.speed, self.trackLength)
 
@@ -90,8 +96,14 @@ class Game:
 
         if self.keyLeft:
             self.playerX = self.playerX - dx
+            if self.speed > 0:
+                self.player.drive_left()
         elif self.keyRight:
             self.playerX = self.playerX + dx
+            if self.speed > 0:
+                self.player.drive_right()
+        else:
+            self.player.drive_straight()
 
         if self.keyFaster:
             self.speed = Util.accelerate(self.speed, self.accel, self.dt)
@@ -106,6 +118,7 @@ class Game:
         self.playerX = Util.limit(self.playerX, -2, 2)
         self.speed = Util.limit(self.speed, 0, self.maxSpeed)
 
+    # erstellt die Straße, am anfang ein Segment einzeln um den startpunkt zu makieren sonst werden alle generisch generiert
     def reset_road(self):
         self.segments = []
         self.segments.append(
@@ -191,15 +204,18 @@ class Game:
 
         self.trackLength = len(self.segments) * self.segmentLength
 
+    # hilfsfunktion fürs erstellen der Straße
     def _road_color(self, n):
         if math.floor(n / self.rumbleLength) % 2 == 0:
             return 255, 255, 255
         else:
             return 107, 107, 107
-
+    # hilfsfunktion fürs rendern
     def findSegment(self, z):
         return self.segments[math.floor(z / self.segmentLength) % self.segmentLength]
 
+    # Rendert alles
+    # TODO: Wenn man self.segment_count auf > 200 stellt wird die straße irgendwie abgeclipt, muss man sich nochmal anschauen
     def render(self):
         basesegment = self.findSegment(self.position)
         maxy = self.height
@@ -247,5 +263,15 @@ class Game:
                          segment.get("color"))
 
             maxy = segment.get("p2").get("screen").get("y")
-            if maxy <= 400:
-                maxy = 389
+
+            # render player
+            self.render_player()
+
+    # erstellt den Spieler Sprite und fügt sie der Player Sprite Gruppe hinzu
+    def create_player(self):
+        self.player = Player(self.screen.get_width()/2-30, self.screen.get_height()-100)
+        self.player_sprite_group.add(self.player)
+
+    # Rendert die Player Sprite Group auf dem screen
+    def render_player(self):
+        self.player_sprite_group.draw(self.screen)
