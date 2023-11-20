@@ -69,7 +69,7 @@ class Game:
         self.background_image = pygame.transform.scale(self.background_image, (screen_width, self.new_hight))
         screen.blit(self.background_image, (0, 0))
 
-        # right button
+        # Multiplayer button
         self.button_multi = Button(x=right_buttonx, y=right_buttony, image=button_image, size=button_size, hover=button_image_hover)
         self.multi = self.button_multi.draw(screen)
         self.button_multi.text(screen=screen, text="Multiplayer", size=font_size, color=WHITE)
@@ -81,7 +81,7 @@ class Game:
             self.multiplay = True
             self.options = False
 
-        # middel button
+        # Options button
         self.button_options = Button(x=middle_buttonx, y=middle_buttony, image=button_image, size=button_size, hover= button_image_hover)
         self.b_options = self.button_options.draw(screen)
         self.button_options.text(screen=screen, text="Options", size=font_size, color=WHITE)
@@ -92,7 +92,7 @@ class Game:
             self.multiplay = False
             self.options = True
 
-        # left button
+        # Singleplayer button
         self.button_start = Button(x=left_buttonx, y=left_buttony, image=button_image, size=button_size, hover= button_image_hover)
         self.start = self.button_start.draw(screen)
         self.button_start.text(screen=screen, text="Singleplayer" , size= font_size, color= WHITE)
