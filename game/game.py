@@ -2,7 +2,7 @@ import math
 
 import pygame, sys
 
-from game.Util import Util
+from game.util import Util
 
 
 class Game:
@@ -43,7 +43,7 @@ class Game:
     keyFaster = False
     keySlower = False
 
-    dt = 1/30
+    dt = 1 / 30
 
     def __init__(self):
         pygame.init()
@@ -149,7 +149,6 @@ class Game:
             })
 
         for n in range(1, self.segment_count):
-
             self.segments.append(
                 {
                     'index': n,
@@ -234,16 +233,19 @@ class Game:
                 self.width, self.height,
                 self.roadWidth)
 
-            if (segment.get("p1").get("camera").get("z") <= self.cameraDepth) or (segment.get("p2").get("screen").get("y") >= maxy):
+            if (segment.get("p1").get("camera").get("z") <= self.cameraDepth) or (
+                    segment.get("p2").get("screen").get("y") >= maxy):
                 continue
-            else:
-                Util.segment(self.screen, self.width, self.lanes,
-                             segment.get("p1").get("screen").get("x"),
-                             segment.get("p1").get("screen").get("y"),
-                             segment.get("p1").get("screen").get("w"),
-                             segment.get("p2").get("screen").get("x"),
-                             segment.get("p2").get("screen").get("y"),
-                             segment.get("p2").get("screen").get("w"),
-                             segment.get("color"))
+
+            Util.segment(self.screen, self.width, self.lanes,
+                         segment.get("p1").get("screen").get("x"),
+                         segment.get("p1").get("screen").get("y"),
+                         segment.get("p1").get("screen").get("w"),
+                         segment.get("p2").get("screen").get("x"),
+                         segment.get("p2").get("screen").get("y"),
+                         segment.get("p2").get("screen").get("w"),
+                         segment.get("color"))
 
             maxy = segment.get("p2").get("screen").get("y")
+            if maxy <= 400:
+                maxy = 389
