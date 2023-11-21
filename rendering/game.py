@@ -2,8 +2,10 @@ import math
 
 import pygame, sys
 
-from game.player import Player
-from game.util import Util
+from rendering.sprites.player import Player
+from rendering.utility.util import Util
+from rendering.sprites.background import Background
+from rendering.utility.colors import Color
 
 
 class Game:
@@ -26,7 +28,7 @@ class Game:
     cameraDepth = 1 / math.tan((fieldOfView / 2) * math.pi / 180)
     drawDistance = 500
     segment_count = 200
-    playerX = 1
+    playerX = 0
     playerZ = (cameraHeight * cameraDepth)
     fogDensity = 5
     position = 0
@@ -51,12 +53,15 @@ class Game:
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.player_sprite_group = pygame.sprite.Group()
+        self.background_group = pygame.sprite.Group()
         self.reset_road()
         self.game_loop()
 
     # main loop wo alles passiert
     def game_loop(self):
         self.create_player()
+        self.create_background()
+        self.background_group.draw(self.screen)
 
         while True:
 
@@ -121,47 +126,8 @@ class Game:
     # erstellt die Straße, am anfang ein Segment einzeln um den startpunkt zu makieren sonst werden alle generisch generiert
     def reset_road(self):
         self.segments = []
-        self.segments.append(
-            {
-                'index': 0,
-                'p1':
-                    {'world': {
-                        'x': None,
-                        'y': None,
-                        'z': 0 * self.segmentLength
-                    },
-                        'camera': {
-                            'x': 0,
-                            'y': 0,
-                            'z': 0
-                        },
-                        'screen': {
-                            "scale": 0,
-                            'x': 0,
-                            'y': 0,
-                        },
-                    },
-                'p2':
-                    {'world': {
-                        'x': None,
-                        'y': None,
-                        'z': (0 + 1) * self.segmentLength
-                    },
-                        'camera': {
-                            'x': 0,
-                            'y': 0,
-                            'z': 0
-                        },
-                        'screen': {
-                            "scale": 0,
-                            'x': 0,
-                            'y': 0,
-                        },
-                    },
-                'color': (0, 255, 0)
-            })
 
-        for n in range(1, self.segment_count):
+        for n in range(self.segment_count):
             self.segments.append(
                 {
                     'index': n,
@@ -202,14 +168,19 @@ class Game:
                     'color': self._road_color(n)
                 })
 
+        self.segments[self.findSegment(self.playerZ)["index"]+2]["color"] = Color.get_start()
+        self.segments[self.findSegment(self.playerZ)["index"]+3]["color"] = Color.get_start()
+        for n in range(self.rumbleLength):
+            self.segments[len(self.segments)-1-n]["color"] = Color.get_finish()
+
         self.trackLength = len(self.segments) * self.segmentLength
 
     # hilfsfunktion fürs erstellen der Straße
     def _road_color(self, n):
         if math.floor(n / self.rumbleLength) % 2 == 0:
-            return 255, 255, 255
+            return Color.get_light()
         else:
-            return 107, 107, 107
+            return Color.get_dark()
     # hilfsfunktion fürs rendern
     def findSegment(self, z):
         return self.segments[math.floor(z / self.segmentLength) % self.segmentLength]
@@ -220,7 +191,6 @@ class Game:
         basesegment = self.findSegment(self.position)
         maxy = self.height
 
-        self.screen.fill((20, 21, 40))
 
         for n in range(self.drawDistance):
             segment = self.segments[(basesegment.get("index") + n) % len(self.segments)]
@@ -266,6 +236,17 @@ class Game:
 
             # render player
             self.render_player()
+
+    # baut den hintergrund zusammen
+    def create_background(self):
+        bg_sky = Background(0,0,pygame.image.load("assets/sky.png"))
+        bg_hills = Background(0,0,pygame.image.load("assets/hills.png"))
+        bg_tree = Background(0,0,pygame.image.load("assets/trees.png"))
+
+        self.background_group.add(bg_sky)
+        self.background_group.add(bg_hills)
+        self.background_group.add(bg_tree)
+
 
     # erstellt den Spieler Sprite und fügt sie der Player Sprite Gruppe hinzu
     def create_player(self):
