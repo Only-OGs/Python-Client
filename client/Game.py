@@ -1,15 +1,15 @@
 import pygame
 from button import Button
+from menu.lobbymenu import LobbyMenu
+from game.globals import screen_width
+from game.globals import screen_height
 
-pygame.init()
 
-#Default Fensterwerte
-screen_width = 1280
-screen_height = 720
-fps = 60
 timer = pygame.time.Clock
 screen = pygame.display.set_mode([screen_width, screen_height])
 pygame.display.set_caption("OG Racer")
+
+pygame.init()
 
 BLACK, WHITE = (0, 0, 0), (255, 255, 255)
 
@@ -20,8 +20,8 @@ class Game:
     # game loop, das spiel läuft solange run = True
     def game_loop(self):
 
-        self.main_menu = True
-        self.multiplay = False
+        self.main_menu = False
+        self.multiplay = True
         self.singleplayer = False
         self.options = False
 
@@ -41,13 +41,14 @@ class Game:
                     self.draw_singleplayer()
                 elif self.options:
                     self.draw_options_()
+
                 pygame.display.update()
 
     #Initialisierung des Main Menu
     def draw_menu(self):
 
         #Deafault werte für die Buttons
-        font_size = 40
+        font_size = 20
 
         left_buttonx = screen_width / 2 - screen_width / 3
         left_buttony = screen_height / 2
@@ -110,23 +111,11 @@ class Game:
 
     # Initialisierung des Multiplayers
     def draw_multiplay(self):
-
-        screen.fill(BLACK)
-        self.background_image = pygame.image.load("../images/background.png")
-        # Calculate the new propotional hight
-        self.new_hight = int((self.background_image.get_width() / screen_width) * screen_height)
-        self.background_image = pygame.transform.scale(self.background_image, (screen_width, self.new_hight))
-        screen.blit(self.background_image, (0, 0))
+         LobbyMenu(screen)
 
     # Initialisierung der Einstellungen/Options
     def draw_options_(self):
-
-        screen.fill(BLACK)
-        self.background_image = pygame.image.load("../images/background.png")
-        # Calculate the new propotional hight
-        self.new_hight = int((self.background_image.get_width() / screen_width) * screen_height)
-        self.background_image = pygame.transform.scale(self.background_image, (screen_width, self.new_hight))
-        screen.blit(self.background_image, (0, 0))
+        pass
 
     def back_to_meun(self):
         pass
