@@ -123,7 +123,7 @@ class Game:
         self.playerX = Util.limit(self.playerX, -2, 2)
         self.speed = Util.limit(self.speed, 0, self.maxSpeed)
 
-    # erstellt die Straße, am anfang ein Segment einzeln um den startpunkt zu makieren sonst werden alle generisch generiert
+    # erstellt die Straße und die Finishline
     def reset_road(self):
         self.segments = []
 
@@ -168,10 +168,10 @@ class Game:
                     'color': self._road_color(n)
                 })
 
-        self.segments[self.findSegment(self.playerZ)["index"]+2]["color"] = Color.get_start()
-        self.segments[self.findSegment(self.playerZ)["index"]+3]["color"] = Color.get_start()
+        self.segments[self.findSegment(self.playerZ)["index"] + 2]["color"] = Color.get_start()
+        self.segments[self.findSegment(self.playerZ)["index"] + 3]["color"] = Color.get_start()
         for n in range(self.rumbleLength):
-            self.segments[len(self.segments)-1-n]["color"] = Color.get_finish()
+            self.segments[len(self.segments) - 1 - n]["color"] = Color.get_finish()
 
         self.trackLength = len(self.segments) * self.segmentLength
 
@@ -181,21 +181,20 @@ class Game:
             return Color.get_light()
         else:
             return Color.get_dark()
+
     # hilfsfunktion fürs rendern
     def findSegment(self, z):
         return self.segments[math.floor(z / self.segmentLength) % len(self.segments)]
 
     # Rendert alles
-    # TODO: Wenn man self.segment_count auf > 200 stellt wird die straße irgendwie abgeclipt, muss man sich nochmal anschauen
     def render(self):
         basesegment = self.findSegment(self.position)
         maxy = self.height
 
-
         for n in range(self.drawDistance):
             segment = self.segments[(basesegment.get("index") + n) % len(self.segments)]
             segment_looped = segment.get("index") < basesegment.get("index")
-            segment_fog = Util.exponential_fog(n/self.drawDistance, self.fogDensity)
+            segment_fog = Util.exponential_fog(n / self.drawDistance, self.fogDensity)
 
             if segment_looped:
                 segment_looped_value = self.trackLength
@@ -210,7 +209,6 @@ class Game:
                 self.cameraDepth,
                 self.width, self.height,
                 self.roadWidth)
-
 
             segment["p2"] = Util.project(
                 segment.get("p2"),
@@ -237,24 +235,19 @@ class Game:
             maxy = segment.get("p2").get("screen").get("y")
 
             # render player
-            self.render_player()
+            self.player_sprite_group.draw(self.screen)
 
     # baut den hintergrund zusammen
     def create_background(self):
-        bg_sky = Background(0,0,pygame.image.load("assets/sky.png"))
-        bg_hills = Background(0,0,pygame.image.load("assets/hills.png"))
-        bg_tree = Background(0,0,pygame.image.load("assets/trees.png"))
+        bg_sky = Background(0, pygame.image.load("assets/sky.png"))
+        bg_hills = Background(0, pygame.image.load("assets/hills.png"))
+        bg_tree = Background(0, pygame.image.load("assets/trees.png"))
 
         self.background_group.add(bg_sky)
         self.background_group.add(bg_hills)
         self.background_group.add(bg_tree)
 
-
     # erstellt den Spieler Sprite und fügt sie der Player Sprite Gruppe hinzu
     def create_player(self):
-        self.player = Player(self.screen.get_width()/2-30, self.screen.get_height()-100)
+        self.player = Player(self.screen.get_width() / 2 - 30, self.screen.get_height() - 100)
         self.player_sprite_group.add(self.player)
-
-    # Rendert die Player Sprite Group auf dem screen
-    def render_player(self):
-        self.player_sprite_group.draw(self.screen)

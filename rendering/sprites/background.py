@@ -2,8 +2,8 @@ import pygame
 
 
 class Background(pygame.sprite.Sprite):
-
-    def __init__(self, x, y, img):
+    # läd das Bild als ein Screen und transformiert diesem damit der passt
+    def __init__(self, x, img):
         super().__init__()
         self.image = img.convert_alpha()
 

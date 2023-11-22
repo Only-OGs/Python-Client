@@ -1,5 +1,5 @@
 class Color:
-
+    """ Hilfsklasse um die Farben besser zu handeln"""
     @staticmethod
     def get_light():
         c = {

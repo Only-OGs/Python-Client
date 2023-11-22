@@ -115,6 +115,8 @@ class Util:
         if fog < 1:
             Util.draw_polygon_alpha(screen, (0, 81, 8, int((1 - fog) * 255)),
                                     [(x, y - 1), (x + width, y - 1), (x + width, y + height), (x, y + height)])
+
+    # von https://stackoverflow.com/a/64630102
     @staticmethod
     def draw_polygon_alpha(surface, color, points):
         lx, ly = zip(*points)
