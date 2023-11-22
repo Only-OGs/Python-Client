@@ -1,4 +1,7 @@
-from rendering.game import Game
 
-if __name__ == "__main__":
-    Game()
+from client.menu import Game
+
+g = Game()
+
+while g.run:
+    g.game_loop()
