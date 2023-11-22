@@ -20,8 +20,8 @@ class Game:
     # game loop, das spiel läuft solange run = True
     def game_loop(self):
 
-        self.main_menu = False
-        self.multiplay = True
+        self.main_menu = True
+        self.multiplay = False
         self.singleplayer = False
         self.options = False
 
