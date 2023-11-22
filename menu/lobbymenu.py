@@ -5,13 +5,13 @@ from game.globals import screen_width
 from game.globals import screen_height
 
 
-class LobbyMenu():
+class LobbyMenu:
 
     def __init__(self, screen):
         self.text = "Lobbyauswahl"
         self.screen = screen
         self.screen.fill('#14152c')
-        self.text_font = Font("../images/rocket-rinder-font/RocketRinder-yV5d.ttf", 45)
+        self.text_font = Font("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 45)
         self.draw_text("#FF06C1", screen_width // 2 - (screen_width // 6), screen_height // 4 - 80)
         self.draw_buttons()
 
@@ -20,8 +20,8 @@ class LobbyMenu():
         self.screen.blit(img, (x, y))
 
     def draw_buttons(self):
-        button_image = '../images/button.png'
-        button_image_hover = '../images/button-pressed.png'
+        button_image = 'assets/button.png'
+        button_image_hover = 'assets/button-pressed.png'
         button_spacing = 30
         button_size = 2
 

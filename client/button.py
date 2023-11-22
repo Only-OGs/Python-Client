@@ -43,7 +43,7 @@ class Button:
     '''
 
     def text(self, screen, text, size, color):
-        font = pygame.font.Font("../images/rocket-rinder-font/RocketRinder-yV5d.ttf", size)
+        font = pygame.font.Font("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", size)
         img = font.render(text, True, color)
         text_rect = img.get_rect()
         text_rect.center = (self.x, self.y)
