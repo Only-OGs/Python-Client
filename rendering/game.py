@@ -27,10 +27,10 @@ class Game:
     cameraHeight = 1000
     cameraDepth = 1 / math.tan((fieldOfView / 2) * math.pi / 180)
     drawDistance = 500
-    segment_count = 200
+    segment_count = 600
     playerX = 0
     playerZ = (cameraHeight * cameraDepth)
-    fogDensity = 5
+    fogDensity = 15
     position = 0
     speed = 0
     maxSpeed = segmentLength / step
@@ -183,7 +183,7 @@ class Game:
             return Color.get_dark()
     # hilfsfunktion fürs rendern
     def findSegment(self, z):
-        return self.segments[math.floor(z / self.segmentLength) % self.segmentLength]
+        return self.segments[math.floor(z / self.segmentLength) % len(self.segments)]
 
     # Rendert alles
     # TODO: Wenn man self.segment_count auf > 200 stellt wird die straße irgendwie abgeclipt, muss man sich nochmal anschauen
@@ -195,6 +195,7 @@ class Game:
         for n in range(self.drawDistance):
             segment = self.segments[(basesegment.get("index") + n) % len(self.segments)]
             segment_looped = segment.get("index") < basesegment.get("index")
+            segment_fog = Util.exponential_fog(n/self.drawDistance, self.fogDensity)
 
             if segment_looped:
                 segment_looped_value = self.trackLength
@@ -209,6 +210,7 @@ class Game:
                 self.cameraDepth,
                 self.width, self.height,
                 self.roadWidth)
+
 
             segment["p2"] = Util.project(
                 segment.get("p2"),
@@ -230,7 +232,7 @@ class Game:
                          segment.get("p2").get("screen").get("x"),
                          segment.get("p2").get("screen").get("y"),
                          segment.get("p2").get("screen").get("w"),
-                         segment.get("color"))
+                         segment.get("color"), segment_fog)
 
             maxy = segment.get("p2").get("screen").get("y")
 

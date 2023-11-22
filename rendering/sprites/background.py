@@ -9,4 +9,4 @@ class Background(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         self.rect.top = x
-        self.image = pygame.transform.scale_by(self.image, 1.4)
+        self.image = pygame.transform.scale_by(self.image, 1.6)

@@ -62,18 +62,18 @@ class Util:
             return value
 
     @staticmethod
-    def segment(screen, width, lanes, x1, y1, w1, x2, y2, w2, color):
+    def segment(screen, width, lanes, x1, y1, w1, x2, y2, w2, color, fog):
         r1 = Util._rumble_width(w1, lanes)
         r2 = Util._rumble_width(w2, lanes)
         l1 = Util._lane_marker_width(w1, lanes)
         l2 = Util._lane_marker_width(w2, lanes)
         lane = 1
 
-        pygame.draw.rect(screen, color.get("grass"), (0, y2, width, y1-y2)) # rasen
+        Util.gras(screen, color.get("grass"), 0, y2, width, y1 - y2)
 
-        Util._polygon(screen, x1 - w1 - r1, y1, x1 - w1, y1, x2 - w2, y2, x2 - w2 - r2, y2, color.get("rumble")) #linker rand
-        Util._polygon(screen, x1 + w1 + r1, y1, x1 + w1, y1, x2 + w2, y2, x2 + w2 + r2, y2,color.get("rumble")) # rechte rand
-        Util._polygon(screen, x1 - w1, y1, x1 + w1, y1, x2 + w2, y2, x2 - w2, y2, color.get("road")) # straße
+        Util._polygon(screen, x1 - w1 - r1, y1, x1 - w1, y1, x2 - w2, y2, x2 - w2 - r2, y2, color.get("rumble"))
+        Util._polygon(screen, x1 + w1 + r1, y1, x1 + w1, y1, x2 + w2, y2, x2 + w2 + r2, y2, color.get("rumble"))
+        Util._polygon(screen, x1 - w1, y1, x1 + w1, y1, x2 + w2, y2, x2 - w2, y2, color.get("road"))
 
         lanew1 = w1 * 2 / lanes
         lanew2 = w2 * 2 / lanes
@@ -88,6 +88,12 @@ class Util:
             lanex2 += lanew2
             lane = lane + 1
 
+        Util.fog(screen, 0, y1, width, y1 - y2, fog)
+
+    @staticmethod
+    def gras(screen, color, x, y, width, height):
+        pygame.draw.polygon(screen, color, [(x, y), (x + width, y), (x + width, y + height), (x, y + height)])
+
     @staticmethod
     def _rumble_width(projectedroadwidth, lanes):
         return projectedroadwidth / max(6, 2 * lanes)
@@ -99,3 +105,21 @@ class Util:
     @staticmethod
     def _polygon(screen, x1, y1, x2, y2, x3, y3, x4, y4, color):
         pygame.draw.polygon(screen, color, [(x1, y1), (x2, y2), (x3, y3), (x4, y4)])
+
+    @staticmethod
+    def exponential_fog(distance, density):
+        return 1 / (math.pow(math.e, (distance * distance * density)))
+
+    @staticmethod
+    def fog(screen, x, y, width, height, fog):
+        if fog < 1:
+            Util.draw_polygon_alpha(screen, (0, 81, 8, int((1 - fog) * 255)),
+                                    [(x, y - 1), (x + width, y - 1), (x + width, y + height), (x, y + height)])
+    @staticmethod
+    def draw_polygon_alpha(surface, color, points):
+        lx, ly = zip(*points)
+        min_x, min_y, max_x, max_y = min(lx), min(ly), max(lx), max(ly)
+        target_rect = pygame.Rect(min_x, min_y, max_x - min_x, max_y - min_y)
+        shape_surf = pygame.Surface(target_rect.size, pygame.SRCALPHA)
+        pygame.draw.polygon(shape_surf, color, [(x - min_x, y - min_y) for x, y in points])
+        surface.blit(shape_surf, target_rect)
