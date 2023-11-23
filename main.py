@@ -1,7 +1,6 @@
+from client.menu import MainMenu
 
-from client.menu import Game
-
-g = Game()
+g = MainMenu()
 
 while g.run:
     g.game_loop()

@@ -3,10 +3,10 @@ from client.button import Button
 from menu.lobbymenu import LobbyMenu
 from game.globals import screen_width
 from game.globals import screen_height
+from rendering.game import Game
 
 
-
-class Game:
+class MainMenu:
 
     def __init__(self):
         self.timer = pygame.time.Clock
@@ -107,7 +107,7 @@ class Game:
 
     #Initialisierung des Singleplayers
     def draw_singleplayer(self):
-        pass
+        Game()
 
     # Initialisierung des Multiplayers
     def draw_multiplay(self):
