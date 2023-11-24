@@ -19,3 +19,13 @@ class Road:
             "hard": 6
         }
         return curve
+
+    @staticmethod
+    def hill():
+        hill = {
+            "none": 0,
+            "low": 20,
+            "medium": 40,
+            "high": 60
+        }
+        return hill

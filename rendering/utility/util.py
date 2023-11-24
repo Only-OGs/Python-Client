@@ -142,3 +142,6 @@ class Util:
     def percent_remaining(n, total):
         return (n % total) / total
 
+    @staticmethod
+    def interpolate(a, b, percent):
+        return a + (b - a) * percent
