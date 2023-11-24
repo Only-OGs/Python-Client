@@ -26,8 +26,17 @@ font_size = 20
 
 
 #event manager
-manager_register = pygame_gui.UIManager((screen_width, screen_height))
 clock = pygame.time.Clock()
+
+manager_register = pygame_gui.UIManager((screen_width, screen_height))
+
+name = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 350), (360, 60)),
+                                           manager=manager_register, object_id="#name", initial_text="Name")
+
+passwort = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 450), (360, 60)),
+                                               manager=manager_register, object_id="#passwort",
+                                               initial_text="Passwort")
+
 
 
 
@@ -39,9 +48,6 @@ class MainMenu:
         self.screen = pygame.display.set_mode([screen_width, screen_height])
         pygame.display.set_caption("OG Racer")
         pygame.init()
-
-
-
 
     run = True
 
@@ -63,37 +69,30 @@ class MainMenu:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.run = False
-                    manager_register.process_events(event)
+                manager_register.process_events(event)
 
-                manager_register.update(refresh)
+            manager_register.update(refresh)
 
-                if self.main_menu:
-                    self.draw_menu()
-                elif self.multiplay:
-                    self.draw_multiplay()
-                elif self.singleplayer:
-                    self.draw_singleplayer()
-                elif self.options:
-                    self.draw_options()
-                elif self.register:
-                    self.draw_register()
-                elif self.login:
-                    self.draw_login()
-                elif self.lobby():
-                    self.draw_login()
-                pygame.display.update()
+            if self.main_menu:
+                self.draw_menu()
+            elif self.multiplay:
+                self.draw_multiplay()
+            elif self.singleplayer:
+                self.draw_singleplayer()
+            elif self.options:
+                self.draw_options()
+            elif self.register:
+                self.draw_register()
+            elif self.login:
+                self.draw_login()
+            elif self.lobby():
+                self.draw_login()
+            pygame.display.update()
 
     #Initialisierung des Main Menu
     def draw_menu(self):
 
         # Input felder init
-        pygame_gui.elements.UITextEntryLine(
-            relative_rect=pygame.Rect((800, 350), (360, 60)), manager=manager_register, object_id="#name"
-            )
-
-        pygame_gui.elements.UITextEntryLine(
-            relative_rect=pygame.Rect((800, 450), (360, 60)), manager=manager_register, object_id="#passwort"
-            )
 
 
         self.init_background()
