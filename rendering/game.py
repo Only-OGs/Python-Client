@@ -41,7 +41,7 @@ class Game:
     offRoadDecel = -maxSpeed / 2
     offRoadLimit = maxSpeed / 4
     clock = None
-    centrifugal = 0.4
+    centrifugal = 0.37
     keyLeft = False
     keyRight = False
     keyFaster = False
@@ -133,7 +133,7 @@ class Game:
         self.add_street(num=Road.lenght().get("medium"))
         self.add_street(num=Road.lenght().get("long"), height=Road.hill().get("high"))
         self.add_street(num=Road.lenght().get("medium"), curve=Road.curve().get("medium"))
-        self.add_street(num=Road.lenght().get("medium"), height=-Road.hill().get("high"))
+        self.add_street(num=Road.lenght().get("long"), height=-Road.hill().get("high"))
         self.add_street(num=Road.lenght().get("medium"))
 
         self.segments[self.findSegment(self.playerZ)["index"] + 2]["color"] = Color.get_start()
