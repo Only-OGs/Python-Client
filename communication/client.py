@@ -7,11 +7,15 @@ def handle_connection_error(error):
 #erstellt Client und Serverkommunikation
 class SocketIOClient:
     def __init__(self):
+        self.Loginsuccessful = None
         self.server_url = "http://89.58.1.158:8080"
         self.sio = socketio.Client(logger=True, engineio_logger=True)
         # reagiert auf die das angeg. Event
         self.sio.on('connection_success', self.on_connection_success)
         self.sio.on('response', self.on_response)
+        self.sio.on('new_message', self.on_newMessage)
+        self.sio.on('player_joined', self.on_playerJoined)
+
 
     def on_connection_success(self, data):
         print(f"Verbindung zum Server mit  Dir ({data}) erfolgreich")
@@ -30,7 +34,7 @@ class SocketIOClient:
         if status == 'register_success':
             print(f"Antwort vom Server: {message}")
         if status == 'login_success':
-            print(f"Antwort vom Server: {message}")
+            self.Loginsuccessful = message
         if status == 'login_failed':
             print(f"Antwort vom Server: {message}")
         if status == 'register_failed':
@@ -56,8 +60,13 @@ class SocketIOClient:
 
     def send_login_data(self, user, password):
         if self.sio.connected:
-            if len(user) < 3 or len(password) < 5:
-                raise Exception("Der Username muss mindestens 3 Zeichen lang sein \nDas Passwort mindestens 5 Zeichen lang sein.")
+            if len(user) < 3 or len(password) < 6:
+                raise Exception("Der Username muss mindestens 3 Zeichen lang sein \nDas Passwort mindestens 6 Zeichen lang sein.")
             else:
                 data = {"user": user, "password": password}
                 self.sio.emit("login", data)
+    def on_newMessage(self):
+        pass
+
+    def on_playerJoined(self):
+        pass

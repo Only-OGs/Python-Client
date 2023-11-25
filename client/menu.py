@@ -1,11 +1,15 @@
+import sys
+
 import pygame
 import pygame_gui
 import time
+
+from pygame.font import Font
+
 import game.globals
 from pygame import mixer_music
 from communication.client import SocketIOClient
 from client.button import Button
-from menu.lobbymenu import LobbyMenu
 from rendering.game import Game
 from client.draw_text import Text
 
@@ -29,6 +33,8 @@ button_image = 'assets/button.png'
 button_image_hover = 'assets/button-pressed.png'
 button_size = 2
 font_size = 20
+screen_width = 1329
+screen_height = 886
 
 #init Music
 main_music = pygame.mixer.music.load(filename="assets/Music/StartMenuMusic.mp3")
@@ -64,8 +70,6 @@ music_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect(
 
 
 
-
-
 class MainMenu:
 
     def __init__(self):
@@ -73,10 +77,8 @@ class MainMenu:
         self.screen = pygame.display.set_mode([game.globals.screen_width, game.globals.screen_height])
         pygame.display.set_caption("OG Racer")
 
-
-    run = True
-
     #game loop, das spiel läuft solange run = True
+    run = True
     def game_loop(self):
 
         self.main_menu = True
@@ -94,15 +96,15 @@ class MainMenu:
             # Gibt die fenster aus
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.run = False
+                   self.run = False
                 #Event manager für die Eingabe beim registrieren und einloggen
 
-                if (event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and self.login):
-                    self.check_data(login_name.get_text(), login_passwort.get_text())
+              #  if (event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and self.login):
+               #     self.check_data(login_name.get_text(), login_passwort.get_text())
 
 
-                if (event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and self.register):
-                    self.check_data(register_name.get_text(),register_passwort.get_text())
+              #  if (event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and self.register):
+              #      self.check_data(register_name.get_text(),register_passwort.get_text())
 
                 # Manager_process
                 manager_Login.process_events(event)
@@ -132,20 +134,10 @@ class MainMenu:
 
 
     def check_data(self, name, passwort):
-        if(len(name) == 0 or len(passwort) == 0):
-            print("gerät hat nix fertig")
-            Text(screen=self.screen, y=game.globals.screen_height//2, x=game.globals.screen_width//2 - 200, text="Falsche eingabe", color=game.globals.RED, size=50)
-            time.sleep(1)
-            return
-        else:
-            if(self.login):
-                client.send_login_data(user=name, password=passwort)
-            if(self.register):
-                client.send_register_data(user=name, password=passwort)
-
-
-        print(name)
-        print(passwort)
+        if(self.login):
+            client.send_login_data(user=name, password=passwort)
+        if(self.register):
+            client.send_register_data(user=name, password=passwort)
 
     #Initialisierung des Main Menu
     def draw_menu(self):
@@ -199,11 +191,11 @@ class MainMenu:
 
     # Initialisierung des Multiplayers
     def draw_lobby(self):
-         LobbyMenu(self.screen)
+        pass
+
 
     def draw_multiplay(self):
         self.init_background()
-        self.back_to_meun()
 
 
         #Register button
@@ -236,25 +228,40 @@ class MainMenu:
 
     def draw_register(self):
         self.init_background()
-        self.back_to_meun()
+        self.back_to_menu()
         manager_register.draw_ui(self.screen)
 
 
     def draw_login(self):
         self.init_background()
-        self.back_to_meun()
+        self.back_to_menu()
+        self.log_in()
         manager_Login.draw_ui(self.screen)
+
+
+    def log_in(self):
+            log_in_button = Button(screen_width // 2 + 50, (screen_height // 2 +100),
+                                    button_image, button_size, button_image_hover)
+            isLog_in_Clicked = log_in_button.draw(self.screen)
+            log_in_button.text(self.screen, "Anmelden", 18, (255, 255, 255))
+
+            for event in pygame.event.get():
+                if isLog_in_Clicked:
+                        self.check_data(register_name.get_text(),register_passwort.get_text())
+
+
 
     # Initialisierung der Einstellungen/Options
     def draw_options(self):
         self.init_background()
-        self.back_to_meun()
+        self.back_to_menu()
 
         #music Slider
         pygame.mixer.music.set_volume(music_slider.current_value)
         manager_option.draw_ui(self.screen)
 
-
+    def init_second_background(self):
+        self.screen.fill('#14152c')
 
     def init_background(self):
         self.screen.fill(game.globals.BLACK)
@@ -264,8 +271,8 @@ class MainMenu:
         self.background_image = pygame.transform.scale(self.background_image, (game.globals.screen_width, self.new_hight))
         self.screen.blit(self.background_image, (0, 0))
 
-    def back_to_meun(self):
-        # back to menu button
+    def back_to_menu(self):
+        self.init_background()
         self.button_back = Button(x=left_buttonx, y=left_buttony, image=button_image, size=button_size,
                                    hover=button_image_hover)
         self.back = self.button_back.draw(self.screen)
@@ -278,3 +285,62 @@ class MainMenu:
             self.register = False
             self.login = False
             self.lobby = False
+
+    def draw_lobby_menu(self):
+        start_time = pygame.time.get_ticks()
+        while True:
+            text = "Lobbyauswahl"
+            loginsuccesstext = client.Loginsuccessful
+            self.init_second_background()
+            text_font = Font("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 45)
+            img = text_font.render(text, True, "#FF06C1")
+            loginsuccessimg = text_font.render(loginsuccesstext, True,"#FF06C1")
+            # Berechne die vergangene Zeit
+            elapsed_time = pygame.time.get_ticks() - start_time
+            # Überprüfe, ob die 3 Sekunden vergangen sind
+            if elapsed_time < 3000:
+                self.screen.blit(loginsuccessimg, (10, self.screen_height - loginsuccessimg.get_height() - 10))
+
+            self.screen.blit(img, (self.screen_width // 2 - (self.screen_width // 6), self.screen_height // 4 - 80))
+
+            button_image = 'assets/button.png'
+            button_image_hover = 'assets/button-pressed.png'
+            button_spacing = 30
+            button_size = 2
+
+            lobby_create_button = Button(screen_width // 2, screen_height // 2 - (2 * button_spacing),
+                                         button_image, button_size, button_image_hover)
+
+            quick_game_button = Button(screen_width // 2, screen_height // 2 + button_spacing,
+                                       button_image, button_size, button_image_hover)
+
+            search_lobby_button = Button(screen_width // 2, (screen_height // 2 + (4 * button_spacing)),
+                                         button_image, button_size, button_image_hover)
+
+            log_out_button = Button(screen_width // 2, (screen_height // 2 + (7 * button_spacing)),
+                                    button_image, button_size, button_image_hover)
+
+            isLobbyCreateClicked = lobby_create_button.draw(self.screen)
+            lobby_create_button.text(self.screen, "Lobby erstellen", 18, (255, 255, 255))
+
+            isQuickGameClicked = quick_game_button.draw(self.screen)
+            quick_game_button.text(self.screen, "Schnelles Spiel", 18, (255, 255, 255))
+
+            isSeachLobbyClicked = search_lobby_button.draw(self.screen)
+            search_lobby_button.text(self.creen, "Lobby suchen", 18, (255, 255, 255))
+
+            isLogoutClicked = log_out_button.draw(self.screen)
+            log_out_button.text(self.screen, "Abmelden", 18, (255, 255, 255))
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if isLogoutClicked:
+                    self.back_to_menu()
+                if isLobbyCreateClicked:
+                    pass
+                if isQuickGameClicked:
+                    pass
+                if isSeachLobbyClicked:
+                    pass
