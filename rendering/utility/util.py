@@ -125,3 +125,23 @@ class Util:
         shape_surf = pygame.Surface(target_rect.size, pygame.SRCALPHA)
         pygame.draw.polygon(shape_surf, color, [(x - min_x, y - min_y) for x, y in points])
         surface.blit(shape_surf, target_rect)
+
+    @staticmethod
+    def easeIn(a, b, percent):
+        return a + (b - a) * math.pow(percent, 2)
+
+    @staticmethod
+    def easeOut(a, b, percent):
+        return a + (b - a) * (1 - math.pow(1 - percent, 2))
+
+    @staticmethod
+    def easeInOut(a, b, percent):
+        return a + (b - a) * ((-math.cos(percent * math.pi) / 2) + 0.5)
+
+    @staticmethod
+    def percent_remaining(n, total):
+        return (n % total) / total
+
+    @staticmethod
+    def interpolate(a, b, percent):
+        return a + (b - a) * percent

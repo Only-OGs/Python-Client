@@ -3,6 +3,7 @@ import math
 import pygame, sys
 
 from rendering.sprites.player import Player
+from rendering.utility.road import Road
 from rendering.utility.util import Util
 from rendering.sprites.background import Background
 from rendering.utility.colors import Color
@@ -40,7 +41,7 @@ class Game:
     offRoadDecel = -maxSpeed / 2
     offRoadLimit = maxSpeed / 4
     clock = None
-
+    centrifugal = 0.37
     keyLeft = False
     keyRight = False
     keyFaster = False
@@ -49,7 +50,6 @@ class Game:
     dt = 1 / 30
 
     def __init__(self):
-        pygame.init()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.player_sprite_group = pygame.sprite.Group()
@@ -61,7 +61,6 @@ class Game:
     def game_loop(self):
         self.create_player()
         self.create_background()
-        self.background_group.draw(self.screen)
 
         while True:
 
@@ -95,9 +94,11 @@ class Game:
 
     # unser KeyInputHandler, hier werden die Keyinputs überprüft und das auto dementsprechend bewegt
     def update(self, dt):
+        playersegment = self.findSegment(self.position + self.playerZ)
+        speedpercent = self.speed / self.maxSpeed
         self.position = Util.increase(self.position, dt * self.speed, self.trackLength)
 
-        dx = dt * 2 * (self.speed / self.maxSpeed)
+        dx = dt * 2 * speedpercent
 
         if self.keyLeft:
             self.playerX = self.playerX - dx
@@ -109,6 +110,8 @@ class Game:
                 self.player.drive_right()
         else:
             self.player.drive_straight()
+
+        self.playerX = self.playerX - (dx * speedpercent * playersegment.get("curve") * self.centrifugal)
 
         if self.keyFaster:
             self.speed = Util.accelerate(self.speed, self.accel, self.dt)
@@ -127,46 +130,11 @@ class Game:
     def reset_road(self):
         self.segments = []
 
-        for n in range(self.segment_count):
-            self.segments.append(
-                {
-                    'index': n,
-                    'p1':
-                        {'world': {
-                            'x': None,
-                            'y': None,
-                            'z': n * self.segmentLength
-                        },
-                            'camera': {
-                                'x': 0,
-                                'y': 0,
-                                'z': 0
-                            },
-                            'screen': {
-                                "scale": 0,
-                                'x': 0,
-                                'y': 0,
-                            },
-                        },
-                    'p2':
-                        {'world': {
-                            'x': None,
-                            'y': None,
-                            'z': (n + 1) * self.segmentLength
-                        },
-                            'camera': {
-                                'x': 0,
-                                'y': 0,
-                                'z': 0
-                            },
-                            'screen': {
-                                "scale": 0,
-                                'x': 0,
-                                'y': 0,
-                            },
-                        },
-                    'color': self._road_color(n)
-                })
+        self.add_street(num=Road.lenght().get("medium"))
+        self.add_street(num=Road.lenght().get("long"), height=Road.hill().get("high"))
+        self.add_street(num=Road.lenght().get("medium"), curve=Road.curve().get("medium"))
+        self.add_street(num=Road.lenght().get("long"), height=-Road.hill().get("high"))
+        self.add_street(num=Road.lenght().get("medium"))
 
         self.segments[self.findSegment(self.playerZ)["index"] + 2]["color"] = Color.get_start()
         self.segments[self.findSegment(self.playerZ)["index"] + 3]["color"] = Color.get_start()
@@ -189,7 +157,18 @@ class Game:
     # Rendert alles
     def render(self):
         basesegment = self.findSegment(self.position)
+        basepercent = Util.percent_remaining(self.position, self.segmentLength)
+        playersegment = self.findSegment(self.position + self.playerZ)
+        playerpercent = Util.percent_remaining(self.position + self.playerZ, self.segmentLength)
+
+        playery = Util.interpolate(playersegment.get("p1").get("world").get("y"),
+                                   playersegment.get("p2").get("world").get("y"), playerpercent)
+
+        dx = -(basesegment.get("curve") * basepercent)
+        x = 0
         maxy = self.height
+
+        self.background_group.draw(self.screen)
 
         for n in range(self.drawDistance):
             segment = self.segments[(basesegment.get("index") + n) % len(self.segments)]
@@ -203,8 +182,8 @@ class Game:
 
             segment["p1"] = Util.project(
                 segment.get("p1"),
-                (self.playerX * self.roadWidth),
-                self.cameraHeight,
+                (self.playerX * self.roadWidth) - x,
+                playery + self.cameraHeight,
                 self.position - segment_looped_value,
                 self.cameraDepth,
                 self.width, self.height,
@@ -212,15 +191,19 @@ class Game:
 
             segment["p2"] = Util.project(
                 segment.get("p2"),
-                (self.playerX * self.roadWidth),
-                self.cameraHeight,
+                (self.playerX * self.roadWidth) - x - dx,
+                playery + self.cameraHeight,
                 self.position - segment_looped_value,
                 self.cameraDepth,
                 self.width, self.height,
                 self.roadWidth)
 
+            x = x + dx
+            dx = dx + segment.get("curve")
+
             if (segment.get("p1").get("camera").get("z") <= self.cameraDepth) or (
-                    segment.get("p2").get("screen").get("y") >= maxy):
+                    segment.get("p2").get("screen").get("y") >= maxy) or (
+                    segment.get("p2").get("screen").get("y") >= segment.get("p1").get("screen").get("y")):
                 continue
 
             Util.segment(self.screen, self.width, self.lanes,
@@ -251,3 +234,77 @@ class Game:
     def create_player(self):
         self.player = Player(self.screen.get_width() / 2 - 30, self.screen.get_height() - 100)
         self.player_sprite_group.add(self.player)
+
+    def add_segment(self, curve, y):
+        n = len(self.segments)
+        self.segments.append(
+            {
+                'index': n,
+                'p1':
+                    {'world': {
+                        'x': None,
+                        'y': self.lastY(),
+                        'z': n * self.segmentLength
+                    },
+                        'camera': {
+                            'x': 0,
+                            'y': 0,
+                            'z': 0
+                        },
+                        'screen': {
+                            "scale": 0,
+                            'x': 0,
+                            'y': 0,
+                        },
+                    },
+                'p2':
+                    {'world': {
+                        'x': None,
+                        'y': y,
+                        'z': (n + 1) * self.segmentLength
+                    },
+                        'camera': {
+                            'x': 0,
+                            'y': 0,
+                            'z': 0
+                        },
+                        'screen': {
+                            "scale": 0,
+                            'x': 0,
+                            'y': 0,
+                        },
+                    },
+                "curve": curve,
+                'color': self._road_color(n)
+            })
+
+    # Erstellt die Straße, so dass wenn es eine Kurbe
+    def add_road(self, enter, hold, leave, curve, y=0):
+        starty = self.lastY()
+        endy = starty + (int(y) * self.segmentLength)
+        total = int(enter) + int(hold) + int(leave)
+        for n in range(int(enter)):
+            self.add_segment(Util.easeIn(0, curve, n / enter), Util.easeInOut(starty, endy, n / total))
+        for n in range(int(hold)):
+            self.add_segment(curve, Util.easeInOut(starty, endy, (enter + n) / total))
+        for n in range(int(leave)):
+            self.add_segment(Util.easeInOut(0, curve, n / enter),
+                             Util.easeInOut(starty, endy, (enter + hold + n) / total))
+
+    # Übergibt die passenden Parameter für die Straße
+    def add_street(self, num=None, curve=None, height=None):
+        if num is None:
+            num = Road.lenght().get("medium")
+        if curve is None:
+            curve = Road.curve().get("none")
+        if height is None:
+            height = Road.hill().get("none")
+
+        self.add_road(num, num, num, curve, height)
+
+    # berechnet der letzten Y-Koordinate
+    def lastY(self):
+        if len(self.segments) == 0:
+            return 0
+        else:
+            return self.segments[len(self.segments) - 1].get("p2").get("world").get("y")
