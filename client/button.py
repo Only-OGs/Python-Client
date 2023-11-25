@@ -16,6 +16,8 @@ class Button:
         self.x = x
         self.y = y
         self.url = image
+        self.sound = pygame.mixer.Sound("assets/Music/clickInterface.mp3")
+        self.sound.set_volume(0.05)
         pos = pygame.mouse.get_pos()
         #Button hintergrundbild
         self.button_image = pygame.image.load(self.url).convert_alpha()
@@ -62,6 +64,7 @@ class Button:
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                 self.clicked = True
                 action = True
+                pygame.mixer.Sound.play(self.sound)
                 time.sleep(0.25)
 
         if pygame.mouse.get_pressed()[0] == 0:

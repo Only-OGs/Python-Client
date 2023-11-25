@@ -7,7 +7,7 @@ def handle_connection_error(error):
 #erstellt Client und Serverkommunikation
 class SocketIOClient:
     def __init__(self):
-        self.server_url = "http://localhost:8080"
+        self.server_url = "http://89.58.1.158:8080"
         self.sio = socketio.Client(logger=True, engineio_logger=True)
         # reagiert auf die das angeg. Event
         self.sio.on('connection_success', self.on_connection_success)
@@ -61,17 +61,3 @@ class SocketIOClient:
             else:
                 data = {"user": user, "password": password}
                 self.sio.emit("login", data)
-
-
-# dient dem Testen
-if __name__ == "__main__":
-    client = SocketIOClient()
-
-    client.connect()
-    user = 'Olli'
-    password = "12346"
-
-    client.send_register_data(user, password)
-    client.send_login_data(user, password)
-
-    input("\n")

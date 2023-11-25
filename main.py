@@ -1,4 +1,3 @@
-import pygame_gui
 from client.menu import MainMenu
 
 g = MainMenu()
