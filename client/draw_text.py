@@ -1,13 +1,7 @@
 import pygame
 class Text:
-    def __init__(self, screen, x, y, text, size, color, font):
-        if font == None:
-            sysfont = pygame.font.get_default_font()
-            font = pygame.font.SysFont(None, size)
-        else:
-            sysfont = pygame.font.Font(font, size)
-
-        img = font.render(text, True, color)
-        rect = img.get_rect()
-        pygame.draw.rect(img)
-        screen.blit(img, (x, y))
+    def __init__(self, screen, x, y, text, size, color):
+        font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", size)
+        text_surface = font.render(text, True, color)
+        screen.blit(text_surface, (x, y))
+        pygame.display.update()

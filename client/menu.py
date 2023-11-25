@@ -1,14 +1,19 @@
 import pygame
 import pygame_gui
+import time
+from communication.client import SocketIOClient
 from client.button import Button
 from menu.lobbymenu import LobbyMenu
 from game.globals import screen_width
 from game.globals import screen_height
 from game.globals import WHITE
 from game.globals import BLACK
+from game.globals import RED
 from rendering.game import Game
+from client.draw_text import Text
 
 pygame.init()
+pygame.font.init()
 
 left_buttonx = screen_width / 2 - screen_width / 3
 left_buttony = screen_height / 2
@@ -28,14 +33,23 @@ font_size = 20
 #event manager
 clock = pygame.time.Clock()
 
+#Register input Fenster
 manager_register = pygame_gui.UIManager((screen_width, screen_height))
+register_name = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 350), (360, 60)),
+                                           manager=manager_register, object_id="#name", placeholder_text="Name")
 
-name = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 350), (360, 60)),
-                                           manager=manager_register, object_id="#name", initial_text="Name")
-
-passwort = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 450), (360, 60)),
+register_passwort = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 450), (360, 60)),
                                                manager=manager_register, object_id="#passwort",
-                                               initial_text="Passwort")
+                                               placeholder_text="Passwort", visible=str)
+
+#Login input Fenster
+manager_Login = pygame_gui.UIManager((screen_width, screen_height))
+login_name = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 350), (360, 60)),
+                                                 manager=manager_Login, object_id="#name", placeholder_text="Name")
+
+login_passwort = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 450), (360, 60)),
+                                                     manager=manager_Login, object_id="#passwort",
+                                                     placeholder_text="Passwort", visible=str)
 
 
 
@@ -51,7 +65,7 @@ class MainMenu:
 
     run = True
 
-    # game loop, das spiel läuft solange run = True
+    #game loop, das spiel läuft solange run = True
     def game_loop(self):
 
         self.main_menu = True
@@ -65,12 +79,23 @@ class MainMenu:
 
         while self.run:
             refresh = clock.tick(60) / 1000.0
-            #Gibt die fenster aus
+            # Gibt die fenster aus
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.run = False
+                #Event manager für die Eingabe beim registrieren und einloggen
+
+                if (event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and self.login):
+                    self.check_data(login_name.get_text(), login_passwort.get_text())
+
+                if (event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and self.register):
+                    self.check_data(register_name.get_text(),register_passwort.get_text())
+                # Manager_process
+                manager_Login.process_events(event)
                 manager_register.process_events(event)
 
+            # Manager_update
+            manager_Login.update(refresh)
             manager_register.update(refresh)
 
             if self.main_menu:
@@ -89,6 +114,20 @@ class MainMenu:
                 self.draw_login()
             pygame.display.update()
 
+
+    def check_data(self, name, passwort):
+        if(len(name) == 0 or len(passwort) == 0):
+            print("gerät hat nix fertig")
+            Text(screen=self.screen, y=screen_height//2, x=screen_width//2 - 200, text="Falsche eingabe", color=RED, size=50)
+            time.sleep(1)
+            return
+        else:
+            if(self.login):
+                SocketIOClient.send_login_data(user=name, password=passwort)
+            if(self.register):
+                SocketIOClient.send_register_data(user=name, password=passwort)
+        print(name)
+        print(passwort)
     #Initialisierung des Main Menu
     def draw_menu(self):
 
@@ -186,7 +225,7 @@ class MainMenu:
     def draw_login(self):
         self.init_background()
         self.back_to_meun()
-        manager_register.draw_ui(self.screen)
+        manager_Login.draw_ui(self.screen)
 
     # Initialisierung der Einstellungen/Options
     def draw_options(self):
