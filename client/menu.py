@@ -76,18 +76,12 @@ class MainMenu:
         self.screen = pygame.display.set_mode([game.globals.screen_width, game.globals.screen_height])
         pygame.display.set_caption("OG Racer")
 
+
     #game loop, das spiel läuft solange run = True
     run = True
     def game_loop(self):
 
-        self.main_menu = True
-        self.singleplayer = False
-        self.multiplay = False
-        self.options = False
-        self.register = False
-        self.login = False
-        self.lobby = False
-
+        self.current_window = "main_menu"
 
         while self.run:
             refresh = clock.tick(60) / 1000.0
@@ -96,14 +90,6 @@ class MainMenu:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                    self.run = False
-                #Event manager für die Eingabe beim registrieren und einloggen
-
-              #  if (event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and self.login):
-               #     self.check_data(login_name.get_text(), login_passwort.get_text())
-
-
-              #  if (event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and self.register):
-              #      self.check_data(register_name.get_text(),register_passwort.get_text())
 
                 # Manager_process
                 manager_Login.process_events(event)
@@ -115,19 +101,19 @@ class MainMenu:
             manager_register.update(refresh)
             manager_option.update(refresh)
 
-            if self.main_menu:
+            if self.current_window == "main_menu":
                 self.draw_menu()
-            elif self.multiplay:
+            elif self.current_window =="multiplayer":
                 self.draw_multiplay()
-            elif self.singleplayer:
+            elif self.current_window =="singleplayer":
                 self.draw_singleplayer()
-            elif self.options:
+            elif self.current_window =="options":
                 self.draw_options()
-            elif self.register:
+            elif self.current_window =="register":
                 self.draw_register()
-            elif self.login:
+            elif self.current_window =="login":
                 self.draw_login()
-            elif self.lobby:
+            elif self.current_window =="lobby":
                 self.draw_lobby_menu()
             pygame.display.update()
 
@@ -150,39 +136,20 @@ class MainMenu:
         #übergibt dem Gameloop welches Fensster offen ist
         if self.multi:
             client.connect()
-            self.main_menu = False
-            self.singleplayer = False
-            self.multiplay = True
-            self.options = False
-            self.register = False
-            self.login = False
-            self.lobby = False
+            self.update_window("multiplayer")
 
         # Options button
         self.button_options = Button(x=middle_buttonx, y=middle_buttony, image=button_image, size=button_size, hover= button_image_hover)
         self.b_options = self.button_options.draw(self.screen)
         self.button_options.text(screen=self.screen, text="Options", size=font_size, color=game.globals.WHITE)
         if self.b_options:
-            self.main_menu = False
-            self.singleplayer = False
-            self.multiplay = False
-            self.options = True
-            self.register = False
-            self.login = False
-            self.lobby = False
-
+            self.update_window("options")
         # Singleplayer button
         self.button_start = Button(x=left_buttonx, y=left_buttony, image=button_image, size=button_size, hover= button_image_hover)
         self.start = self.button_start.draw(self.screen)
         self.button_start.text(screen=self.screen, text="Singleplayer" , size= font_size, color=game.globals.WHITE)
         if self.start:
-            self.main_menu = False
-            self.singleplayer = True
-            self.multiplay = False
-            self.options = False
-            self.register = False
-            self.login = False
-            self.lobby = False
+            self.update_window("singleplayer")
 
     #Initialisierung des Singleplayers
     def draw_singleplayer(self):
@@ -198,13 +165,7 @@ class MainMenu:
         self.register = self.button_register.draw(self.screen)
         self.button_register.text(screen=self.screen, text="Registrieren", size=font_size, color=game.globals.WHITE)
         if self.register:
-            self.main_menu = False
-            self.singleplayer = False
-            self.multiplay = False
-            self.options = False
-            self.register = True
-            self.login = False
-            self.lobby = False
+            self.update_window("register")
 
         # login button
         self.button_login = Button(x=middle_buttonx, y=middle_buttony, image=button_image, size=button_size,
@@ -212,13 +173,7 @@ class MainMenu:
         self.login = self.button_login.draw(self.screen)
         self.button_login.text(screen=self.screen, text="Login", size=font_size, color=game.globals.WHITE)
         if self.login:
-            self.main_menu = False
-            self.singleplayer = False
-            self.multiplay = False
-            self.options = False
-            self.register = False
-            self.login = True
-            self.lobby = False
+            self.update_window("login")
 
     def draw_register(self):
         self.init_background()
@@ -247,13 +202,7 @@ class MainMenu:
             isLog_in_Clicked = log_in_button.draw(self.screen)
 
             if isLog_in_Clicked:
-                self.main_menu = False
-                self.singleplayer = False
-                self.multiplay = False
-                self.options = False
-                self.register = False
-                self.login = False
-                self.lobby = True
+                self.update_window("lobby")
                 self.check_data(login_name.get_text(), login_passwort.get_text())
 
 
@@ -285,13 +234,7 @@ class MainMenu:
         self.button_back.text(screen=self.screen, text="Menu", size=font_size, color=game.globals.WHITE)
         if self.back:
             client.disconnect()
-            self.main_menu = True
-            self.singleplayer = False
-            self.multiplay = False
-            self.options = False
-            self.register = False
-            self.login = False
-            self.lobby = False
+            self.update_window("main_menu")
 
     def draw_lobby_menu(self):
 
@@ -351,3 +294,5 @@ class MainMenu:
                 pass
             if isSeachLobbyClicked:
                 pass
+    def update_window(self, new_window):
+        self.current_window = new_window
