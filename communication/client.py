@@ -1,77 +1,110 @@
 import socketio
 
+
 # statische Mehtode, um Fehler Verbindungsprobleme zu reagieren.
 def handle_connection_error(error):
     print(f"Error connecting to the server: {error}")
 
-#erstellt Client und Serverkommunikation
+
+# erstellt Client und Serverkommunikation
 class SocketIOClient:
     def __init__(self):
-        self.Loginsuccessful = None
+
+        # Serverurl
         self.server_url = "http://89.58.1.158:8080"
+        # Client mit aktivem Logging
         self.sio = socketio.Client(logger=True, engineio_logger=True)
+
         # reagiert auf die das angeg. Event
         self.sio.on('connection_success', self.on_connection_success)
-        self.sio.on('response', self.on_response)
+        self.sio.on('search_lobby', self.on_seach_lobby)
         self.sio.on('new_message', self.on_newMessage)
-        self.sio.on('player_joined', self.on_playerJoined)
+        self.sio.on('lobby_created', self.on_lobbycreated)
+        self.sio.on('register', self.on_register)
+        self.sio.on('lobby_management', self.on_playerJoined)
+        self.sio.on('logout', self.on_logout)
+        self.sio.on('login', self.on_login)
 
+        # Initialisierung von Variablen für Erfolg/Misserfolg bei Aktionen
+        self.logoutstatus = None
+        self.loginstatus = None
+        self.registerstatus = None
+        self.lobbystatus = None
 
     def on_connection_success(self, data):
-        print(f"Verbindung zum Server mit  Dir ({data}) erfolgreich")
+        print(f"Verbindung zum Server erfolgreich")
 
+    def on_lobbycreated(self, data):
+        if self.sio.connected:
+            status = data.get('status')
+            message = data.get('message')
+            self.lobbystatus = message
+    def on_newMessage(self, data):
+        pass
 
-    def on_response(self, data):
-        print(f"Server response received: {data}")
-        self.process_response(data)
+    def on_seach_lobby(self, data):
+        if self.sio.connected:
+            status = data.get('status')
+            message = data.get('message')
+            self.lobbystatus = message
+    def on_logout(self, data):
+        if self.sio.connected:
+            status = data.get('status')
+            message = data.get('message')
+            self.logoutstatus = message
+    def on_playerJoined(self, data):
+        pass
 
-    def process_response(self, data):
-        status = data.get('status')
-        message = data.get('message')
+    def on_login(self, data):
+        if self.sio.connected:
+            message = data.get('message')
+            self.loginstatus = message
+    def on_register(self, data):
+        if self.sio.connected:
+            message = data.get('message')
+            self.registerstatus = message
 
-        if status == 'success':
-            print(f"Antwort vom Server: {message}")
-        if status == 'register_success':
-            print(f"Antwort vom Server: {message}")
-        if status == 'login_success':
-            self.Loginsuccessful = message
-        if status == 'login_failed':
-            print(f"Antwort vom Server: {message}")
-        if status == 'register_failed':
-            print(f"Antwort vom Server: {message}")
-
-
-
-    #stellt die Verbindung zum Server her.
+    # stellt die Verbindung zum Server her.
     def connect(self):
         try:
             self.sio.connect(self.server_url, transports=['websocket'])
         except ConnectionError as e:
             handle_connection_error(e)
 
+    # sendet Koordinaten
     def emit_coordinate(self):
         if self.sio.connected:
             data = {"message1": "Hallo", "message2": "Pascal"}
             self.sio.emit("message", data)
 
+    # sendet Registrierungsdaten
     def send_register_data(self, user, password):
         if self.sio.connected:
             data = {"user": user, "password": password}
             self.sio.emit("register", data)
 
+    # sendet Login-Daten
     def send_login_data(self, user, password):
         if self.sio.connected:
             if len(user) < 3 or len(password) < 6:
-                raise Exception("Der Username muss mindestens 3 Zeichen lang sein \nDas Passwort mindestens 6 Zeichen lang sein.")
+                raise Exception(
+                    "Der Username muss mindestens 3 Zeichen lang sein \nDas Passwort mindestens 6 Zeichen lang sein.")
             else:
                 data = {"user": user, "password": password}
                 self.sio.emit("login", data)
 
+    # trennt die Verbindung zum Server
     def disconnect(self):
         if self.sio.connected:
             self.sio.disconnect();
-    def on_newMessage(self):
-        pass
 
-    def on_playerJoined(self):
-        pass
+    # erstellt eine Lobby
+    def createLobby(self):
+        if self.sio.connected:
+            self.sio.emit('lobby_created')
+
+    # sendet eine neue Nachricht
+    def newMessage(self, message):
+        if self.sio.connected:
+            message = {"message": message}
+            self.sio.emit('new_message', message)
