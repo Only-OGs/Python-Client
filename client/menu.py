@@ -127,8 +127,8 @@ class MainMenu:
                 self.draw_register()
             elif self.login:
                 self.draw_login()
-            elif self.lobby():
-                self.draw_login()
+            elif self.lobby:
+                self.draw_lobby_menu()
             pygame.display.update()
 
 
@@ -188,11 +188,6 @@ class MainMenu:
     def draw_singleplayer(self):
         Game()
 
-    # Initialisierung des Multiplayers
-    def draw_lobby(self):
-        self.draw_lobby_menu()
-
-
     def draw_multiplay(self):
         self.init_background()
         self.back_to_menu()
@@ -243,28 +238,23 @@ class MainMenu:
                                button_image, button_size, button_image_hover)
         isLog_in_Clicked = log_in_button.draw(self.screen)
         log_in_button.text(self.screen, "Registrieren", 18, (255, 255, 255))
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if isLog_in_Clicked:
-                self.check_data(register_name.get_text(), register_passwort.get_text())
+        if isLog_in_Clicked:
+            self.check_data(register_name.get_text(), register_passwort.get_text())
 
     def log_in(self):
             log_in_button = Button(screen_width - 400, (screen_height // 2 +150),
                                     button_image, button_size, button_image_hover)
             isLog_in_Clicked = log_in_button.draw(self.screen)
-            log_in_button.text(self.screen, "Anmelden", 18, (255, 255, 255))
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if isLog_in_Clicked:
-                    self.draw_lobby_menu()
-                    self.check_data(login_name.get_text(),login_passwort.get_text())
-
+            if isLog_in_Clicked:
+                self.main_menu = False
+                self.singleplayer = False
+                self.multiplay = False
+                self.options = False
+                self.register = False
+                self.login = False
+                self.lobby = True
+                self.check_data(login_name.get_text(), login_passwort.get_text())
 
 
     # Initialisierung der Einstellungen/Options
