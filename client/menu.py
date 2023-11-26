@@ -19,7 +19,6 @@ pygame.font.init()
 #SocketIOClient
 client = SocketIOClient()
 
-
 left_buttonx = game.globals.screen_width / 2 - game.globals.screen_width / 3
 left_buttony = game.globals.screen_height / 2
 
@@ -191,12 +190,12 @@ class MainMenu:
 
     # Initialisierung des Multiplayers
     def draw_lobby(self):
-        pass
+        self.draw_lobby_menu()
 
 
     def draw_multiplay(self):
         self.init_background()
-
+        self.back_to_menu()
 
         #Register button
         self.button_register = Button(x=right_buttonx, y=right_buttony, image=button_image, size=button_size,
@@ -229,6 +228,7 @@ class MainMenu:
     def draw_register(self):
         self.init_background()
         self.back_to_menu()
+        self.register_button()
         manager_register.draw_ui(self.screen)
 
 
@@ -238,16 +238,32 @@ class MainMenu:
         self.log_in()
         manager_Login.draw_ui(self.screen)
 
+    def register_button(self):
+        log_in_button = Button(screen_width -400, (screen_height // 2 + 150),
+                               button_image, button_size, button_image_hover)
+        isLog_in_Clicked = log_in_button.draw(self.screen)
+        log_in_button.text(self.screen, "Registrieren", 18, (255, 255, 255))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if isLog_in_Clicked:
+                self.check_data(register_name.get_text(), register_passwort.get_text())
 
     def log_in(self):
-            log_in_button = Button(screen_width // 2 + 50, (screen_height // 2 +100),
+            log_in_button = Button(screen_width - 400, (screen_height // 2 +150),
                                     button_image, button_size, button_image_hover)
             isLog_in_Clicked = log_in_button.draw(self.screen)
             log_in_button.text(self.screen, "Anmelden", 18, (255, 255, 255))
 
             for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
                 if isLog_in_Clicked:
-                        self.check_data(register_name.get_text(),register_passwort.get_text())
+                    self.draw_lobby_menu()
+                    self.check_data(login_name.get_text(),login_passwort.get_text())
 
 
 
@@ -278,6 +294,7 @@ class MainMenu:
         self.back = self.button_back.draw(self.screen)
         self.button_back.text(screen=self.screen, text="Menu", size=font_size, color=game.globals.WHITE)
         if self.back:
+            client.disconnect()
             self.main_menu = True
             self.singleplayer = False
             self.multiplay = False
@@ -287,60 +304,60 @@ class MainMenu:
             self.lobby = False
 
     def draw_lobby_menu(self):
-        start_time = pygame.time.get_ticks()
-        while True:
-            text = "Lobbyauswahl"
-            loginsuccesstext = client.Loginsuccessful
-            self.init_second_background()
-            text_font = Font("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 45)
-            img = text_font.render(text, True, "#FF06C1")
-            loginsuccessimg = text_font.render(loginsuccesstext, True,"#FF06C1")
-            # Berechne die vergangene Zeit
-            elapsed_time = pygame.time.get_ticks() - start_time
-            # Überprüfe, ob die 3 Sekunden vergangen sind
-            if elapsed_time < 3000:
-                self.screen.blit(loginsuccessimg, (10, self.screen_height - loginsuccessimg.get_height() - 10))
 
-            self.screen.blit(img, (self.screen_width // 2 - (self.screen_width // 6), self.screen_height // 4 - 80))
+        text = "Lobbyauswahl"
+        loginsuccesstext = client.Loginsuccessful
+        self.init_second_background()
+        text_font = Font("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 45)
+        img = text_font.render(text, True, "#FF06C1")
+        loginsuccessimg = text_font.render(loginsuccesstext, True,"#FF06C1")
 
-            button_image = 'assets/button.png'
-            button_image_hover = 'assets/button-pressed.png'
-            button_spacing = 30
-            button_size = 2
+        # Berechne die vergangene Zeit
+       # elapsed_time = pygame.time.get_ticks() - start_time
+        # Überprüfe, ob die 3 Sekunden vergangen sind
+       # if elapsed_time < 3000:
+           # self.screen.blit(loginsuccessimg, (10, screen_height - loginsuccessimg.get_height() - 10))
 
-            lobby_create_button = Button(screen_width // 2, screen_height // 2 - (2 * button_spacing),
-                                         button_image, button_size, button_image_hover)
+       # self.screen.blit(img, (screen_width // 2 - (screen_width // 6), screen_height // 4 - 80))
 
-            quick_game_button = Button(screen_width // 2, screen_height // 2 + button_spacing,
-                                       button_image, button_size, button_image_hover)
+        button_image = 'assets/button.png'
+        button_image_hover = 'assets/button-pressed.png'
+        button_spacing = 30
+        button_size = 2
 
-            search_lobby_button = Button(screen_width // 2, (screen_height // 2 + (4 * button_spacing)),
-                                         button_image, button_size, button_image_hover)
+        lobby_create_button = Button(screen_width // 2, screen_height // 2 - (2 * button_spacing),
+                                     button_image, button_size, button_image_hover)
 
-            log_out_button = Button(screen_width // 2, (screen_height // 2 + (7 * button_spacing)),
-                                    button_image, button_size, button_image_hover)
+        quick_game_button = Button(screen_width // 2, screen_height // 2 + button_spacing,
+                                   button_image, button_size, button_image_hover)
 
-            isLobbyCreateClicked = lobby_create_button.draw(self.screen)
-            lobby_create_button.text(self.screen, "Lobby erstellen", 18, (255, 255, 255))
+        search_lobby_button = Button(screen_width // 2, (screen_height // 2 + (4 * button_spacing)),
+                                     button_image, button_size, button_image_hover)
 
-            isQuickGameClicked = quick_game_button.draw(self.screen)
-            quick_game_button.text(self.screen, "Schnelles Spiel", 18, (255, 255, 255))
+        log_out_button = Button(screen_width // 2, (screen_height // 2 + (7 * button_spacing)),
+                                button_image, button_size, button_image_hover)
 
-            isSeachLobbyClicked = search_lobby_button.draw(self.screen)
-            search_lobby_button.text(self.creen, "Lobby suchen", 18, (255, 255, 255))
+        isLobbyCreateClicked = lobby_create_button.draw(self.screen)
+        lobby_create_button.text(self.screen, "Lobby erstellen", 18, (255, 255, 255))
 
-            isLogoutClicked = log_out_button.draw(self.screen)
-            log_out_button.text(self.screen, "Abmelden", 18, (255, 255, 255))
+        isQuickGameClicked = quick_game_button.draw(self.screen)
+        quick_game_button.text(self.screen, "Schnelles Spiel", 18, (255, 255, 255))
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if isLogoutClicked:
-                    self.back_to_menu()
-                if isLobbyCreateClicked:
-                    pass
-                if isQuickGameClicked:
-                    pass
-                if isSeachLobbyClicked:
-                    pass
+        isSeachLobbyClicked = search_lobby_button.draw(self.screen)
+        search_lobby_button.text(self.screen, "Lobby suchen", 18, (255, 255, 255))
+
+        isLogoutClicked = log_out_button.draw(self.screen)
+        log_out_button.text(self.screen, "Abmelden", 18, (255, 255, 255))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if isLogoutClicked:
+                self.back_to_menu()
+            if isLobbyCreateClicked:
+                pass
+            if isQuickGameClicked:
+                pass
+            if isSeachLobbyClicked:
+                pass

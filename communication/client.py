@@ -41,6 +41,7 @@ class SocketIOClient:
             print(f"Antwort vom Server: {message}")
 
 
+
     #stellt die Verbindung zum Server her.
     def connect(self):
         try:
@@ -65,6 +66,10 @@ class SocketIOClient:
             else:
                 data = {"user": user, "password": password}
                 self.sio.emit("login", data)
+
+    def disconnect(self):
+        if self.sio.connected:
+            self.sio.disconnect();
     def on_newMessage(self):
         pass
 
