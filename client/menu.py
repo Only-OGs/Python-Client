@@ -68,6 +68,7 @@ music_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect(
 # Player in Lobby List
 id_playerList = []
 # counter für "Suchen..."
+global search_counter
 search_counter = 0
 player_texts = [pygame.font.SysFont("Arial", 20).render(player, True, (255, 255, 255)) for player in id_playerList]
 player_colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 0), (255, 0, 255), (0, 255, 255), (128, 0, 0), (0, 128, 0)]
@@ -85,14 +86,7 @@ class MainMenu:
     run = True
     def game_loop(self):
 
-        self.main_menu = True
-        self.singleplayer = False
-        self.multiplay = False
-        self.options = False
-        self.register = False
-        self.login = False
-        self.lobby = False
-
+        self.current_window = "main_menu"
 
         while self.run:
             refresh = clock.tick(60) / 1000.0
@@ -101,14 +95,6 @@ class MainMenu:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                    self.run = False
-                #Event manager für die Eingabe beim registrieren und einloggen
-
-              #  if (event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and self.login):
-               #     self.check_data(login_name.get_text(), login_passwort.get_text())
-
-
-              #  if (event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED and self.register):
-              #      self.check_data(register_name.get_text(),register_passwort.get_text())
 
                 # Manager_process
                 manager_Login.process_events(event)
@@ -120,19 +106,19 @@ class MainMenu:
             manager_register.update(refresh)
             manager_option.update(refresh)
 
-            if self.main_menu:
+            if self.current_window == "main_menu":
                 self.draw_menu()
-            elif self.multiplay:
+            elif self.current_window =="multiplayer":
                 self.draw_multiplay()
-            elif self.singleplayer:
+            elif self.current_window =="singleplayer":
                 self.draw_singleplayer()
-            elif self.options:
+            elif self.current_window =="options":
                 self.draw_options()
-            elif self.register:
+            elif self.current_window =="register":
                 self.draw_register()
-            elif self.login:
+            elif self.current_window =="login":
                 self.draw_login()
-            elif self.lobby:
+            elif self.current_window =="lobby":
                 self.draw_lobby_menu()
             pygame.display.update()
 
@@ -155,39 +141,20 @@ class MainMenu:
         #übergibt dem Gameloop welches Fensster offen ist
         if self.multi:
             client.connect()
-            self.main_menu = False
-            self.singleplayer = False
-            self.multiplay = True
-            self.options = False
-            self.register = False
-            self.login = False
-            self.lobby = False
+            self.update_window("multiplayer")
 
         # Options button
         self.button_options = Button(x=middle_buttonx, y=middle_buttony, image=button_image, size=button_size, hover= button_image_hover)
         self.b_options = self.button_options.draw(self.screen)
         self.button_options.text(screen=self.screen, text="Options", size=font_size, color=game.globals.WHITE)
         if self.b_options:
-            self.main_menu = False
-            self.singleplayer = False
-            self.multiplay = False
-            self.options = True
-            self.register = False
-            self.login = False
-            self.lobby = False
-
+            self.update_window("options")
         # Singleplayer button
         self.button_start = Button(x=left_buttonx, y=left_buttony, image=button_image, size=button_size, hover= button_image_hover)
         self.start = self.button_start.draw(self.screen)
         self.button_start.text(screen=self.screen, text="Singleplayer" , size= font_size, color=game.globals.WHITE)
         if self.start:
-            self.main_menu = False
-            self.singleplayer = True
-            self.multiplay = False
-            self.options = False
-            self.register = False
-            self.login = False
-            self.lobby = False
+            self.update_window("singleplayer")
 
     #Initialisierung des Singleplayers
     def draw_singleplayer(self):
@@ -203,13 +170,7 @@ class MainMenu:
         self.register = self.button_register.draw(self.screen)
         self.button_register.text(screen=self.screen, text="Registrieren", size=font_size, color=game.globals.WHITE)
         if self.register:
-            self.main_menu = False
-            self.singleplayer = False
-            self.multiplay = False
-            self.options = False
-            self.register = True
-            self.login = False
-            self.lobby = False
+            self.update_window("register")
 
         # login button
         self.button_login = Button(x=middle_buttonx, y=middle_buttony, image=button_image, size=button_size,
@@ -217,13 +178,7 @@ class MainMenu:
         self.login = self.button_login.draw(self.screen)
         self.button_login.text(screen=self.screen, text="Login", size=font_size, color=game.globals.WHITE)
         if self.login:
-            self.main_menu = False
-            self.singleplayer = False
-            self.multiplay = False
-            self.options = False
-            self.register = False
-            self.login = True
-            self.lobby = False
+            self.update_window("login")
 
     def draw_register(self):
         self.init_background()
@@ -254,13 +209,7 @@ class MainMenu:
 
             if isLog_in_Clicked:
                 self.check_data(login_name.get_text(), login_passwort.get_text())
-                self.main_menu = False
-                self.singleplayer = False
-                self.multiplay = False
-                self.options = False
-                self.register = False
-                self.login = False
-                self.lobby = True
+                self.update_window("lobby")
 
 
     # Initialisierung der Einstellungen/Options
@@ -291,13 +240,7 @@ class MainMenu:
         self.button_back.text(screen=self.screen, text="Menu", size=font_size, color=game.globals.WHITE)
         if self.back:
             client.disconnect()
-            self.main_menu = True
-            self.singleplayer = False
-            self.multiplay = False
-            self.options = False
-            self.register = False
-            self.login = False
-            self.lobby = False
+            self.update_window("main_menu")
 
     def draw_lobby_menu(self):
 
@@ -361,7 +304,8 @@ class MainMenu:
             pygame.draw.rect(self.screen, color, (100, (screen_height // 16) + (80 * i), 400, 40), 0)
             self.screen.blit(text, (110, (screen_height // 16) + (80 * i) + 10))
 
-        # search_counter+=1
+        global search_counter
+        search_counter+=1
 
         if search_counter == 60:
             player_texts.extend([pygame.font.SysFont("Arial", 20).render("Suchen .", True, (255, 255, 255))] * (
@@ -376,3 +320,8 @@ class MainMenu:
 
         pygame.display.flip()
         self.timer.tick(60)
+
+
+def update_window(self, new_window):
+    self.current_window = new_window
+
