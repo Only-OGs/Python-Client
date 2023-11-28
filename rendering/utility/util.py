@@ -190,6 +190,6 @@ class Util:
 
         if clip_h < dest_h:
             img = pygame.image.load(asset).convert()
-            test = pygame.transform.chop(img, (0, sprite_h-(sprite_h*clip_h/dest_h), 0, sprite_h))
-            test = pygame.transform.scale(test, (dest_w, dest_h))
+            test = pygame.transform.scale(img, (dest_w, dest_h))
+            test = pygame.transform.chop(test, (0, test.get_height()-(test.get_height()*clip_h/dest_h), 0, sprite_h))
             screen.blit(test, [destX, destY])
