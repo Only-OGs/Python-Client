@@ -1,6 +1,9 @@
 import math
+import random
 
 import pygame
+
+from rendering.sprites.autos import Autos
 
 
 class Util:
@@ -145,3 +148,48 @@ class Util:
     @staticmethod
     def interpolate(a, b, percent):
         return a + (b - a) * percent
+
+    @staticmethod
+    def random_choice(options):
+        return options[Util.random_int(0, len(options) - 1)]
+
+    @staticmethod
+    def random_int(minimum, maximum):
+        return round(Util.interpolate(minimum, maximum, random.random()))
+
+    @staticmethod
+    def overlap(x1, w1, x2, w2, percent=None):
+        if percent is None:
+            percent = 1
+        half = percent / 2
+        min1 = x1 - (w1 * half)
+        max1 = x1 + (w1 * half)
+        min2 = x2 - (w2 * half)
+        max2 = x2 + (w2 * half)
+        return not ((max1 < min2) or (min1 > max2))
+
+    @staticmethod
+    def sprite(screen: pygame.Surface, width, road_width, sprite_w, sprite_h, asset, sprite_scale, destX, destY,
+               offset_x, offset_y, clip_y):
+
+        dest_w = (sprite_w * sprite_scale * width / 2) * (((1 / 80)*0.3) * road_width)
+        dest_h = (sprite_h * sprite_scale * width / 2) * (((1 / 80)*0.3) * road_width)
+
+        if offset_x is None:
+            offset_x = 0
+        if offset_y is None:
+            offset_y = 0
+
+        destX = destX + (dest_w * offset_x)
+        destY = destY + (dest_h * offset_y)
+
+        if clip_y is not None:
+            clip_h = max(0, destY + dest_h - clip_y)
+        else:
+            clip_h = 0
+
+        if clip_h < dest_h:
+            img = pygame.image.load(asset).convert()
+            test = pygame.transform.chop(img, (0, sprite_h-(sprite_h*clip_h/dest_h), 0, sprite_h))
+            test = pygame.transform.scale(test, (dest_w, dest_h))
+            screen.blit(test, [destX, destY])
