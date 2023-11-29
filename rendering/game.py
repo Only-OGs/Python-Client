@@ -130,6 +130,9 @@ class Game:
         self.speed = Util.limit(self.speed, 0, self.maxSpeed)
 
         # car here
+        playerw = ((1/80)*0.3 ) * 80
+
+        self.update_cars(dt, playersegment, playerw)
 
     # erstellt die Straße und die Finishline
     def reset_road(self):
@@ -347,14 +350,13 @@ class Game:
             Util.sprite(self.screen, self.width, self.roadWidth, sprite, sprite_scale, sprite_x,
                         sprite_y, -0.5, -1, segment.get("clip"))
 
-    """ 
+
     def update_cars(self, dt, playersegment, playerw):
         for n in range(len(self.cars)):
             car = self.cars[n]
             oldsegment = self.findSegment(car.get("z"))
-
             if self.update_car_offset(car, oldsegment, playersegment, playerw) is None:
-                hel = 1
+                hel = 0
             else:
                 hel = self.update_car_offset(car, oldsegment, playersegment, playerw)
             car["offset"] = car.get("offset") + hel
@@ -365,6 +367,7 @@ class Game:
                 index = oldsegment.get("cars").index(car)
                 del oldsegment["cars"][index:1]
                 newsegment.get("cars").append(car)
+
 
     def update_car_offset(self, car, carsegment, playersegment, playerw):
         lookahead = 20
@@ -402,4 +405,3 @@ class Game:
                         else:
                             direction = -1
                     return direction * 1 / i * (car.speed - other_car.get("speed")) / self.maxSpeed
-    """
