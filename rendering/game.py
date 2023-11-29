@@ -6,6 +6,7 @@ from rendering.sprites.player import Player
 from rendering.utility.util import Util
 from rendering.sprites.background import Background
 from rendering.utility.colors import Color
+from rendering import gui
 
 
 class Game:
@@ -62,13 +63,17 @@ class Game:
         self.create_player()
         self.create_background()
         self.background_group.draw(self.screen)
+        self.add = 0
+        timer = gui.Gui(screen=self.screen, x=0, y=0)
 
         while True:
 
             for event in pygame.event.get():
+
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         self.keyLeft = True
@@ -87,11 +92,17 @@ class Game:
                         self.keyFaster = False
                     if event.key == pygame.K_DOWN:
                         self.keySlower = False
-
+            timer.show_speed(speed=self.speed)
+            timer.start_timer()
+            '''
+            if(Ziellinie):
+                timer.end_timer()
+            '''
             self.render()
             self.update(self.step)
             pygame.display.update()
             self.clock.tick(self.fps)
+
 
     # unser KeyInputHandler, hier werden die Keyinputs überprüft und das auto dementsprechend bewegt
     def update(self, dt):
@@ -251,3 +262,4 @@ class Game:
     def create_player(self):
         self.player = Player(self.screen.get_width() / 2 - 30, self.screen.get_height() - 100)
         self.player_sprite_group.add(self.player)
+

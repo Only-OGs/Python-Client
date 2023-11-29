@@ -1,13 +1,12 @@
 import pygame
-import pygame_gui
-import game.globals
+import globals.globals
 from globals import gui_globals
-from globals import background_global
-from globals import button_globals
 from pygame.font import Font
 from communication.client import SocketIOClient
-from client.button import Button
+from rendering import button_layout
+from rendering.button import Button
 from rendering.game import Game
+from rendering import background_init
 
 pygame.init()
 pygame.font.init()
@@ -35,7 +34,7 @@ class MainMenu:
 
     def __init__(self):
         self.timer = pygame.time.Clock
-        self.screen = pygame.display.set_mode([game.globals.screen_width, game.globals.screen_height])
+        self.screen = pygame.display.set_mode([globals.globals.screen_width, globals.globals.screen_height])
         pygame.display.set_caption("OG Racer")
 
 
@@ -89,22 +88,22 @@ class MainMenu:
     #Initialisierung des Main Menu
     def draw_menu(self):
         # Input felder init
-        background_global.init_background(self.screen)
+        background_init.init_background(self.screen)
         # Multiplayer button
 
         #übergibt dem Gameloop welches Fensster offen ist
-        multi = button_globals.rechter_button(screen=self.screen,text="Multiplayer")
+        multi = button_layout.rechter_button(screen=self.screen, text="Multiplayer")
         if multi:
             client.connect()
             self.update_window("multiplayer")
 
         # Options button
-        b_options = button_globals.mittlerer_button(screen=self.screen, text="Options")
+        b_options = button_layout.mittlerer_button(screen=self.screen, text="Options")
         if b_options:
             self.update_window("options")
 
         # Singleplayer button
-        start = button_globals.linker_button(screen=self.screen,text="Singleplayer")
+        start = button_layout.linker_button(screen=self.screen, text="Singleplayer")
         if start:
             self.update_window("singleplayer")
 
@@ -113,39 +112,39 @@ class MainMenu:
         Game()
 
     def draw_multiplay(self):
-        background_global.init_background(self.screen)
+        background_init.init_background(self.screen)
         self.back_to_menu()
 
         #Register button
-        register = button_globals.rechter_button(screen=self.screen, text="Register")
+        register = button_layout.rechter_button(screen=self.screen, text="Register")
         if register:
             self.update_window("register")
 
         # login button
-        login = button_globals.mittlerer_button(screen=self.screen, text="Anmelden")
+        login = button_layout.mittlerer_button(screen=self.screen, text="Anmelden")
         if login:
             self.update_window("login")
 
     def draw_register(self):
-        background_global.init_background(self.screen)
+        background_init.init_background(self.screen)
         self.back_to_menu()
         self.register_button()
         gui_globals.manager_register.draw_ui(self.screen)
 
 
     def draw_login(self):
-        background_global.init_background(self.screen)
+        background_init.init_background(self.screen)
         self.back_to_menu()
         self.log_in()
         gui_globals.manager_Login.draw_ui(self.screen)
 
     def register_button(self):
-        reg = button_globals.log_reg_button(screen=self.screen,text= "register")
+        reg = button_layout.log_reg_button(screen=self.screen, text="register")
         if reg:
             self.check_data(gui_globals.register_name.get_text(), gui_globals.register_passwort.get_text())
 
     def log_in(self):
-            log = button_globals.log_reg_button(screen=self.screen,text= "register")
+            log = button_layout.log_reg_button(screen=self.screen, text="register")
             if log:
                 self.check_data(gui_globals.login_name.get_text(), gui_globals.login_passwort.get_text())
                 self.update_window("lobby")
@@ -153,7 +152,7 @@ class MainMenu:
 
     # Initialisierung der Einstellungen/Options
     def draw_options(self):
-        background_global.init_background(self.screen)
+        background_init.init_background(self.screen)
         self.back_to_menu()
 
         #music Slider
@@ -161,8 +160,8 @@ class MainMenu:
         gui_globals.manager_option.draw_ui(self.screen)
 
     def back_to_menu(self):
-        background_global.init_background(self.screen)
-        back = button_globals.linker_button(screen=self.screen, text="menu")
+        background_init.init_background(self.screen)
+        back = button_layout.linker_button(screen=self.screen, text="menu")
         if back:
             client.disconnect()
             self.update_window("main_menu")
@@ -171,13 +170,13 @@ class MainMenu:
 
         text = "Lobbyauswahl"
         loginstatus = client.loginstatus
-        background_global.init_background(self.screen)
+        background_init.init_background(self.screen)
         text_font = Font("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 45)
         img = text_font.render(text, True, "#FF06C1")
         if loginstatus != None:
             text_font = Font("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 20)
             loginstatusimg = text_font.render(loginstatus, True, "White")
-            self.screen.blit(loginstatusimg, (100, game.globals.screen_height - loginstatusimg.get_height() - 50))
+            self.screen.blit(loginstatusimg, (100, globals.globals.screen_height - loginstatusimg.get_height() - 50))
 
 
 
@@ -222,7 +221,7 @@ class MainMenu:
             pass
 
     def InLobby(self):
-        background_global.init_background(self.screen)
+        background_init.init_background(self.screen)
         pygame.draw.rect(self.screen, (255, 255, 255), (100, screen_height // 16, 400, 40), 0)
         for i, (text, color) in enumerate(zip(player_texts, player_colors)):
             pygame.draw.rect(self.screen, color, (100, (screen_height // 16) + (80 * i), 400, 40), 0)

@@ -1,7 +1,7 @@
 from pygame.font import Font
-from client.button import Button
-from game.globals import screen_width
-from game.globals import screen_height
+from rendering.button import Button
+from globals.globals import screen_width
+from globals.globals import screen_height
 import pygame
 import sys
 
