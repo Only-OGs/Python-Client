@@ -3,9 +3,9 @@ import random
 
 import pygame, sys
 
-from rendering.sprites.autos import Autos
 from rendering.sprites.player import Player
 from rendering.utility.road import Road
+from rendering.utility.sprites import Sprite
 from rendering.utility.util import Util
 from rendering.sprites.background import Background
 from rendering.utility.colors import Color
@@ -48,7 +48,7 @@ class Game:
     keyRight = False
     keyFaster = False
     keySlower = False
-    total_cars = 1
+    total_cars = 5
     dt = 1 / 30
     cars = []
 
@@ -322,11 +322,9 @@ class Game:
         self.cars = []
 
         for n in range(self.total_cars):
-            #offset = random.random() * Util.random_choice([-0.8, 0.8])
-            #z = math.floor(random.random() * len(self.segments) * self.segmentLength)
-            offset = 0
-            z = 103277
-            sprite = "assets/cars/car01.png"
+            offset = random.random() * Util.random_choice([-0.8, 0.8])
+            z = math.floor(random.random() * len(self.segments) * self.segmentLength)
+            sprite = Sprite.random_car()
             speed = self.maxSpeed / 4 + random.random() * self.maxSpeed / 2
             car = {"offset": offset, "z": z, "sprite": sprite, "speed": speed, "percent": 0}
             segment = self.findSegment(z)
@@ -336,7 +334,7 @@ class Game:
     def render_cars(self, segment):
         for n in range(len(segment.get("cars"))):
             car = segment.get("cars")[n]
-            asset = car.get("sprite")
+            sprite = car.get("sprite")
             car["percent"] = Util.percent_remaining(car.get("z"), self.segmentLength)
 
             sprite_scale = Util.interpolate(segment.get("p1").get("screen").get("scale"), segment.get("p2").get("screen").get("scale"), car.get("percent"))
@@ -346,7 +344,7 @@ class Game:
 
             sprite_y = Util.interpolate(segment.get("p1").get("screen").get("y"), segment.get("p2").get("screen").get("y"), car.get("percent"))
 
-            Util.sprite(self.screen, self.width, self.roadWidth, 80, 56, asset, sprite_scale, sprite_x,
+            Util.sprite(self.screen, self.width, self.roadWidth, sprite, sprite_scale, sprite_x,
                         sprite_y, -0.5, -1, segment.get("clip"))
 
     """ 

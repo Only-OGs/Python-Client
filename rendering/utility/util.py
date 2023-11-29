@@ -3,8 +3,6 @@ import random
 
 import pygame
 
-from rendering.sprites.autos import Autos
-
 
 class Util:
 
@@ -169,11 +167,11 @@ class Util:
         return not ((max1 < min2) or (min1 > max2))
 
     @staticmethod
-    def sprite(screen: pygame.Surface, width, road_width, sprite_w, sprite_h, asset, sprite_scale, destX, destY,
+    def sprite(screen: pygame.Surface, width, road_width, sprite, sprite_scale, destX, destY,
                offset_x, offset_y, clip_y):
 
-        dest_w = (sprite_w * sprite_scale * width / 2) * (((1 / 80)*0.3) * road_width)
-        dest_h = (sprite_h * sprite_scale * width / 2) * (((1 / 80)*0.3) * road_width)
+        dest_w = (sprite.get("width") * sprite_scale * width / 2) * (((1 / 80)*0.3) * road_width)
+        dest_h = (sprite.get("height") * sprite_scale * width / 2) * (((1 / 80)*0.3) * road_width)
 
         if offset_x is None:
             offset_x = 0
@@ -189,7 +187,7 @@ class Util:
             clip_h = 0
 
         if clip_h < dest_h:
-            img = pygame.image.load(asset).convert()
+            img = pygame.image.load(sprite.get("asset")).convert()
             test = pygame.transform.scale(img, (dest_w, dest_h))
-            test = pygame.transform.chop(test, (0, test.get_height()-(test.get_height()*clip_h/dest_h), 0, sprite_h))
+            test = pygame.transform.chop(test, (0, test.get_height()-(test.get_height()*clip_h/dest_h), 0, sprite.get("height")))
             screen.blit(test, [destX, destY])
