@@ -66,8 +66,8 @@ class Game:
         self.add = 0
         timer = gui.Gui(screen=self.screen, x=0, y=0)
 
-        while True:
 
+        while True:
             for event in pygame.event.get():
 
                 if event.type == pygame.QUIT:
@@ -92,12 +92,14 @@ class Game:
                         self.keyFaster = False
                     if event.key == pygame.K_DOWN:
                         self.keySlower = False
+
+
             timer.show_speed(speed=self.speed)
-            timer.start_timer()
-            '''
-            if(Ziellinie):
-                timer.end_timer()
-            '''
+            timer.count_up()
+            print(self.position)
+            if(self.position >= round(119900.0)):
+                timer.ende_timer()
+
             self.render()
             self.update(self.step)
             pygame.display.update()
