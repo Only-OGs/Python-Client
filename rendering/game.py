@@ -359,17 +359,16 @@ class Game:
         for n in range(len(self.cars)):
             car = self.cars[n]
             oldsegment = self.findSegment(car.get("z"))
-            if self.update_car_offset(car, oldsegment, playersegment, playerw) is None:
+            hel = self.update_car_offset(car, oldsegment, playersegment, playerw)
+            if hel is None:
                 hel = 0
-            else:
-                hel = self.update_car_offset(car, oldsegment, playersegment, playerw)
             car["offset"] = car.get("offset") + hel
             car["z"] = Util.increase(car.get("z"), dt * car.get("speed"), self.trackLength)
             car["percent"] = Util.percent_remaining(car.get("z"), self.segmentLength)
             newsegment = self.findSegment(car.get("z"))
             if oldsegment != newsegment:
                 index = oldsegment.get("cars").index(car)
-                del oldsegment["cars"][index:1]
+                oldsegment.get("cars").pop(index)
                 newsegment.get("cars").append(car)
 
     def update_car_offset(self, car, carsegment, playersegment, playerw):
