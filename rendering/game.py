@@ -140,7 +140,7 @@ class Game:
 
         Road.load_road(self)
         self.reset_cars()
-        self.reset_sprites()
+        #self.reset_sprites()
 
         self.segments[self.findSegment(self.playerZ)["index"] + 2]["color"] = Color.get_start()
         self.segments[self.findSegment(self.playerZ)["index"] + 3]["color"] = Color.get_start()
