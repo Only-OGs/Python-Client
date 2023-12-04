@@ -1,5 +1,5 @@
 import math
-
+import random
 import pygame
 
 
@@ -145,3 +145,48 @@ class Util:
     @staticmethod
     def interpolate(a, b, percent):
         return a + (b - a) * percent
+
+    @staticmethod
+    def random_choice(options):
+        return options[Util.random_int(0, len(options) - 1)]
+
+    @staticmethod
+    def random_int(minimum, maximum):
+        return round(Util.interpolate(minimum, maximum, random.random()))
+
+    @staticmethod
+    def overlap(x1, w1, x2, w2, percent=None):
+        if percent is None:
+            percent = 1
+        half = percent / 2
+        min1 = x1 - (w1 * half)
+        max1 = x1 + (w1 * half)
+        min2 = x2 - (w2 * half)
+        max2 = x2 + (w2 * half)
+        return not ((max1 < min2) or (min1 > max2))
+
+    @staticmethod
+    def sprite(screen: pygame.Surface, width, road_width, sprite, sprite_scale, destX, destY,
+               offset_x, offset_y, clip_y):
+
+        dest_w = int((sprite.get("width") * sprite_scale * width / 2) * (((1 / 80) * 0.3) * road_width))
+        dest_h = int((sprite.get("height") * sprite_scale * width / 2) * (((1 / 80) * 0.3) * road_width))
+
+        if offset_x is None:
+            offset_x = 0
+        if offset_y is None:
+            offset_y = 0
+
+        destX = destX + (dest_w * offset_x)
+        destY = destY + (dest_h * offset_y)
+
+        if clip_y is not None:
+            clip_h = max(0, destY + dest_h - clip_y)
+        else:
+            clip_h = 0
+
+        if clip_h < dest_h and (dest_w <= (sprite.get("width")*5) or (dest_h <= sprite.get("height")*5)):
+            img = pygame.image.load(sprite.get("asset")).convert_alpha()
+            test = pygame.transform.scale(img, (dest_w, dest_h))
+            test = pygame.transform.chop(test, (0, test.get_height()-(test.get_height()*clip_h/dest_h), 0, sprite.get("height")))
+            screen.blit(test, [destX, destY])
