@@ -72,14 +72,15 @@ class Gui:
                 self.set_new_record()
 
             if(self.min < self.rec_min):
-
                 self.set_new_record()
+
             elif(self.sec < self.rec_sec and self.min < self.rec_min):
-
                 self.set_new_record()
+
             elif (self.sec < self.rec_sec and self.min < self.rec_min and self.mil_sec < self.rec_mil_sec):
                 self.set_new_record()
-                self.reset_lap()
+
+            self.reset_lap()
 
     #Setzt den neuen Record
     def set_new_record(self):

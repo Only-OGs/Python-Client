@@ -63,7 +63,7 @@ class Game:
         self.create_player()
         self.create_background()
         self.background_group.draw(self.screen)
-        self.add = 0
+
         timer = gui.Gui(screen=self.screen, x=0, y=0)
 
 
@@ -96,7 +96,7 @@ class Game:
 
             timer.show_speed(speed=self.speed)
             timer.count_up()
-            print(self.position)
+            #In Round() länge der Strecke einsetzten
             if(self.position >= round(119900.0)):
                 timer.ende_timer()
 
