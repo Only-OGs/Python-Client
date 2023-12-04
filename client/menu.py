@@ -4,6 +4,7 @@ from menu.lobbymenu import LobbyMenu
 from game.globals import screen_width
 from game.globals import screen_height
 from rendering.game import Game
+from communication.client import SocketIOClient
 
 
 class MainMenu:
@@ -12,6 +13,7 @@ class MainMenu:
         self.timer = pygame.time.Clock
         self.screen = pygame.display.set_mode([screen_width, screen_height])
         pygame.display.set_caption("OG Racer")
+
         pygame.init()
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
 
@@ -111,7 +113,15 @@ class MainMenu:
 
     # Initialisierung des Multiplayers
     def draw_multiplay(self):
-         LobbyMenu(self.screen)
+        # Dient vorerst nur zum Testen
+        client = SocketIOClient()
+        client.connect()
+        client.send_register_data("Oliver", "ficken")
+        client.send_login_data("Oliver", "ficken")
+        client.create_lobby()
+        client.startGame()
+
+        LobbyMenu(self.screen)
 
     # Initialisierung der Einstellungen/Options
     def draw_options_(self):

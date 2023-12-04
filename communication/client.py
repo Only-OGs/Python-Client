@@ -1,4 +1,8 @@
+import time
+from rendering.globals_vars import gameStart
+from rendering.globals_vars import track
 import socketio
+
 
 
 # statische Mehtode, um Fehler Verbindungsprobleme zu reagieren.
@@ -25,18 +29,24 @@ class SocketIOClient:
         self.sio.on('logout', self.on_logout)
         self.sio.on('login', self.on_login)
         self.sio.on('receive_track', self.on_receiveTrack)
+        self.sio.on('game_start', self.on_gameStart)
+
 
         # Initialisierung von Variablen für Erfolg/Misserfolg bei Aktionen
         self.logoutstatus = None
         self.loginstatus = None
         self.registerstatus = None
         self.lobbystatus = None
-        self.track = None
+        
+    def on_gameStart(self,data):
+        global gameStart
+        gameStart = True
 
     def on_receiveTrack(self, data):
         if self.sio.connected:
             if data != '':
-                self.track = data;
+                global track
+                track = data;
 
     def startGame(self):
         if self.sio.connected:
@@ -49,6 +59,12 @@ class SocketIOClient:
             status = data.get('status')
             message = data.get('message')
             self.lobbystatus = message
+
+    # erstellt eine Lobby
+    def create_lobby(self):
+        if self.sio.connected:
+            self.sio.emit("create_lobby");
+
     def on_newMessage(self, data):
         pass
 
@@ -108,13 +124,20 @@ class SocketIOClient:
         if self.sio.connected:
             self.sio.disconnect();
 
-    # erstellt eine Lobby
-    def createLobby(self):
-        if self.sio.connected:
-            self.sio.emit('lobby_created')
+
 
     # sendet eine neue Nachricht
     def newMessage(self, message):
         if self.sio.connected:
             message = {"message": message}
             self.sio.emit('new_message', message)
+
+
+
+
+
+
+
+
+
+
