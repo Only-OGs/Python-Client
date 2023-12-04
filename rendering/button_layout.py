@@ -39,6 +39,7 @@ def rechter_button(screen, text):
     button_rechts.text(screen=screen, text=text, size=font_size, color=globals.WHITE)
     if button:
         return True
+
 def log_reg_button(screen, text):
     log_button = Button(x=globals.screen_width -400, y=(globals.screen_height // 2 + 150), image=button_image, size=button_size,
                                hover=button_image_hover)
