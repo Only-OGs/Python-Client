@@ -1,21 +1,18 @@
 import pygame
-import globals.globals
+import globals.globals as globals
 from globals import gui_globals
 from pygame.font import Font
-from communication.client import SocketIOClient
 from rendering import button_layout
 from rendering.button import Button
 from rendering.game import Game
 from rendering import background_init
+from communication.client import SocketIOClient
 
 pygame.init()
 pygame.font.init()
 
 #SocketIOClient
 client = SocketIOClient()
-
-screen_width = 1329
-screen_height = 886
 
 #event manager
 clock = pygame.time.Clock()
@@ -30,12 +27,16 @@ player_texts = [pygame.font.SysFont("Arial", 20).render(player, True, (255, 255,
 player_colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 0), (255, 0, 255), (0, 255, 255), (128, 0, 0), (0, 128, 0)]
 
 
+
+
 class MainMenu:
 
     def __init__(self):
         self.timer = pygame.time.Clock
-        self.screen = pygame.display.set_mode([globals.globals.screen_width, globals.globals.screen_height])
+        self.screen = pygame.display.set_mode([globals.screen_width, globals.screen_height])
         pygame.display.set_caption("OG Racer")
+        pygame.init()
+        self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
 
 
     #game loop, das spiel läuft solange run = True
@@ -112,6 +113,7 @@ class MainMenu:
         Game()
 
     def draw_multiplay(self):
+
         background_init.init_background(self.screen)
         self.back_to_menu()
 
@@ -181,23 +183,23 @@ class MainMenu:
 
 
 
-        self.screen.blit(img, (screen_width // 2 - (screen_width // 6), screen_height // 4 - 80))
+        self.screen.blit(img, (globals.screen_width // 2 - (globals.screen_width // 6), globals.screen_height // 4 - 80))
 
         button_image = 'assets/button.png'
         button_image_hover = 'assets/button-pressed.png'
         button_spacing = 30
         button_size = 2
 
-        lobby_create_button = Button(screen_width // 2, screen_height // 2 - (2 * button_spacing),
+        lobby_create_button = Button(globals.screen_width // 2, globals.screen_height // 2 - (2 * button_spacing),
                                      button_image, button_size, button_image_hover)
 
-        quick_game_button = Button(screen_width // 2, screen_height // 2 + button_spacing,
+        quick_game_button = Button(globals.screen_width // 2, globals.screen_height // 2 + button_spacing,
                                    button_image, button_size, button_image_hover)
 
-        search_lobby_button = Button(screen_width // 2, (screen_height // 2 + (4 * button_spacing)),
+        search_lobby_button = Button(globals.screen_width // 2, (globals.screen_height // 2 + (4 * button_spacing)),
                                      button_image, button_size, button_image_hover)
 
-        log_out_button = Button(screen_width // 2, (screen_height // 2 + (7 * button_spacing)),
+        log_out_button = Button(globals.screen_width // 2, (globals.screen_height // 2 + (7 * button_spacing)),
                                 button_image, button_size, button_image_hover)
 
         isLobbyCreateClicked = lobby_create_button.draw(self.screen)
@@ -222,10 +224,10 @@ class MainMenu:
 
     def InLobby(self):
         background_init.init_background(self.screen)
-        pygame.draw.rect(self.screen, (255, 255, 255), (100, screen_height // 16, 400, 40), 0)
+        pygame.draw.rect(self.screen, (255, 255, 255), (100, globals.screen_height // 16, 400, 40), 0)
         for i, (text, color) in enumerate(zip(player_texts, player_colors)):
-            pygame.draw.rect(self.screen, color, (100, (screen_height // 16) + (80 * i), 400, 40), 0)
-            self.screen.blit(text, (110, (screen_height // 16) + (80 * i) + 10))
+            pygame.draw.rect(self.screen, color, (100, (globals.screen_height // 16) + (80 * i), 400, 40), 0)
+            self.screen.blit(text, (110, (globals.screen_height // 16) + (80 * i) + 10))
 
         global search_counter
         search_counter+=1

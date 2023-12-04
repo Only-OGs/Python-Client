@@ -57,13 +57,11 @@ class Gui:
                            (globals.VIOLETTE))
         self.update_gui(x=1024 // 2 - 175, y=self.y, width=300)
         self.screen.blit(text, (1024 // 2 - 150, self.y + self.text_offste))
-        pygame.display.update()
 
         font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
         text = font.render("Time: {}:{}:{}".format(self.min, self.sec, self.mil_sec), True, (globals.VIOLETTE))
         self.update_gui(x=self.x, y=self.y, width=150)
         self.screen.blit(text, (self.x, self.y + self.text_offste))
-        pygame.display.update()
 
     #Beendet den Timer und setzt die neue bestzeit
     def ende_timer(self):
@@ -94,7 +92,6 @@ class Gui:
         text = font.render("{} kmh".format(round(speed/60)), True, (globals.VIOLETTE))
         self.update_gui(x=self.x + 900, y=self.y, width=150)
         self.screen.blit(text, (self.x + 900, self.y + self.text_offste))
-        pygame.display.update()
 
     #Übermalt die Alten GUI elemente damit diese sich nicht Stacken.
     def update_gui(self,x, y, width):

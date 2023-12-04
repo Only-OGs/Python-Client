@@ -1,6 +1,7 @@
 import math
-
+import random
 import pygame
+import rendering.globals_vars as var
 
 
 class Util:
@@ -10,7 +11,6 @@ class Util:
 
     @staticmethod
     def increase(start, increment, maximum):
-
         result = start + increment
         while result >= maximum:
             result -= maximum
@@ -88,7 +88,7 @@ class Util:
             lanex2 += lanew2
             lane = lane + 1
 
-        Util.fog(screen, 0, y1, width, y1 - y2, fog)
+        Util.fog(screen, 0, y1, width, y1 - y2, fog, color.get("fog"))
 
     @staticmethod
     def gras(screen, color, x, y, width, height):
@@ -111,10 +111,15 @@ class Util:
         return 1 / (math.pow(math.e, (distance * distance * density)))
 
     @staticmethod
-    def fog(screen, x, y, width, height, fog):
+    def fog(screen, x, y, width, height, fog, color):
         if fog < 1:
-            Util.draw_polygon_alpha(screen, (0, 81, 8, int((1 - fog) * 255)),
+            rgb = Util.hex_to_rgb(color)
+            Util.draw_polygon_alpha(screen, (rgb[0], rgb[1], rgb[2], int((1 - fog) * 255)),
                                     [(x, y - 1), (x + width, y - 1), (x + width, y + height), (x, y + height)])
+
+    @staticmethod
+    def hex_to_rgb(hexa):
+        return tuple(int(hexa[i:i + 2], 16) for i in (0, 2, 4))
 
     # von https://stackoverflow.com/a/64630102
     @staticmethod
@@ -125,3 +130,81 @@ class Util:
         shape_surf = pygame.Surface(target_rect.size, pygame.SRCALPHA)
         pygame.draw.polygon(shape_surf, color, [(x - min_x, y - min_y) for x, y in points])
         surface.blit(shape_surf, target_rect)
+
+    @staticmethod
+    def easeIn(a, b, percent):
+        return a + (b - a) * math.pow(percent, 2)
+
+    @staticmethod
+    def easeOut(a, b, percent):
+        return a + (b - a) * (1 - math.pow(1 - percent, 2))
+
+    @staticmethod
+    def easeInOut(a, b, percent):
+        return a + (b - a) * ((-math.cos(percent * math.pi) / 2) + 0.5)
+
+    @staticmethod
+    def percent_remaining(n, total):
+        return (n % total) / total
+
+    @staticmethod
+    def interpolate(a, b, percent):
+        return a + (b - a) * percent
+
+    @staticmethod
+    def random_choice(options):
+        return options[Util.random_int(0, len(options) - 1)]
+
+    @staticmethod
+    def random_int(minimum, maximum):
+        return round(Util.interpolate(minimum, maximum, random.random()))
+
+    @staticmethod
+    def overlap(x1, w1, x2, w2, percent=None):
+        if percent is None:
+            percent = 1
+        half = percent / 2
+        min1 = x1 - (w1 * half)
+        max1 = x1 + (w1 * half)
+        min2 = x2 - (w2 * half)
+        max2 = x2 + (w2 * half)
+        return not ((max1 < min2) or (min1 > max2))
+
+    @staticmethod
+    def sprite(screen: pygame.Surface, width, road_width, sprite, sprite_scale, destX, destY,
+               offset_x, offset_y, clip_y):
+
+        dest_w = int((sprite.get("width") * sprite_scale * width / 2) * (((1 / 80) * 0.3) * road_width))
+        dest_h = int((sprite.get("height") * sprite_scale * width / 2) * (((1 / 80) * 0.3) * road_width))
+
+        if offset_x is None:
+            offset_x = 0
+        if offset_y is None:
+            offset_y = 0
+
+        destX = destX + (dest_w * offset_x)
+        destY = destY + (dest_h * offset_y)
+
+        if clip_y is not None:
+            clip_h = max(0, destY + dest_h - clip_y)
+        else:
+            clip_h = 0
+
+        if clip_h < dest_h and (dest_w <= (sprite.get("width") * 5) or (dest_h <= sprite.get("height") * 5)):
+            img = pygame.image.load(sprite.get("asset")).convert_alpha()
+            test = pygame.transform.scale(img, (dest_w, dest_h))
+            test = pygame.transform.chop(test, (
+            0, test.get_height() - (test.get_height() * clip_h / dest_h), 0, sprite.get("height")))
+            screen.blit(test, [destX, destY])
+
+    @staticmethod
+    def lastY(segments):
+        if len(segments) == 0:
+            return 0
+        else:
+            return segments[len(segments) - 1].get("p2").get("world").get("y")
+
+    # hilfsfunktion fürs rendern
+    @staticmethod
+    def findSegment(z):
+        return var.segments[math.floor(z / var.segmentLength) % len(var.segments)]
