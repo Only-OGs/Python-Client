@@ -1,6 +1,5 @@
 import math
 import random
-
 import pygame
 
 
@@ -170,8 +169,8 @@ class Util:
     def sprite(screen: pygame.Surface, width, road_width, sprite, sprite_scale, destX, destY,
                offset_x, offset_y, clip_y):
 
-        dest_w = (sprite.get("width") * sprite_scale * width / 2) * (((1 / 80)*0.3) * road_width)
-        dest_h = (sprite.get("height") * sprite_scale * width / 2) * (((1 / 80)*0.3) * road_width)
+        dest_w = int((sprite.get("width") * sprite_scale * width / 2) * (((1 / 80) * 0.3) * road_width))
+        dest_h = int((sprite.get("height") * sprite_scale * width / 2) * (((1 / 80) * 0.3) * road_width))
 
         if offset_x is None:
             offset_x = 0
@@ -186,8 +185,8 @@ class Util:
         else:
             clip_h = 0
 
-        if clip_h < dest_h:
-            img = pygame.image.load(sprite.get("asset")).convert()
+        if clip_h < dest_h and (dest_w <= (sprite.get("width")*8) or (dest_h <= sprite.get("height")*8)):
+            img = pygame.image.load(sprite.get("asset")).convert_alpha()
             test = pygame.transform.scale(img, (dest_w, dest_h))
             test = pygame.transform.chop(test, (0, test.get_height()-(test.get_height()*clip_h/dest_h), 0, sprite.get("height")))
             screen.blit(test, [destX, destY])
