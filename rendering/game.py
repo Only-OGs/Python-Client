@@ -5,6 +5,8 @@ import rendering.globals_vars as var
 from rendering.utility.car_ai import Cars
 from rendering.utility.road import Road
 from rendering.utility.util import Util
+from rendering import gui
+
 from rendering.utility.sprite_generator import SpriteGen
 from rendering.utility.render import Render
 
@@ -24,12 +26,16 @@ class Game:
         SpriteGen.create_player()
         SpriteGen.create_background()
 
-        while True:
+        timer = gui.Gui(screen=var.screen, x=0, y=0)
 
+
+        while True:
             for event in pygame.event.get():
+
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LEFT:
                         var.keyLeft = True
@@ -50,9 +56,19 @@ class Game:
                         var.keySlower = False
 
             Render.render()
+
+            timer.show_speed(speed=var.speed)
+            timer.count_up()
+            # In Round() länge der Strecke einsetzten
+
+            if (var.position >= var.trackLength-1000):
+                timer.ende_timer()
+
             self.update(var.step)
+
             pygame.display.update()
             var.clock.tick(var.fps)
+
 
     # unser KeyInputHandler, hier werden die Keyinputs überprüft und das auto dementsprechend bewegt
     def update(self, dt):
@@ -90,5 +106,4 @@ class Game:
 
         # car here
         playerw = ((1 / 80) * 0.3) * 80
-
         Cars.update_cars(dt, playersegment, playerw)
