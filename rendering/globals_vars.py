@@ -42,3 +42,6 @@ cars = []
 player = None
 background_sprite_group = None
 player_sprite_group = None
+track = None
+gameStart = None
+
