@@ -7,11 +7,12 @@ class Player(pygame.sprite.Sprite):
     # läd ein bild und wandelt es zu einem pygame.Surface um
     def __init__(self, x, y):
         super().__init__()
-        self.image = pygame.image.load("assets/player_straight.png").convert_alpha()
         # läd alle verschiedenen Assets
-        self.right = pygame.image.load("assets/player_right.png")
-        self.left = pygame.image.load("assets/player_left.png")
-        self.straight = pygame.image.load("assets/player_straight.png")
+        self.right = pygame.image.load("assets/cars/player_right.png")
+        self.left = pygame.image.load("assets/cars/player_left.png")
+        self.straight = pygame.image.load("assets/cars/player_straight.png")
+
+        self.image = self.straight.convert_alpha()
 
         # setzt die position so das es passt mit dem scaling
         # TODO: Ist evnt nicht ganz mittig, wer Zeit hat bitte nochmal anschauen

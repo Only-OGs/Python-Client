@@ -54,9 +54,9 @@ while run:
 
     elif var.buttons["Anmelden"]:
         var.client.send_login_data(var.login_name.get_text(), var.login_password.get_text())
-        while not var.client.logincomplete:
-            pass
-        var.menu_state = "lobby_option"
+        if var.client.logincomplete:
+            var.menu_state = "lobby_option"
+
 
     elif var.buttons["Schnelles Spiel"] or var.buttons["Lobby erstellen"]:
         var.menu_state = "ingame_lobby"
@@ -66,15 +66,13 @@ while run:
 
     elif var.buttons["Suchen"]:
         var.client.join_lobby(var.lobby_search_input.get_text())
-        while not var.client.lobbystatus == "success":
-            pass
-        var.menu_state = "ingame_lobby"
+        if var.client.lobbystatus == "success":
+            var.menu_state = "ingame_lobby"
 
     elif var.buttons["Jetzt Registrieren"]:
         var.client.send_register_data(var.register_name.get_text(), var.register_password.get_text())
-        while not var.client.registercomplete:
-            pass
-        var.menu_state = "registration_menu"
+        if var.client.registercomplete:
+            var.menu_state = "registration_menu"
 
     elif var.buttons["Abmelden"]:
         var.menu_state = "main_menu"

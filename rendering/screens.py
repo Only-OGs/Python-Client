@@ -43,8 +43,9 @@ class Screens:
         Layout.create_Serverstatus()
         Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="Lobbyauswahl", size=45,
                          color=(255,6,193))
-        Layout.draw_text(screen=var.menu_screen, x=50, y=var.height - 50, text=var.client.loginstatus, size=20,
-                         color=(255,6,193))
+        if var.client.loginstatus != '':
+            Layout.draw_text(screen=var.menu_screen, x=50, y=var.height - 50, text=var.client.loginstatus, size=20,
+                             color=(255,6,193))
         Layout.search_lobby_button(screen=var.menu_screen, text="Lobby suchen")
         Layout.lobby_create_button(screen=var.menu_screen, text="Lobby erstellen")
         Layout.quick_game_button(screen=var.menu_screen, text="Schnelles Spiel")

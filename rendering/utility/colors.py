@@ -6,7 +6,8 @@ class Color:
             "road": "#6B6B6B",
             "grass": "#10AA10",
             "rumble": "#555555",
-            "lane": "#CCCCCC"
+            "lane": "#CCCCCC",
+            "fog": "005108"
         }
         return c
 
@@ -16,7 +17,9 @@ class Color:
             "road": "#696969",
             "grass": "#009A00",
             "rumble": "#BBBBBB",
-            "lane": "#696969"
+            "lane": "#696969",
+            "fog": "005108"
+
         }
         return c
 
@@ -26,7 +29,8 @@ class Color:
             "road": "#FFFFFF",
             "grass": "#FFFFFF",
             "rumble": "#FFFFFF",
-            "lane": "#FFFFFF"
+            "lane": "#FFFFFF",
+            "fog": "005108"
         }
         return c
 
@@ -36,6 +40,7 @@ class Color:
             "road": "#000000",
             "grass": "#000000",
             "rumble": "#000000",
-            "lane": "#000000"
+            "lane": "#000000",
+            "fog": "005108"
         }
         return c
