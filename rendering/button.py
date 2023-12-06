@@ -44,18 +44,20 @@ class Button:
         :param color color: farbe
     '''
 
-    def text(self, screen, text, size, color):
+    def render(self, screen, text, size, color):
         font = pygame.font.Font("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", size)
         img = font.render(text, True, color)
         text_rect = img.get_rect()
         text_rect.center = (self.x, self.y)
+
+        # draw button on given @screen
+        screen.blit(self.button_image, (self.rect.x, self.rect.y))
         screen.blit(img, (self.x - 90, self.y - 15))
 
     ''' Erstellt die Funktionalität hinter dem button.
-            :param screen: default screen übergeben
     '''
-    def draw(self,screen):
-        self.screen = screen
+    def check(self):
+
         action = False
         pos = pygame.mouse.get_pos()
 
@@ -69,6 +71,5 @@ class Button:
 
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
-        #draw button on given @screen
-        screen.blit(self.button_image, (self.rect.x, self.rect.y))
+
         return action

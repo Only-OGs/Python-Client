@@ -2,7 +2,7 @@ import pygame
 from rendering import game
 import sys
 import pygame_gui
-from globals import globals
+'''
 class Gui:
     def __init__(self, screen,x ,y):
         self.min = 0
@@ -22,8 +22,8 @@ class Gui:
         self.add = 1
 
         font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
-        text = font.render("schnellste Runde {}:{}:{}".format(self.new_min, self.new_sec, self.new_mil_sec), True, (globals.VIOLETTE),
-                           (globals.DARKBLUE))
+        text = font.render("schnellste Runde {}:{}:{}".format(self.new_min, self.new_sec, self.new_mil_sec), True, ("VIOLETTE"),
+                           ("DARKBLUE"))
         self.screen.blit(text, (1024//2-150, self.y))
         pygame.display.update()
 
@@ -44,7 +44,7 @@ class Gui:
             self.min = 0
 
         font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
-        text = font.render("Time: {}:{}:{}".format(self.min, self.sec, self.mil_sec), True, (globals.VIOLETTE),(globals.DARKBLUE))
+        text = font.render("Time: {}:{}:{}".format(self.min, self.sec, self.mil_sec), True, ("VIOLETTE"),("DARKBLUE"))
         self.screen.blit(text, (self.x, self.y))
         pygame.display.update()
 
@@ -61,9 +61,10 @@ class Gui:
 
     def show_speed(self, speed):
         font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
-        text = font.render("{} kmh".format(round(speed/60)), True, (globals.VIOLETTE),
-                           (globals.DARKBLUE))
+        text = font.render("{} kmh".format(round(speed/60)), True, ("VIOLETTE"),
+                           ("DARKBLUE"))
         self.screen.blit(text, (self.x + 940, self.y))
         pygame.display.update()
 
 
+'''

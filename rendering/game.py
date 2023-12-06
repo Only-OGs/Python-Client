@@ -64,7 +64,7 @@ class Game:
         self.create_background()
         self.background_group.draw(self.screen)
         self.add = 0
-        timer = gui.Gui(screen=self.screen, x=0, y=0)
+      #  timer = gui.Gui(screen=self.screen, x=0, y=0)
 
         while True:
 
@@ -92,8 +92,8 @@ class Game:
                         self.keyFaster = False
                     if event.key == pygame.K_DOWN:
                         self.keySlower = False
-            timer.show_speed(speed=self.speed)
-            timer.start_timer()
+          #  timer.show_speed(speed=self.speed)
+           # timer.start_timer()
             '''
             if(Ziellinie):
                 timer.end_timer()

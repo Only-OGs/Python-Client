@@ -1,5 +1,5 @@
 import math
-
+import rendering.globals_vars as var
 import pygame
 
 
@@ -125,3 +125,9 @@ class Util:
         shape_surf = pygame.Surface(target_rect.size, pygame.SRCALPHA)
         pygame.draw.polygon(shape_surf, color, [(x - min_x, y - min_y) for x, y in points])
         surface.blit(shape_surf, target_rect)
+
+    @staticmethod
+    def reset_buttons():
+        for x in var.buttons:
+            var.buttons[x] = False
+

@@ -34,10 +34,10 @@ class Lobby:
         send_button = Button(screen_width // 2, screen_height // 2 - (2 * button_spacing),
                                          button_image, button_size, button_image_hover)
 
-        leave_button.text(self.screen, "Verlassen", 18, (255, 255, 255))
-        send_button.text(self.screen, "Senden", 18, (255, 255, 255))
-        isLeaveClicked = leave_button.draw(self.screen)
-        isSendClicked = send_button.draw(self.screen)
+        leave_button.render(self.screen, "Verlassen", 18, (255, 255, 255))
+        send_button.render(self.screen, "Senden", 18, (255, 255, 255))
+        isLeaveClicked = leave_button.check(self.screen)
+        isSendClicked = send_button.check(self.screen)
 
 
         for event in pygame.event.get():
