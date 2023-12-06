@@ -25,9 +25,7 @@ class Game:
     def game_loop(self):
         SpriteGen.create_player()
         SpriteGen.create_background()
-
         timer = gui.Gui(screen=var.screen, x=0, y=0)
-
 
         while True:
             for event in pygame.event.get():
@@ -53,6 +51,7 @@ class Game:
                     if event.key == pygame.K_UP:
                         var.keyFaster = False
                     if event.key == pygame.K_DOWN:
+
                         var.keySlower = False
 
             Render.render()

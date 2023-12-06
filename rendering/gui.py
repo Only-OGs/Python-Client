@@ -1,9 +1,11 @@
 import pygame
+import rendering.globals_vars as var
 from rendering import game
 import sys
 import pygame_gui
+
 import time
-from globals import globals
+
 
 '''
 In dieser Class, wird das gesamte GUI erstellt.
@@ -11,6 +13,7 @@ Sämtliche Anzeigen werden pro X Framerate mal in der Sekunde ausgegeben.
 Im folgenden Frame werden alle Elemente mit einem Rechteck übermalt,
 um im Anschluss wieder gezeichnet zu werden.
 '''
+
 
 class Gui:
 
@@ -34,7 +37,6 @@ class Gui:
         self.text_offste = 10
         self.first_lab = True
 
-
     #Zählt den Timer hoch, muss im Game-Loop aufgerufen werden
     def count_up(self):
         self.mil_sec += self.add
@@ -54,12 +56,13 @@ class Gui:
 
         font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
         text = font.render("schnellste Runde {}:{}:{}".format(self.rec_min, self.rec_sec, self.rec_mil_sec), True,
-                           (globals.VIOLETTE))
+                           (var.VIOLETTE))
         self.update_gui(x=1024 // 2 - 175, y=self.y, width=300)
         self.screen.blit(text, (1024 // 2 - 150, self.y + self.text_offste))
 
+
         font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
-        text = font.render("Time: {}:{}:{}".format(self.min, self.sec, self.mil_sec), True, (globals.VIOLETTE))
+        text = font.render("Time: {}:{}:{}".format(self.min, self.sec, self.mil_sec), True, (var.VIOLETTE))
         self.update_gui(x=self.x, y=self.y, width=150)
         self.screen.blit(text, (self.x, self.y + self.text_offste))
 
@@ -89,19 +92,18 @@ class Gui:
     #Zeigt dem Spieler seine Gewschwindigkeit
     def show_speed(self, speed):
         font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
-        text = font.render("{} kmh".format(round(speed/60)), True, (globals.VIOLETTE))
+
+        text = font.render("{} kmh".format(round(speed/60)), True, (var.VIOLETTE))
         self.update_gui(x=self.x + 900, y=self.y, width=150)
         self.screen.blit(text, (self.x + 900, self.y + self.text_offste))
 
     #Übermalt die Alten GUI elemente damit diese sich nicht Stacken.
     def update_gui(self,x, y, width):
         cover_old_frame = pygame.rect.Rect(x, y, width, 40)
-        pygame.draw.rect(self.screen ,(globals.DARKBLUE), cover_old_frame)
+        pygame.draw.rect(self.screen ,(var.DARKBLUE), cover_old_frame)
 
     def reset_lap(self):
         self.min = 0
         self.sec = 0
         self.mil_sec = 0
-
-
 

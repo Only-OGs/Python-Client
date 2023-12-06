@@ -132,6 +132,11 @@ class Util:
         surface.blit(shape_surf, target_rect)
 
     @staticmethod
+    def reset_buttons():
+        for x in var.buttons:
+            var.buttons[x] = False
+
+    @staticmethod
     def easeIn(a, b, percent):
         return a + (b - a) * math.pow(percent, 2)
 

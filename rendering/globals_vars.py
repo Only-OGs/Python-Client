@@ -1,11 +1,14 @@
 import math
+import pygame
+from communication.client import SocketIOClient
 """Globale Game Variablen"""
 fps = 60
 step = 1 / fps
-width = 1024
-height = 768
+width = 1329
+height = 886
 segments = []
 screen = None
+menu_screen = pygame.display.set_mode((1329, 886))
 background = None
 sprites = None
 resolution = None
@@ -30,7 +33,7 @@ breaking = -maxSpeed
 decel = -maxSpeed / 5
 offRoadDecel = -maxSpeed / 2
 offRoadLimit = maxSpeed / 4
-clock = None
+clock = pygame.time.Clock()
 centrifugal = 0.37
 keyLeft = False
 keyRight = False
@@ -44,4 +47,44 @@ background_sprite_group = None
 player_sprite_group = None
 track = None
 gameStart = None
+menu_state = "main_menu"
+buttons = {
+    "Anmelden": False,
+    "Zurueck": False,
+    "Registrieren": False,
+    "Abmelden": False,
+    "Schnelles Spiel": False,
+    "Lobby erstellen": False,
+    "Lobby suchen": False,
+    "Jetzt Registrieren": False,
+    "Jetzt Anmelden": False,
+    "Mehrspieler": False,
+    "Optionen": False,
+    "Einzelspieler": False,
+    "Suchen": False
+}
+
+SCREEN_WIDTH = 1329
+SCREEN_HEIGHT = 886
+client = SocketIOClient()
+search_counter = 0
+player_colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 0), (255, 0, 255), (0, 255, 255),
+                 (128, 0, 0), (0, 128, 0)]
+id_playerList = []
+slider_width = 500
+slider_height = 30
+music_slider = None
+login_name = None
+login_password = None
+register_name = None
+register_password = None
+manager_option = None
+manager_register = None
+manager_Login = None
+manager_lobby_search = None
+lobby_search_input = None
+BLACK, WHITE, RED, VIOLETTE, CYAN, DARKBLUE, YELLOW, ORANGE = (0, 0, 0), (255, 255, 255), (255, 0, 0), (255, 6, 193), (0, 255, 234), (20, 21, 44), (234, 235, 44), (250, 128, 87)
+DARK_VIOLLETTE, DARK_CYAN, DARK_YELLOW, LIGHT_ORANGE = (186, 46, 151), (55, 214, 201), (234, 235, 117), (255, 151, 116)
+
+
 
