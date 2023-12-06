@@ -15,6 +15,7 @@ class SocketIOClient:
 
         # Serverurl
         self.server_url = "http://89.58.1.158:8080"
+        #self.server_url = "http://localhost:8080"
         # Client mit aktivem Logging
         self.sio = socketio.Client(logger=True, engineio_logger=True)
 

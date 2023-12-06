@@ -19,11 +19,11 @@ font_size = 20
 
 class Layout:
 
-    def __create_button(screen, x, y, text):
+    def __create_button(screen, x, y, text, trigger):
         button = Button(x=x, y=y, image=button_image, size=button_size, hover=button_image_hover)
         button.render(screen=screen, text=text, size=font_size, color="WHITE")
         clicked = button.check()
-        var.buttons[text] = clicked
+        var.buttons[trigger] = clicked
 
     @staticmethod
     def init_second_background(screen):
@@ -44,20 +44,20 @@ class Layout:
         screen.blit(text_surface, (x, y))
 
     @staticmethod
-    def linker_button(screen, text):
-        return Layout.__create_button(screen, **button_positions["linker"], text=text)
+    def linker_button(screen, text, trigger):
+        return Layout.__create_button(screen, **button_positions["linker"], text=text, trigger=trigger)
 
     @staticmethod
-    def mittlerer_button(screen, text):
-        return Layout.__create_button(screen, **button_positions["mittlerer"], text=text)
+    def mittlerer_button(screen, text, trigger):
+        return Layout.__create_button(screen, **button_positions["mittlerer"], text=text, trigger=trigger)
 
     @staticmethod
-    def rechter_button(screen, text):
-        return Layout.__create_button(screen, **button_positions["rechter"], text=text)
+    def rechter_button(screen, text, trigger):
+        return Layout.__create_button(screen, **button_positions["rechter"], text=text, trigger=trigger)
 
     @staticmethod
     def log_reg_button(screen, text):
-        return Layout.__create_button(screen, **button_positions["log_reg"], text=text)
+        return Layout.__create_button(screen, **button_positions["log_reg"], text=text, trigger=text)
 
     @staticmethod
     def lobby_create_button(screen, text):
@@ -67,6 +67,42 @@ class Layout:
         clicked = lobby_create_button.check()
         lobby_create_button.render(screen=screen, text=text, size=18, color="WHITE")
         var.buttons[text] = clicked
+
+    @staticmethod
+    def zureuck_button(screen, x, y):
+        zurueck_button = Button(x, y,
+                                button_image, 2, button_image_hover)
+
+        clicked = zurueck_button.check()
+        zurueck_button.render(screen=screen, text="Zureuck", size=18, color="WHITE")
+        var.buttons["Anmelden"] = clicked
+
+    @staticmethod
+    def abmelden_button(screen, x, y):
+        abmelden_button = Button(x, y,
+                                button_image, 2, button_image_hover)
+
+        clicked = abmelden_button.check()
+        abmelden_button.render(screen=screen, text="Abmelden", size=18, color="WHITE")
+        var.buttons["Abmelden"] = clicked
+
+    @staticmethod
+    def einstellungen_button(screen, x, y):
+        einstellungen_button = Button(x, y,
+                                 button_image, 2, button_image_hover)
+
+        clicked = einstellungen_button.check()
+        einstellungen_button.render(screen=screen, text="Optionen", size=18, color="WHITE")
+        var.buttons["Optionen"] = clicked
+
+    @staticmethod
+    def bereit(screen, x, y):
+        einstellungen_button = Button(x, y,
+                                      button_image, 2, button_image_hover)
+
+        clicked = einstellungen_button.check()
+        einstellungen_button.render(screen=screen, text="Bereit", size=18, color="WHITE")
+        var.buttons["Zureuck"] = clicked
 
     @staticmethod
     def quick_game_button(screen, text):
@@ -109,26 +145,55 @@ class Layout:
     @staticmethod
     def create_ingamelobby(screen):
         # counter für "Suchen..."
+
+        Layout.init_second_background(var.menu_screen)
+
         var.search_counter = 0
-        player_texts = [pygame.font.SysFont(FONT, 20).render(player, True, (255, 255, 255)) for player in
+        player_texts = [pygame.font.Font(FONT, 20).render(player, True, (255, 255, 255)) for player in
                         var.id_playerList]
 
+        #Button
+        Layout.zureuck_button(x=var.width//3-300,y=var.height-150, screen=var.menu_screen)
+        Layout.abmelden_button(x=var.width//3,y=var.height-150, screen=var.menu_screen)
+        Layout.einstellungen_button(x=var.width//3+300,y=var.height-150, screen=var.menu_screen)
+        Layout.bereit(x=var.width // 3 + 300, y=var.height - 50, screen=var.menu_screen)
 
         pygame.draw.rect(screen, (255, 255, 255), (100, var.height // 16, 400, 40), 0)
         for i, (text, color) in enumerate(zip(player_texts, var.player_colors)):
             pygame.draw.rect(screen, color, (100, (var.height // 16) + (80 * i), 400, 40), 0)
             screen.blit(text, (110, (var.height // 16) + (80 * i) + 10))
 
+        #Lobby ID
+        font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
+        text = font.render("Lobby ID: {}".format(var.lobby_id), True, (var.WHITE))
+        #update_gui(x=self.x, y=self.y, width=150)
+        screen.blit(text, (var.width//2+400, var.height-150))
+
+        #Lobby Countdown
+        font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
+        text = font.render("Starte in: {}".format(var.lobby_id), True, (var.WHITE))
+        # update_gui(x=self.x, y=self.y, width=150)
+        screen.blit(text, (var.width // 2 + 400, + 20))
+
+        #Name
+        font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
+        text = font.render("ID: {}".format(var.lobby_name_id), True, (var.WHITE))
+        # update_gui(x=self.x, y=self.y, width=150)
+        screen.blit(text, (+100, + 20))
+
+
+
+
         var.search_counter += 1
 
         if var.search_counter == 60:
-            player_texts.extend([pygame.font.SysFont(FONT, 20).render("Suchen .", True, (0, 0, 0))] * (
+            player_texts.extend([pygame.font.Font(FONT, 20).render("Suchen .", True, (0, 0, 0))] * (
                     len(player_texts) - len(var.id_playerList)))
         elif var.search_counter == 120:
-            player_texts.extend([pygame.font.SysFont(FONT, 20).render("Suchen ..", True, (0, 0, 0))] * (
+            player_texts.extend([pygame.font.Font(FONT, 20).render("Suchen ..", True, (0, 0, 0))] * (
                     len(player_texts) - len(var.id_playerList)))
         elif var.search_counter == 180:
-            player_texts.extend([pygame.font.SysFont(FONT, 20).render("Suchen ...", True, (0, 0, 0))] * (
+            player_texts.extend([pygame.font.Font(FONT, 20).render("Suchen ...", True, (0, 0, 0))] * (
                     len(player_texts) - len(var.id_playerList)))
 
         var.search_counter = 0

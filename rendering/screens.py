@@ -11,9 +11,9 @@ class Screens:
         var.client.disconnect()
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus()
-        Layout.linker_button(screen=var.menu_screen, text="Einzelspieler")
-        Layout.mittlerer_button(screen=var.menu_screen, text="Optionen")
-        Layout.rechter_button(screen=var.menu_screen, text="Mehrspieler")
+        Layout.linker_button(screen=var.menu_screen, text="Einzelspieler",trigger="Einzelspieler")
+        Layout.mittlerer_button(screen=var.menu_screen, text="Optionen",trigger="Optionen")
+        Layout.rechter_button(screen=var.menu_screen, text="Mehrspieler",trigger="Mehrspieler")
 
     @staticmethod
     def create_mulitplayer_screen():
@@ -21,14 +21,14 @@ class Screens:
             var.client.connect()
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus()
-        Layout.linker_button(screen=var.menu_screen, text="Jetzt Anmelden")
-        Layout.mittlerer_button(screen=var.menu_screen, text="Zurueck")
-        Layout.rechter_button(screen=var.menu_screen, text="Jetzt Registrieren")
+        Layout.linker_button(screen=var.menu_screen, text="Anmelden",trigger="Jetzt Anmelden")
+        Layout.mittlerer_button(screen=var.menu_screen, text="Zurueck",trigger="Zurueck")
+        Layout.rechter_button(screen=var.menu_screen, text="Registrieren",trigger="Jetzt Registrieren")
 
     @staticmethod
     def create_option_screen():
         Layout.init_background(screen=var.menu_screen)
-        Layout.linker_button(screen=var.menu_screen, text="Zurueck")
+        Layout.linker_button(screen=var.menu_screen, text="Zurueck",trigger="Zurueck")
         pygame.mixer.music.set_volume(var.music_slider.current_value)
         var.manager_option.draw_ui(var.menu_screen)
 
@@ -56,7 +56,7 @@ class Screens:
         Layout.init_second_background(screen=var.menu_screen)
         Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="Lobby suchen", size=35,
                          color=(255, 6, 193))
-        Layout.mittlerer_button(screen=var.menu_screen, text="Suchen")
+        Layout.mittlerer_button(screen=var.menu_screen, text="Suchen",trigger="Suchen")
         var.manager_lobby_search.draw_ui(var.menu_screen)
 
 
@@ -64,7 +64,7 @@ class Screens:
     def create_log_screen():
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus()
-        Layout.linker_button(screen=var.menu_screen, text="Zurueck")
+        Layout.linker_button(screen=var.menu_screen, text="Zurueck",trigger="Mehrspieler")
         Layout.log_reg_button(screen=var.menu_screen, text="Anmelden")
         var.manager_Login.draw_ui(var.menu_screen)
 
@@ -72,7 +72,7 @@ class Screens:
     def create_registration_screen():
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus()
-        Layout.linker_button(screen=var.menu_screen, text="Zurueck")
+        Layout.linker_button(screen=var.menu_screen, text="Zurueck",trigger="Mehrspieler")
         Layout.log_reg_button(screen=var.menu_screen, text="Registrieren")
         var.manager_register.draw_ui(var.menu_screen)
 

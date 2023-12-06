@@ -67,6 +67,8 @@ buttons = {
 SCREEN_WIDTH = 1329
 SCREEN_HEIGHT = 886
 client = SocketIOClient()
+lobby_id = SocketIOClient().lobbyid
+lobby_name_id = SocketIOClient().lobbyplayer
 search_counter = 0
 player_colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 0), (255, 0, 255), (0, 255, 255),
                  (128, 0, 0), (0, 128, 0)]
