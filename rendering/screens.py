@@ -51,6 +51,15 @@ class Screens:
         Layout.log_out_button(screen=var.menu_screen, text="Abmelden")
 
     @staticmethod
+    def create_lobby_search():
+        Layout.init_second_background(screen=var.menu_screen)
+        Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="Lobby suchen", size=35,
+                         color=(255, 6, 193))
+        Layout.mittlerer_button(screen=var.menu_screen, text="Suchen")
+        var.manager_lobby_search.draw_ui(var.menu_screen)
+
+
+    @staticmethod
     def create_log_screen():
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus()
@@ -90,12 +99,24 @@ class Screens:
            Screens.create_mulitplayer_screen()
         elif var.menu_state == "ingame_lobby":
             Screens.create_ingameLobby()
+        elif var.menu_state == "search_for_lobby":
+            Screens.create_lobby_search()
 
     @staticmethod
     def init_music():
         pygame.mixer.music.load(filename="assets/Music/StartMenuMusic.mp3")
         pygame.mixer.music.play(loops=5, fade_ms=40, start=0)
         pygame.mixer.music.set_volume(0.01)
+
+
+    @staticmethod
+    def create_lobby_search_input():
+        var.manager_lobby_search = pygame_gui.UIManager((var.width, var.height))
+        var.lobby_search_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect(((var.width-360)//2, (var.height-120)//2), (360, 60)),
+                                                                manager=var.manager_lobby_search, object_id="#search",
+                                                                placeholder_text="LobbyID")
+
+
 
     @staticmethod
     def create_register_input():

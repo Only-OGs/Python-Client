@@ -2,7 +2,7 @@ import pygame
 from rendering import game
 import sys
 import pygame_gui
-'''
+
 class Gui:
     def __init__(self, screen,x ,y):
         self.min = 0
@@ -66,5 +66,3 @@ class Gui:
         self.screen.blit(text, (self.x + 940, self.y))
         pygame.display.update()
 
-
-'''

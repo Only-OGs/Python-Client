@@ -61,6 +61,7 @@ buttons = {
     "Mehrspieler": False,
     "Optionen": False,
     "Einzelspieler": False,
+    "Suchen": False
 }
 
 SCREEN_WIDTH = 1329
@@ -80,4 +81,6 @@ register_password = None
 manager_option = None
 manager_register = None
 manager_Login = None
+manager_lobby_search = None
+lobby_search_input = None
 
