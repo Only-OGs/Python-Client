@@ -3,7 +3,6 @@ import time
 
 class Button:
 
-
     ''' Erstellt einen neuen Button, mit hover effekt.
     :param int x: X Kordinate
     :param int y: Y Kordinate
@@ -11,6 +10,7 @@ class Button:
     :param int size: skalierungsfaktor
     :param str hover: pfad zum hover button
     '''
+
     def __init__(self, x, y, image, size, hover):
         skalierungsfaktor = size
         self.x = x
@@ -54,7 +54,8 @@ class Button:
         screen.blit(self.button_image, (self.rect.x, self.rect.y))
         screen.blit(img, (self.x - 90, self.y - 15))
 
-    ''' Erstellt die Funktionalität hinter dem button.
+    ''' 
+    Erstellt die Funktionalität hinter dem button.
     '''
     def check(self):
 

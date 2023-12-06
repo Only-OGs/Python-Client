@@ -14,7 +14,6 @@ Screens.create_register_input()
 Screens.create_music_slider()
 Screens.create_lobby_search_input()
 
-
 while run:
     tick = var.clock.tick(var.fps)
 
@@ -57,7 +56,6 @@ while run:
         if var.client.logincomplete:
             var.menu_state = "lobby_option"
 
-
     elif var.buttons["Schnelles Spiel"] or var.buttons["Lobby erstellen"]:
         var.menu_state = "ingame_lobby"
 
@@ -70,9 +68,12 @@ while run:
             var.menu_state = "ingame_lobby"
 
     elif var.buttons["Jetzt Registrieren"]:
+            var.menu_state = "registration_menu"
+
+    elif var.buttons["Registrieren"]:
         var.client.send_register_data(var.register_name.get_text(), var.register_password.get_text())
         if var.client.registercomplete:
-            var.menu_state = "registration_menu"
+            var.menu_state = "log_menu"
 
     elif var.buttons["Abmelden"]:
         var.menu_state = "main_menu"
@@ -91,7 +92,5 @@ while run:
 
     Util.reset_buttons()
     pygame.display.update()
-
-
 
 pygame.quit()

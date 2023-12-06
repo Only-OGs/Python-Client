@@ -152,3 +152,4 @@ class Screens:
                                       (var.slider_width, var.slider_height)), start_value=0.01,
             value_range=((0.00), (0.10)), manager=var.manager_option
         )
+

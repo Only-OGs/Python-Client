@@ -1,7 +1,7 @@
 from pygame.font import Font
 from rendering.button import Button
-from globals.globals import screen_width
-from globals.globals import screen_height
+from rendering.globals_vars import width
+from rendering.globals_vars import height
 import pygame
 import sys
 
@@ -28,17 +28,16 @@ class Lobby:
         lobbyID = "ID"
         searchText = "Suchen"
 
-        leave_button = Button(screen_width // 2, screen_height // 2 - (2 * button_spacing),
+        leave_button = Button(width // 2, height // 2 - (2 * button_spacing),
                                          button_image, button_size, button_image_hover)
 
-        send_button = Button(screen_width // 2, screen_height // 2 - (2 * button_spacing),
+        send_button = Button(width // 2, height // 2 - (2 * button_spacing),
                                          button_image, button_size, button_image_hover)
 
         leave_button.render(self.screen, "Verlassen", 18, (255, 255, 255))
         send_button.render(self.screen, "Senden", 18, (255, 255, 255))
         isLeaveClicked = leave_button.check(self.screen)
         isSendClicked = send_button.check(self.screen)
-
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
