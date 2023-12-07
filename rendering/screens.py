@@ -10,69 +10,72 @@ class Screens:
     def create_menu_screen():
         var.client.disconnect()
         Layout.init_background(screen=var.menu_screen)
-        Layout.create_Serverstatus()
-        Layout.linker_button(screen=var.menu_screen, text="Einzelspieler")
-        Layout.mittlerer_button(screen=var.menu_screen, text="Optionen")
-        Layout.rechter_button(screen=var.menu_screen, text="Mehrspieler")
+        Layout.create_Serverstatus_gui()
+        Layout.linker_button(screen=var.menu_screen, text="Einzelspieler",trigger="Einzelspieler")
+        Layout.mittlerer_button(screen=var.menu_screen, text="Optionen",trigger="Optionen")
+        Layout.rechter_button(screen=var.menu_screen, text="Mehrspieler",trigger="Mehrspieler")
 
     @staticmethod
     def create_mulitplayer_screen():
         if not var.client.sio.connected:
             var.client.connect()
         Layout.init_background(screen=var.menu_screen)
-        Layout.create_Serverstatus()
-        Layout.linker_button(screen=var.menu_screen, text="Jetzt Anmelden")
-        Layout.mittlerer_button(screen=var.menu_screen, text="Zurueck")
-        Layout.rechter_button(screen=var.menu_screen, text="Jetzt Registrieren")
+        Layout.create_Serverstatus_gui()
+        Layout.linker_button(screen=var.menu_screen, text="Anmelden",trigger="Jetzt Anmelden")
+        Layout.mittlerer_button(screen=var.menu_screen, text="Zurueck",trigger="Zurueck")
+        Layout.rechter_button(screen=var.menu_screen, text="Registrieren",trigger="Jetzt Registrieren")
 
     @staticmethod
     def create_option_screen():
         Layout.init_background(screen=var.menu_screen)
-        Layout.linker_button(screen=var.menu_screen, text="Zurueck")
+        Layout.linker_button(screen=var.menu_screen, text="Zurueck",trigger="Zurueck")
         pygame.mixer.music.set_volume(var.music_slider.current_value)
         var.manager_option.draw_ui(var.menu_screen)
 
     @staticmethod
     def create_ingame_Lobby():
-        Layout.init_second_background(screen=var.menu_screen)
         Layout.create_ingamelobby(screen=var.menu_screen)
 
     @staticmethod
     def create_lobby_screen():
         Layout.init_background(screen=var.menu_screen)
-        Layout.create_Serverstatus()
+        Layout.create_Serverstatus_gui()
         Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="Lobbyauswahl", size=45,
                          color=(255,6,193))
-        if var.client.loginstatus != '':
-            Layout.draw_text(screen=var.menu_screen, x=50, y=var.height - 50, text=var.client.loginstatus, size=20,
-                             color=(255,6,193))
+        Layout.create_loginstatus_gui()
         Layout.search_lobby_button(screen=var.menu_screen, text="Lobby suchen")
         Layout.lobby_create_button(screen=var.menu_screen, text="Lobby erstellen")
         Layout.quick_game_button(screen=var.menu_screen, text="Schnelles Spiel")
         Layout.log_out_button(screen=var.menu_screen, text="Abmelden")
+
 
     @staticmethod
     def create_lobby_search():
         Layout.init_second_background(screen=var.menu_screen)
         Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="Lobby suchen", size=35,
                          color=(255, 6, 193))
-        Layout.mittlerer_button(screen=var.menu_screen, text="Suchen")
+        Layout.mittlerer_button(screen=var.menu_screen, text="Suchen",trigger="Suchen")
+        #if not var.client.searchlobbyJoined:
+         #   Layout.draw_text(screen=var.menu_screen, x=50, y=var.height - 50, text=var.client.lobbymessage, size=20,
+         #                    color=(255, 6, 193))
+          #  var.client.searchlobbyJoined = False
+        Layout.create_lobbystatus_gui()
         var.manager_lobby_search.draw_ui(var.menu_screen)
 
 
     @staticmethod
     def create_log_screen():
         Layout.init_background(screen=var.menu_screen)
-        Layout.create_Serverstatus()
-        Layout.linker_button(screen=var.menu_screen, text="Zurueck")
+        Layout.create_Serverstatus_gui()
+        Layout.linker_button(screen=var.menu_screen, text="Zurueck",trigger="Mehrspieler")
         Layout.log_reg_button(screen=var.menu_screen, text="Anmelden")
         var.manager_Login.draw_ui(var.menu_screen)
 
     @staticmethod
     def create_registration_screen():
         Layout.init_background(screen=var.menu_screen)
-        Layout.create_Serverstatus()
-        Layout.linker_button(screen=var.menu_screen, text="Zurueck")
+        Layout.create_Serverstatus_gui()
+        Layout.linker_button(screen=var.menu_screen, text="Zurueck",trigger="Mehrspieler")
         Layout.log_reg_button(screen=var.menu_screen, text="Registrieren")
         var.manager_register.draw_ui(var.menu_screen)
 
@@ -81,20 +84,6 @@ class Screens:
 
         Layout.init_second_background(screen=var.menu_screen)
         Layout.create_ingamelobby(screen=var.menu_screen)
-        Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="LobbyID:", size=15,
-                         color=(255, 255, 255))
-        Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="Timer:", size=15,
-                         color=(255, 255, 255))
-        Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="Die Lobby:", size=15,
-                         color=(255, 255, 255))
-        Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="ID:", size=20,
-                         color=(255, 255, 255))
-       # Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text=var.client.timer", size=35,
-              #           color=(255, 6, 193))
-        # Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text=var.client.lobbyid", size=35,
-       # color = (255, 6, 193))
-    # Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text=var.client.playerid", size=35,
-    # color = (255, 6, 193))
 
 
 

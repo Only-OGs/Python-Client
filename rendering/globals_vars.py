@@ -1,4 +1,6 @@
 import math
+import threading
+
 import pygame
 from communication.client import SocketIOClient
 """Globale Game Variablen"""
@@ -61,16 +63,20 @@ buttons = {
     "Mehrspieler": False,
     "Optionen": False,
     "Einzelspieler": False,
-    "Suchen": False
+    "Suchen": False,
+    "Bereit": False,
+    "Verlassen": False
 }
 
 SCREEN_WIDTH = 1329
 SCREEN_HEIGHT = 886
 client = SocketIOClient()
+lobby_id = SocketIOClient().lobbyid
+lobby_name_id = SocketIOClient().lobbyplayer
 search_counter = 0
 player_colors = [(255, 6, 193), (186, 46, 151), (0, 255, 234), (55, 214, 201), (234, 235, 44), (234, 235, 117),
                  (250, 128, 87), (255, 155, 116)]
-id_playerList = ["Oliver","Suchen","Suchen","Suchen","Suchen","Suchen","Suchen","Suchen"]
+id_playerList = []
 slider_width = 500
 slider_height = 30
 music_slider = None
@@ -87,4 +93,5 @@ BLACK, WHITE, RED, VIOLETTE, CYAN, DARKBLUE, YELLOW, ORANGE = (0, 0, 0), (255, 2
 DARK_VIOLLETTE, DARK_CYAN, DARK_YELLOW, LIGHT_ORANGE = (186, 46, 151), (55, 214, 201), (234, 235, 117), (255, 151, 116)
 is_await = False
 player_texts = []
-
+is_running = False
+lock = threading.Lock()

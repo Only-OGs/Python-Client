@@ -15,6 +15,7 @@ class SocketIOClient:
 
         # Serverurl
         self.server_url = "http://89.58.1.158:8080"
+        #self.server_url = "http://localhost:8080"
         # Client mit aktivem Logging
         self.sio = socketio.Client(logger=True, engineio_logger=True)
 
@@ -30,23 +31,38 @@ class SocketIOClient:
         self.sio.on('receive_track', self.on_receiveTrack)
         self.sio.on('game_start', self.on_gameStart)
         self.sio.on('get_lobby', self.on_get_lobby)
+        self.sio.on('player_leave', self.on_playerLeave)
 
 
         # Initialisierung von Variablen für Erfolg/Misserfolg bei Aktionen
         self.logoutstatus = None
         self.loginstatus = None
+        self.loginmessage = None
+        self.logincomplete = False
+
         self.registerstatus = None
         self.registercomplete = False
+
         self.lobbystatus = None
         self.lobbymessage = None
-        self.logincomplete = False
+
+        self.lobbycreated = False
+        self.lobbyleaft= False
+        self.lobbyJoined = False
+        self.searchlobbyJoined = False
+        self.quickLobbyJoined = False
+
         self.lobbyplayer = None
         self.lobbyid = None
         self.playersname = None
         self.chat_message = None
-        self.lobbyJoined = None
 
-    def on_gameStart(self, data):
+
+    def on_playerLeave(self,data):
+        if self.sio.connected:
+            if data.get('status')=='left':
+                self.lobbyleaft = True
+    def on_gameStart(self):
         var.gameStart = True
 
     def on_receiveTrack(self, data):
@@ -58,6 +74,8 @@ class SocketIOClient:
         if self.sio.connected:
             self.lobbymessage = data.get("message")
             self.lobbystatus = data.get("status")
+            if self.lobbystatus == 'success':
+                self.quickLobbyJoined = True
 
     def startGame(self):
         if self.sio.connected:
@@ -67,9 +85,11 @@ class SocketIOClient:
 
     def on_lobbycreated(self, data):
         if self.sio.connected:
-            status = data.get('status')
-            message = data.get('message')
-            self.lobbystatus = message
+            if data.get('status') == 'lobby_created':
+                self.lobbycreated = True
+                message = data.get('message')
+                self.lobbyid = message
+
 
     # erstellt eine Lobby
     def create_lobby(self):
@@ -87,9 +107,13 @@ class SocketIOClient:
                 print("Übergebene Daten sind kein String")
 
     def on_search_lobby(self, data):
+        print(data)
         if self.sio.connected:
             self.lobbystatus = data.get("status")
             self.lobbymessage = data.get("message")
+            self.lobbyid = data.get("lobby")
+            if self.lobbystatus == 'success':
+                self.searchlobbyJoined = True
     def on_logout(self, data):
         if self.sio.connected:
             status = data.get('status')
@@ -103,7 +127,8 @@ class SocketIOClient:
                 self.lobbyJoined = True
             self.lobbymessage = data.get("message")
             self.lobbyid = data.get("lobby")
-            var.id_playerList = data.get("players")
+            var.id_playerList = data.get("players").split(';')
+
     def leave_lobby(self):
         self.sio.emit("leave_lobby")
 
@@ -114,15 +139,18 @@ class SocketIOClient:
     def join_lobby(self, lobbycode):
         if self.sio.connected:
             if lobbycode != '':
-                self.sio.emit("join_lobby", lobbycode)
+                data = {"lobby": lobbycode}
+                self.sio.emit("join_lobby", data)
             else:
                 self.lobbystatus = "Bitte gib eine LobbyID ein"
     def on_login(self, data):
         if self.sio.connected:
             message = data.get('message')
-            self.loginstatus = message
+            self.loginmessage = message
             if data.get('status') == "login_success":
                 self.logincomplete = True
+            else:
+                self.playersname = ''
 
     def on_register(self, data):
         if self.sio.connected:
@@ -164,6 +192,7 @@ class SocketIOClient:
                     "Der Username muss mindestens 3 Zeichen lang sein \nDas Passwort mindestens 6 Zeichen lang sein.")
             else:
                 data = {"user": user, "password": password}
+                var.client.playersname = user
                 self.sio.emit("login", data)
 
 

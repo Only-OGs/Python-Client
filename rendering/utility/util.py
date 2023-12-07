@@ -219,10 +219,21 @@ class Util:
         if var.is_await:
             if var.client.logincomplete:
                 var.menu_state = "lobby_option"
+                var.client.logincomplete = False
                 var.is_await = False
             elif var.client.registercomplete:
                 var.menu_state = "log_menu"
+                var.client.registercomplete = False
                 var.is_await = False
-          #  elif (var.client.lobbystatus == "lobby_created" or var.client.lobbystatus == "search_lobby") and (var.client.lobbyJoined):
+            elif var.client.lobbycreated:
                 var.menu_state = "ingame_lobby"
                 var.is_await = False
+                var.client.lobbycreated = False
+            elif var.client.searchlobbyJoined and var.client.lobbyid != '':
+                var.is_await = False
+                var.client.searchlobbyJoined = False
+                var.menu_state = "ingame_lobby"
+            elif var.client.quickLobbyJoined:
+                var.is_await = False
+                var.client.quickLobbyJoined = False
+                var.menu_state = "ingame_lobby"

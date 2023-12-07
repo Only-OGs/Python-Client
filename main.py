@@ -62,15 +62,18 @@ while run:
         var.client.send_login_data(var.login_name.get_text(), var.login_password.get_text())
         var.is_await = True
 
-
     elif var.buttons["Schnelles Spiel"] or var.buttons["Lobby erstellen"]:
         if var.buttons["Schnelles Spiel"]:
             var.client.get_lobby()
             var.is_await = True
-        else:
+        elif var.buttons["Lobby erstellen"]:
             var.client.create_lobby()
+            var.id_playerList.append(var.client.playersname)
             var.is_await = True
 
+    elif var.buttons["Verlassen"]:
+        var.client.leave_lobby()
+        var.menu_state = "lobby_option"
 
     elif var.buttons["Lobby suchen"]:
         var.menu_state = "search_for_lobby"
