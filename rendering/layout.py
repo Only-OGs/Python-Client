@@ -104,32 +104,16 @@ class Layout:
 
 
 
-    #TODO - noch nicht gestestet!
 
     @staticmethod
     def create_ingamelobby(screen):
-        # counter für "Suchen..."
-        var.search_counter = 0
-        player_texts = [pygame.font.SysFont(FONT, 20).render(player, True, (255, 255, 255)) for player in
-                        var.id_playerList]
+        for i, (playername, color) in enumerate(zip(var.id_playerList, var.player_colors)):
+            pygame.draw.rect(screen, (255, 255, 255, 128), (100, (var.height // 16) + (80 * i), 400, 40), 0)
+            font = pygame.font.Font(FONT, 20)
+
+            playernametext = font.render(playername, True, color)
+            var.player_texts.append(playernametext)
+            screen.blit(playernametext, (110, (var.height // 16) + (80 * i) + 10))
 
 
-        pygame.draw.rect(screen, (255, 255, 255), (100, var.height // 16, 400, 40), 0)
-        for i, (text, color) in enumerate(zip(player_texts, var.player_colors)):
-            pygame.draw.rect(screen, color, (100, (var.height // 16) + (80 * i), 400, 40), 0)
-            screen.blit(text, (110, (var.height // 16) + (80 * i) + 10))
-
-        var.search_counter += 1
-
-        if var.search_counter == 60:
-            player_texts.extend([pygame.font.SysFont(FONT, 20).render("Suchen .", True, (0, 0, 0))] * (
-                    len(player_texts) - len(var.id_playerList)))
-        elif var.search_counter == 120:
-            player_texts.extend([pygame.font.SysFont(FONT, 20).render("Suchen ..", True, (0, 0, 0))] * (
-                    len(player_texts) - len(var.id_playerList)))
-        elif var.search_counter == 180:
-            player_texts.extend([pygame.font.SysFont(FONT, 20).render("Suchen ...", True, (0, 0, 0))] * (
-                    len(player_texts) - len(var.id_playerList)))
-
-        var.search_counter = 0
 

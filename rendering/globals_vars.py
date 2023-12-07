@@ -68,9 +68,9 @@ SCREEN_WIDTH = 1329
 SCREEN_HEIGHT = 886
 client = SocketIOClient()
 search_counter = 0
-player_colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 0), (255, 0, 255), (0, 255, 255),
-                 (128, 0, 0), (0, 128, 0)]
-id_playerList = []
+player_colors = [(255, 6, 193), (186, 46, 151), (0, 255, 234), (55, 214, 201), (234, 235, 44), (234, 235, 117),
+                 (250, 128, 87), (255, 155, 116)]
+id_playerList = ["Oliver","Suchen","Suchen","Suchen","Suchen","Suchen","Suchen","Suchen"]
 slider_width = 500
 slider_height = 30
 music_slider = None
@@ -85,6 +85,6 @@ manager_lobby_search = None
 lobby_search_input = None
 BLACK, WHITE, RED, VIOLETTE, CYAN, DARKBLUE, YELLOW, ORANGE = (0, 0, 0), (255, 255, 255), (255, 0, 0), (255, 6, 193), (0, 255, 234), (20, 21, 44), (234, 235, 44), (250, 128, 87)
 DARK_VIOLLETTE, DARK_CYAN, DARK_YELLOW, LIGHT_ORANGE = (186, 46, 151), (55, 214, 201), (234, 235, 117), (255, 151, 116)
-
-
+is_await = False
+player_texts = []
 

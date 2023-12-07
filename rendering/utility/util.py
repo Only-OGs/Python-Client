@@ -213,3 +213,16 @@ class Util:
     @staticmethod
     def findSegment(z):
         return var.segments[math.floor(z / var.segmentLength) % len(var.segments)]
+
+    @staticmethod
+    def do_after_await():
+        if var.is_await:
+            if var.client.logincomplete:
+                var.menu_state = "lobby_option"
+                var.is_await = False
+            elif var.client.registercomplete:
+                var.menu_state = "log_menu"
+                var.is_await = False
+          #  elif (var.client.lobbystatus == "lobby_created" or var.client.lobbystatus == "search_lobby") and (var.client.lobbyJoined):
+                var.menu_state = "ingame_lobby"
+                var.is_await = False

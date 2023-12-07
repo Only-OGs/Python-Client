@@ -81,7 +81,23 @@ class Screens:
 
         Layout.init_second_background(screen=var.menu_screen)
         Layout.create_ingamelobby(screen=var.menu_screen)
-        # TODO Buttons! und Texte
+        Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="LobbyID:", size=15,
+                         color=(255, 255, 255))
+        Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="Timer:", size=15,
+                         color=(255, 255, 255))
+        Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="Die Lobby:", size=15,
+                         color=(255, 255, 255))
+        Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="ID:", size=20,
+                         color=(255, 255, 255))
+       # Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text=var.client.timer", size=35,
+              #           color=(255, 6, 193))
+        # Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text=var.client.lobbyid", size=35,
+       # color = (255, 6, 193))
+    # Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text=var.client.playerid", size=35,
+    # color = (255, 6, 193))
+
+
+
 
     @staticmethod
     def screen_update():

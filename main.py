@@ -1,3 +1,5 @@
+import threading
+
 import pygame
 from rendering.screens import Screens
 import rendering.globals_vars as var
@@ -17,12 +19,15 @@ Screens.create_lobby_search_input()
 while run:
     tick = var.clock.tick(var.fps)
 
+    Util.do_after_await()
     Screens.screen_update()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
             break
+
+
 
         if var.menu_state == "log_menu":
             var.manager_Login.process_events(event)
@@ -35,6 +40,8 @@ while run:
 
         if var.menu_state == "search_for_lobby":
             var.manager_lobby_search.process_events(event)
+
+
 
     if var.buttons["Einzelspieler"]:
         Game()
@@ -53,27 +60,31 @@ while run:
 
     elif var.buttons["Anmelden"]:
         var.client.send_login_data(var.login_name.get_text(), var.login_password.get_text())
-        if var.client.logincomplete:
-            var.menu_state = "lobby_option"
+        var.is_await = True
+
 
     elif var.buttons["Schnelles Spiel"] or var.buttons["Lobby erstellen"]:
-        var.menu_state = "ingame_lobby"
+        if var.buttons["Schnelles Spiel"]:
+            var.client.get_lobby()
+            var.is_await = True
+        else:
+            var.client.create_lobby()
+            var.is_await = True
+
 
     elif var.buttons["Lobby suchen"]:
         var.menu_state = "search_for_lobby"
 
     elif var.buttons["Suchen"]:
         var.client.join_lobby(var.lobby_search_input.get_text())
-        if var.client.lobbystatus == "success":
-            var.menu_state = "ingame_lobby"
+        var.is_await = True
 
     elif var.buttons["Jetzt Registrieren"]:
-            var.menu_state = "registration_menu"
+        var.menu_state = "registration_menu"
 
     elif var.buttons["Registrieren"]:
         var.client.send_register_data(var.register_name.get_text(), var.register_password.get_text())
-        if var.client.registercomplete:
-            var.menu_state = "log_menu"
+        var.is_await = True
 
     elif var.buttons["Abmelden"]:
         var.menu_state = "main_menu"
@@ -89,6 +100,7 @@ while run:
 
     elif var.menu_state == "log_menu":
         var.manager_Login.update(tick)
+
 
     Util.reset_buttons()
     pygame.display.update()
