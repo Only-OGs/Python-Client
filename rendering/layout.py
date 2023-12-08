@@ -99,13 +99,13 @@ class Layout:
         var.buttons["Optionen"] = clicked
 
     @staticmethod
-    def bereit(screen, x, y):
+    def bereit(screen, x, y, text):
         einstellungen_button = Button(x, y,
                                       button_image, 2, button_image_hover)
 
         clicked = einstellungen_button.check()
-        einstellungen_button.render(screen=screen, text="Bereit", size=18, color="WHITE")
-        var.buttons["Bereit"] = clicked
+        einstellungen_button.render(screen=screen, text=text, size=18, color="WHITE")
+        var.buttons[text] = clicked
 
     @staticmethod
     def quick_game_button(screen, text):
@@ -186,7 +186,11 @@ class Layout:
         Layout.zureuck_button(x=var.width//3-300,y=var.height-150, screen=var.menu_screen)
         Layout.abmelden_button(x=var.width//3,y=var.height-150, screen=var.menu_screen)
         Layout.einstellungen_button(x=var.width//3+300,y=var.height-150, screen=var.menu_screen)
-        Layout.bereit(x=var.width // 3 + 300, y=var.height - 50, screen=var.menu_screen)
+
+        if var.client.is_ready:
+            Layout.bereit(x=var.width // 3 + 300, y=var.height - 50, screen=var.menu_screen, text="Bereit")
+        elif not var.client.is_ready:
+            Layout.bereit(x=var.width // 3 + 300, y=var.height - 50, screen=var.menu_screen, text="Nicht Bereit")
 
 
         pygame.draw.rect(screen, (255, 255, 255), (100, var.height // 16, 400, 40), 0)

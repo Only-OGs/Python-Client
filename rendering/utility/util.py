@@ -237,3 +237,7 @@ class Util:
                 var.is_await = False
                 var.client.quickLobbyJoined = False
                 var.menu_state = "ingame_lobby"
+            elif var.menu_state == "ingame_lobby":
+                var.is_await = False
+                var.menu_state = "ingame_lobby"
+

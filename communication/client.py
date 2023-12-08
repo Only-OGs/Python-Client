@@ -57,6 +57,8 @@ class SocketIOClient:
         self.playersname = None
         self.chat_message = None
 
+        self.is_ready = False
+
 
     def on_playerLeave(self,data):
         if self.sio.connected:
@@ -125,11 +127,11 @@ class SocketIOClient:
             self.lobbystatus = data.get("status")
             if self.lobbystatus == 'joined':
                 self.lobbyJoined = True
-            self.lobbymessage = data.get("message")
             self.lobbyid = data.get("lobby")
             var.id_playerList = data.get("players").split(';')
 
     def leave_lobby(self):
+        self.lobbymessage = ''
         self.sio.emit("leave_lobby")
 
     def get_lobby(self):
@@ -159,6 +161,15 @@ class SocketIOClient:
             if data.get('status') == "register_success":
                 self.registercomplete = True
 
+    def ready(self):
+        if self.sio.connected:
+            self.sio.emit("is_ready")
+            self.is_ready = True
+
+    def notReady(self):
+        if self.sio.connected:
+            self.sio.emit("not_ready")
+            self.is_ready = False
 
 
     # stellt die Verbindung zum Server her.

@@ -65,6 +65,7 @@ buttons = {
     "Einzelspieler": False,
     "Suchen": False,
     "Bereit": False,
+    "Nicht Bereit": False,
     "Verlassen": False
 }
 
@@ -94,4 +95,4 @@ DARK_VIOLLETTE, DARK_CYAN, DARK_YELLOW, LIGHT_ORANGE = (186, 46, 151), (55, 214,
 is_await = False
 player_texts = []
 is_running = False
-lock = threading.Lock()
+
