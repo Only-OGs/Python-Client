@@ -20,12 +20,13 @@ class Game:
         var.background_sprite_group = pygame.sprite.Group()
         Road.create_road()
         self.game_loop()
+        self.timer_rest=False
 
     # main loop wo alles passiert
     def game_loop(self):
         SpriteGen.create_player()
         SpriteGen.create_background()
-        timer = gui.Gui(screen=var.screen, x=0, y=0)
+        timer = gui.Gui(screen=var.screen)
 
         while True:
             for event in pygame.event.get():
@@ -60,8 +61,14 @@ class Game:
             timer.count_up()
             # In Round() länge der Strecke einsetzten
 
+            if(var.position < 10000 and var.position > 1000):
+                self.timer_rest = True
+
             if (var.position >= var.trackLength-1000):
-                timer.ende_timer()
+                if(self.timer_rest):
+                    self.timer_rest = False
+                    timer.ende_timer()
+
 
             self.update(var.step)
 
