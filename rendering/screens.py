@@ -57,10 +57,7 @@ class Screens:
         Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="Lobby suchen", size=35,
                          color=(255, 6, 193))
         Layout.mittlerer_button(screen=var.menu_screen, text="Suchen",trigger="Suchen")
-        #if not var.client.searchlobbyJoined:
-         #   Layout.draw_text(screen=var.menu_screen, x=50, y=var.height - 50, text=var.client.lobbymessage, size=20,
-         #                    color=(255, 6, 193))
-          #  var.client.searchlobbyJoined = False
+        Layout.rechter_button(screen=var.menu_screen, text="Zurueck", trigger="Zurueck")
         Layout.create_lobbystatus_gui()
         var.manager_lobby_search.draw_ui(var.menu_screen)
 

@@ -65,6 +65,7 @@ buttons = {
     "Einzelspieler": False,
     "Suchen": False,
     "Bereit": False,
+    "Nicht Bereit": False,
     "Verlassen": False
 }
 
@@ -95,4 +96,4 @@ TRANSPARENT_BLACK = (0 , 0 , 0 , 20)
 is_await = False
 player_texts = []
 is_running = False
-lock = threading.Lock()
+

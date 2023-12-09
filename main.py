@@ -75,6 +75,14 @@ while run:
         var.client.leave_lobby()
         var.menu_state = "lobby_option"
 
+    elif var.buttons["Bereit"]:
+        var.client.notReady()
+        var.is_await = True
+
+    elif var.buttons["Nicht Bereit"]:
+        var.client.ready()
+        var.is_await = True
+
     elif var.buttons["Lobby suchen"]:
         var.menu_state = "search_for_lobby"
 
