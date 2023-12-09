@@ -94,4 +94,5 @@ TRANSPARENT_BLACK = (0 , 0 , 0 , 20)
 is_await = False
 player_texts = []
 is_running = False
+trackloaded = False
 

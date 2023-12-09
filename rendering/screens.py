@@ -1,3 +1,5 @@
+import threading
+
 from rendering.layout import Layout
 import rendering.globals_vars as var
 import pygame
@@ -45,6 +47,7 @@ class Screens:
         Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="Lobbyauswahl", size=45,
                          color=(255,6,193))
         Layout.create_loginstatus_gui()
+        Layout.create_lobbystatus_gui()
         Layout.search_lobby_button(screen=var.menu_screen, text="Lobby suchen")
         Layout.lobby_create_button(screen=var.menu_screen, text="Lobby erstellen")
         Layout.quick_game_button(screen=var.menu_screen, text="Schnelles Spiel")
@@ -60,6 +63,7 @@ class Screens:
         Layout.rechter_button(screen=var.menu_screen, text="Zurueck", trigger="Zurueck")
         Layout.create_lobbystatus_gui()
         var.manager_lobby_search.draw_ui(var.menu_screen)
+
 
 
     @staticmethod

@@ -83,6 +83,7 @@ while run:
         var.client.ready()
         var.is_await = True
 
+
     elif var.buttons["Lobby suchen"]:
         var.menu_state = "search_for_lobby"
 

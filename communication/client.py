@@ -1,5 +1,4 @@
-import threading
-
+from rendering.game import Game
 import socketio
 import rendering.globals_vars as var
 
@@ -134,6 +133,9 @@ class SocketIOClient:
 
     def leave_lobby(self):
         self.lobbymessage = ''
+        var.id_playerList = []
+        self.is_ready = False
+        self.timer = None
         self.sio.emit("leave_lobby")
 
     def get_lobby(self):
@@ -224,7 +226,6 @@ class SocketIOClient:
     def on_timer(self, countdown):
         if self.sio.connected:
             self.timer = countdown
-
 
     def on_timer_off(self):
         if self.sio.connected:

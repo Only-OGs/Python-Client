@@ -152,6 +152,7 @@ class Layout:
             var.client.lobbymessage = ''
         var.is_running = False
 
+
     @staticmethod
     def create_loginstatus_gui():
 
