@@ -201,21 +201,16 @@ class Layout:
         screen.blit(text, (var.width//2+400, var.height-150))
 
         #Lobby Countdown
-
         font = pygame.font.Font(FONT, 18)
         text = font.render(f"Starte in: {None}", True, (var.WHITE))
         # update_gui(x=self.x, y=self.y, width=150)
         screen.blit(text, (var.width // 2 + 400, + 20))
 
         #Name
-
         font = pygame.font.Font(FONT, 18)
         text = font.render(f"ID: {var.client.playersname}".format(), True, (var.WHITE))
         # update_gui(x=self.x, y=self.y, width=150)
         screen.blit(text, (+100, + 20))
-
-
-
 
         var.search_counter += 1
 

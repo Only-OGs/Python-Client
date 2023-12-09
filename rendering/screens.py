@@ -10,7 +10,6 @@ class Screens:
     def create_menu_screen():
         var.client.disconnect()
         Layout.init_background(screen=var.menu_screen)
-        Layout.create_Serverstatus_gui()
         Layout.linker_button(screen=var.menu_screen, text="Einzelspieler",trigger="Einzelspieler")
         Layout.mittlerer_button(screen=var.menu_screen, text="Optionen",trigger="Optionen")
         Layout.rechter_button(screen=var.menu_screen, text="Mehrspieler",trigger="Mehrspieler")
@@ -19,6 +18,8 @@ class Screens:
     def create_mulitplayer_screen():
         if not var.client.sio.connected:
             var.client.connect()
+        else:
+            pass
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus_gui()
         Layout.linker_button(screen=var.menu_screen, text="Anmelden",trigger="Jetzt Anmelden")
@@ -29,6 +30,7 @@ class Screens:
     def create_option_screen():
         Layout.init_background(screen=var.menu_screen)
         Layout.linker_button(screen=var.menu_screen, text="Zurueck",trigger="Zurueck")
+        Layout.draw_text(screen=var.menu_screen, x=var.slider_width // 2 + 150, y=var.height-150, text="Musik Lautstaerke", size=31, color=var.WHITE)
         pygame.mixer.music.set_volume(var.music_slider.current_value)
         var.manager_option.draw_ui(var.menu_screen)
 
@@ -84,9 +86,6 @@ class Screens:
 
         Layout.init_second_background(screen=var.menu_screen)
         Layout.create_ingamelobby(screen=var.menu_screen)
-
-
-
 
     @staticmethod
     def screen_update():
@@ -149,12 +148,15 @@ class Screens:
 
     @staticmethod
     def create_music_slider():
-
         var.manager_option = pygame_gui.UIManager((var.width, var.height))
         var.music_slider = pygame_gui.elements.UIHorizontalSlider(
             relative_rect=pygame.Rect((var.width // 2 - (
                     var.slider_width // 2), var.height - 100),
                                       (var.slider_width, var.slider_height)), start_value=0.01,
-            value_range=((0.00), (0.10)), manager=var.manager_option
+            value_range=((0.008), (0.05)), manager=var.manager_option
         )
 
+    @staticmethod
+    def create_ingmae_menu(screen):
+        rect = pygame.rect.Rect(var.width//2, var.height//2, 600, 600)
+        pygame.draw.rect(screen, var.DARKBLUE, rect)

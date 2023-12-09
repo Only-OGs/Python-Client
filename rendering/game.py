@@ -1,7 +1,7 @@
 import pygame
 import sys
 import rendering.globals_vars as var
-
+from rendering.screens import Screens
 from rendering.utility.car_ai import Cars
 from rendering.utility.road import Road
 from rendering.utility.util import Util

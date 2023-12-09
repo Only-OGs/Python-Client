@@ -81,9 +81,6 @@ class Gui:
 
         self.reset_lap()
 
-
-
-
     #Setzt den neuen Record
     def set_new_record(self):
         self.rec_min = self.min
@@ -93,7 +90,7 @@ class Gui:
     #Zeigt dem Spieler seine Gewschwindigkeit
     def show_speed(self, speed):
         font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
-        text = font.render("{} kmh".format(round(speed/60)), True, (var.VIOLETTE))
+        text = font.render("{} kmh".format(round(speed/100)), True, (var.VIOLETTE))
         self.background_gui(x=var.width-150, y=0, width=150)
         self.screen.blit(text, (var.width-150, self.text_offste))
 

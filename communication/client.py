@@ -5,8 +5,7 @@ import rendering.globals_vars as var
 
 
 # statische Mehtode, um Fehler Verbindungsprobleme zu reagieren.
-def handle_connection_error(error):
-    print(f"Error connecting to the server: {error}")
+
 
 
 # erstellt Client und Serverkommunikation
@@ -165,8 +164,9 @@ class SocketIOClient:
     def connect(self):
         try:
             self.sio.connect(self.server_url, transports=['websocket'])
-        except ConnectionError as e:
-            handle_connection_error(e)
+        except:
+            print("fail")
+
 
 
     def emit_coordinate(self):
