@@ -27,10 +27,12 @@ class SocketIOClient:
         self.sio.on('lobby_management', self.on_playerJoined)
         self.sio.on('logout', self.on_logout)
         self.sio.on('login', self.on_login)
-        self.sio.on('receive_track', self.on_receiveTrack)
         self.sio.on('game_start', self.on_gameStart)
         self.sio.on('get_lobby', self.on_get_lobby)
         self.sio.on('player_leave', self.on_playerLeave)
+        self.sio.on('timer_countdown', self.on_timer)
+        self.sio.on('timer_abrupt', self.on_timer_off)
+        self.sio.on('load_level', self.on_level_load)
 
 
         # Initialisierung von Variablen für Erfolg/Misserfolg bei Aktionen
@@ -44,6 +46,7 @@ class SocketIOClient:
 
         self.lobbystatus = None
         self.lobbymessage = None
+        self.timer = None;
 
         self.lobbycreated = False
         self.lobbyleaft= False
@@ -66,7 +69,7 @@ class SocketIOClient:
     def on_gameStart(self):
         var.gameStart = True
 
-    def on_receiveTrack(self, data):
+    def on_level_load(self, data):
         if self.sio.connected:
             if data != '':
                 var.track = data
@@ -218,12 +221,11 @@ class SocketIOClient:
             message = {"message": message}
             self.sio.emit('new_message', message)
 
+    def on_timer(self, countdown):
+        if self.sio.connected:
+            self.timer = countdown
 
 
-
-
-
-
-
-
-
+    def on_timer_off(self):
+        if self.sio.connected:
+            self.timer = None

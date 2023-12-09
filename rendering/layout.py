@@ -206,7 +206,7 @@ class Layout:
 
         #Lobby Countdown
         font = pygame.font.Font(FONT, 18)
-        text = font.render(f"Starte in: {None}", True, (var.WHITE))
+        text = font.render(f"Starte in: {var.client.timer}", True, (var.WHITE))
         # update_gui(x=self.x, y=self.y, width=150)
         screen.blit(text, (var.width // 2 + 400, + 20))
 
