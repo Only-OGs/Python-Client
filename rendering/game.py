@@ -19,9 +19,8 @@ class Game:
         Road.create_road()
         if not var.singleplayer:
             var.client.client_is_ingame()
-        while var.help_car is not True:
+        while var.help_car is not True and not var.singleplayer:
             pass
-
         self.game_loop()
         self.timer_rest = False
 
