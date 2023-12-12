@@ -102,7 +102,7 @@ class Screens:
         elif var.menu_state == "option_menu":
             Screens.create_option_screen()
         elif var.menu_state == "multiplayer_menu":
-           Screens.create_mulitplayer_screen()
+            Screens.create_mulitplayer_screen()
         elif var.menu_state == "ingame_lobby":
             Screens.create_ingameLobby()
         elif var.menu_state == "search_for_lobby":

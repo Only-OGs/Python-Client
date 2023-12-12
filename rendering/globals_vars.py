@@ -10,7 +10,7 @@ width = 1329
 height = 886
 segments = []
 screen = None
-menu_screen = pygame.display.set_mode((1329, 886))
+menu_screen = pygame.display.set_mode((width, height))
 background = None
 sprites = None
 resolution = None
@@ -48,7 +48,7 @@ player = None
 background_sprite_group = None
 player_sprite_group = None
 track = None
-gameStart = None
+gameStart = False
 menu_state = "main_menu"
 buttons = {
     "Anmelden": False,
@@ -96,4 +96,4 @@ is_await = False
 player_texts = []
 is_running = False
 trackloaded = False
-
+singleplayer = True

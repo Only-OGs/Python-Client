@@ -41,7 +41,8 @@ while run:
         if var.menu_state == "search_for_lobby":
             var.manager_lobby_search.process_events(event)
 
-
+    if var.track is not None and var.singleplayer is not True:
+        Game()
 
     if var.buttons["Einzelspieler"]:
         Game()

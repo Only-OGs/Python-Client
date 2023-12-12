@@ -13,13 +13,12 @@ from rendering.utility.render import Render
 class Game:
 
     def __init__(self):
-        var.clock = pygame.time.Clock()
         var.screen = pygame.display.set_mode((var.width, var.height))
         var.player_sprite_group = pygame.sprite.Group()
         var.background_sprite_group = pygame.sprite.Group()
         Road.create_road()
         self.game_loop()
-        self.timer_rest=False
+        self.timer_rest = False
 
     # main loop wo alles passiert
     def game_loop(self):

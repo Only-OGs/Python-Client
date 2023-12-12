@@ -16,9 +16,10 @@ class Road:
         """
         var.segments = []
 
+        print("test")
         Road.load_road()
-        SpriteGen.create_bot_cars()
-        SpriteGen.create_street_objectives(var.segments)
+        #SpriteGen.create_bot_cars()
+        #SpriteGen.create_street_objectives(var.segments)
 
         var.segments[Util.findSegment(var.playerZ)["index"] + 2]["color"] = Color.get_start()
         var.segments[Util.findSegment(var.playerZ)["index"] + 3]["color"] = Color.get_start()
@@ -112,13 +113,17 @@ class Road:
 
     @staticmethod
     def load_road():
-        with open("road.json", "r") as f:
-            data = json.load(f)
+        if var.singleplayer:
+            with open("road.json", "r") as f:
+                data = json.load(f)
 
-        for x in data["road"]:
-            if len(x) == 1:
-                Road.add_street(x[0])
-            elif len(x) == 2:
-                Road.add_street(x[0], x[1])
-            elif len(x) == 3:
-                Road.add_street(x[0], x[1], x[2])
+            for x in data["road"]:
+                if len(x) == 1:
+                    Road.add_street(x[0])
+                elif len(x) == 2:
+                    Road.add_street(x[0], x[1])
+                elif len(x) == 3:
+                    Road.add_street(x[0], x[1], x[2])
+        else:
+            for n in var.track:
+                Road.add_street(n.get("segment_length"), n.get("curve_strength"), n.get("hill_height"))

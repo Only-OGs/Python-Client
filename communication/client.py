@@ -26,7 +26,6 @@ class SocketIOClient:
         self.sio.on('lobby_management', self.on_playerJoined)
         self.sio.on('logout', self.on_logout)
         self.sio.on('login', self.on_login)
-        self.sio.on('game_start', self.on_gameStart)
         self.sio.on('get_lobby', self.on_get_lobby)
         self.sio.on('player_leave', self.on_playerLeave)
         self.sio.on('timer_countdown', self.on_timer)
@@ -65,12 +64,12 @@ class SocketIOClient:
         if self.sio.connected:
             if data.get('status')=='left':
                 self.lobbyleaft = True
-    def on_gameStart(self):
-        var.gameStart = True
+
 
     def on_level_load(self, data):
         if self.sio.connected:
             if data != '':
+                var.singleplayer = False
                 var.track = data
 
     def on_get_lobby(self, data):
@@ -80,9 +79,6 @@ class SocketIOClient:
             if self.lobbystatus == 'success':
                 self.quickLobbyJoined = True
 
-    def startGame(self):
-        if self.sio.connected:
-            self.sio.emit("start_game")
     def on_connection_success(self, data):
         print(f"Verbindung zum Server erfolgreich")
 
@@ -227,6 +223,6 @@ class SocketIOClient:
         if self.sio.connected:
             self.timer = countdown
 
-    def on_timer_off(self):
+    def on_timer_off(self, args):
         if self.sio.connected:
             self.timer = None
