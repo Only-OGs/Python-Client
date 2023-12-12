@@ -213,3 +213,30 @@ class Util:
     @staticmethod
     def findSegment(z):
         return var.segments[math.floor(z / var.segmentLength) % len(var.segments)]
+
+    @staticmethod
+    def do_after_await():
+        if var.is_await:
+            if var.client.logincomplete:
+                var.menu_state = "lobby_option"
+                var.client.logincomplete = False
+                var.is_await = False
+            elif var.client.registercomplete:
+                var.menu_state = "log_menu"
+                var.client.registercomplete = False
+                var.is_await = False
+            elif var.client.lobbycreated:
+                var.menu_state = "ingame_lobby"
+                var.is_await = False
+                var.client.lobbycreated = False
+            elif var.client.searchlobbyJoined and var.client.lobbyid != '':
+                var.is_await = False
+                var.client.searchlobbyJoined = False
+                var.menu_state = "ingame_lobby"
+            elif var.client.quickLobbyJoined:
+                var.is_await = False
+                var.client.quickLobbyJoined = False
+                var.menu_state = "ingame_lobby"
+            elif var.menu_state == "ingame_lobby":
+                var.is_await = False
+                var.menu_state = "ingame_lobby"

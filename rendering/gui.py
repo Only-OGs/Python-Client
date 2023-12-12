@@ -18,7 +18,7 @@ um im Anschluss wieder gezeichnet zu werden.
 class Gui:
 
     #init den Timer und die beste Rundenzeit
-    def __init__(self, screen,x ,y):
+    def __init__(self, screen):
         self.min = 0
         self.sec = 0
         self.mil_sec = 0
@@ -27,11 +27,7 @@ class Gui:
         self.rec_sec = 0
         self.rec_mil_sec = 0
 
-        self.finish = False
         self.screen = screen
-        self.x = x
-        self.y = y
-        self.finish = True
         #self.Highscore
         self.add = 1
         self.text_offste = 10
@@ -54,34 +50,39 @@ class Gui:
             self.sec = 0
             self.min = 0
 
+        #Print die Bestzeit
         font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
-        text = font.render("schnellste Runde {}:{}:{}".format(self.rec_min, self.rec_sec, self.rec_mil_sec), True,
-                           (var.VIOLETTE))
-        self.update_gui(x=1024 // 2 - 175, y=self.y, width=300)
-        self.screen.blit(text, (1024 // 2 - 150, self.y + self.text_offste))
+        text = font.render("schnellste Runde {}:{}:{}".format(self.rec_min, self.rec_sec, self.rec_mil_sec), True
+                           ,(var.BLACK))
+        self.background_gui(x=var.width // 2 - 175, y=0, width=300, color=var.TRANSPARENT_WHITE)
+        self.screen.blit(text, (var.width // 2 - 150, 0 + self.text_offste))
 
-
+        # Print die den Runden counter
         font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
-        text = font.render("Time: {}:{}:{}".format(self.min, self.sec, self.mil_sec), True, (var.VIOLETTE))
-        self.update_gui(x=self.x, y=self.y, width=150)
-        self.screen.blit(text, (self.x, self.y + self.text_offste))
+        text = font.render("Time: {}:{}:{}".format(self.min, self.sec, self.mil_sec), True, (var.BLACK))
+        self.background_gui(x=0, y=0, width=150, color=var.TRANSPARENT_WHITE)
+        self.screen.blit(text, (0, 0 + self.text_offste))
+
+        #Red Background
+        self.background_gui(x=0, y=0, width=var.width, color= var.TRANSPARENT_RED)
 
     #Beendet den Timer und setzt die neue bestzeit
     def ende_timer(self):
-            if (self.first_lab):
-                self.first_lab = False
-                self.set_new_record()
 
-            if(self.min < self.rec_min):
-                self.set_new_record()
+        if (self.first_lab):
+            self.first_lab = False
+            self.set_new_record()
 
-            elif(self.sec < self.rec_sec and self.min < self.rec_min):
-                self.set_new_record()
+        if(self.min < self.rec_min):
+            self.set_new_record()
 
-            elif (self.sec < self.rec_sec and self.min < self.rec_min and self.mil_sec < self.rec_mil_sec):
-                self.set_new_record()
+        elif(self.sec < self.rec_sec and self.min <= self.rec_min):
+            self.set_new_record()
 
-            self.reset_lap()
+        elif (self.sec <= self.rec_sec and self.min <= self.rec_min and self.mil_sec < self.rec_mil_sec):
+            self.set_new_record()
+
+        self.reset_lap()
 
     #Setzt den neuen Record
     def set_new_record(self):
@@ -92,15 +93,16 @@ class Gui:
     #Zeigt dem Spieler seine Gewschwindigkeit
     def show_speed(self, speed):
         font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
-
-        text = font.render("{} kmh".format(round(speed/60)), True, (var.VIOLETTE))
-        self.update_gui(x=self.x + 900, y=self.y, width=150)
-        self.screen.blit(text, (self.x + 900, self.y + self.text_offste))
+        text = font.render("{} kmh".format(round(speed/100)), True, (var.BLACK))
+        self.background_gui(x=var.width-150, y=0, width=150,color=var.TRANSPARENT_WHITE)
+        self.screen.blit(text, (var.width-150, self.text_offste))
 
     #Übermalt die Alten GUI elemente damit diese sich nicht Stacken.
-    def update_gui(self,x, y, width):
-        cover_old_frame = pygame.rect.Rect(x, y, width, 40)
-        pygame.draw.rect(self.screen ,(var.DARKBLUE), cover_old_frame)
+    def background_gui(self, x, y, width, color):
+        rect = pygame.rect.Rect(x, y, width, 40)
+        shape_surf = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
+        pygame.draw.rect(shape_surf, color, shape_surf.get_rect())
+        self.screen.blit(shape_surf, rect)
 
     def reset_lap(self):
         self.min = 0

@@ -1,7 +1,6 @@
 import pygame
 import sys
 import rendering.globals_vars as var
-
 from rendering.utility.car_ai import Cars
 from rendering.utility.road import Road
 from rendering.utility.util import Util
@@ -14,18 +13,18 @@ from rendering.utility.render import Render
 class Game:
 
     def __init__(self):
-        var.clock = pygame.time.Clock()
         var.screen = pygame.display.set_mode((var.width, var.height))
         var.player_sprite_group = pygame.sprite.Group()
         var.background_sprite_group = pygame.sprite.Group()
         Road.create_road()
         self.game_loop()
+        self.timer_rest = False
 
     # main loop wo alles passiert
     def game_loop(self):
         SpriteGen.create_player()
         SpriteGen.create_background()
-        timer = gui.Gui(screen=var.screen, x=0, y=0)
+        timer = gui.Gui(screen=var.screen)
 
         while True:
             for event in pygame.event.get():
@@ -60,8 +59,14 @@ class Game:
             timer.count_up()
             # In Round() länge der Strecke einsetzten
 
+            if(var.position < 10000 and var.position > 1000):
+                self.timer_rest = True
+
             if (var.position >= var.trackLength-1000):
-                timer.ende_timer()
+                if(self.timer_rest):
+                    self.timer_rest = False
+                    timer.ende_timer()
+
 
             self.update(var.step)
 

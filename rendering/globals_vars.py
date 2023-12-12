@@ -1,4 +1,6 @@
 import math
+import threading
+
 import pygame
 from communication.client import SocketIOClient
 """Globale Game Variablen"""
@@ -8,7 +10,7 @@ width = 1329
 height = 886
 segments = []
 screen = None
-menu_screen = pygame.display.set_mode((1329, 886))
+menu_screen = pygame.display.set_mode((width, height))
 background = None
 sprites = None
 resolution = None
@@ -46,7 +48,7 @@ player = None
 background_sprite_group = None
 player_sprite_group = None
 track = None
-gameStart = None
+gameStart = False
 menu_state = "main_menu"
 buttons = {
     "Anmelden": False,
@@ -61,15 +63,18 @@ buttons = {
     "Mehrspieler": False,
     "Optionen": False,
     "Einzelspieler": False,
-    "Suchen": False
+    "Suchen": False,
+    "Bereit": False,
+    "Nicht Bereit": False,
+    "Verlassen": False
 }
 
 SCREEN_WIDTH = 1329
 SCREEN_HEIGHT = 886
 client = SocketIOClient()
 search_counter = 0
-player_colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 0), (255, 0, 255), (0, 255, 255),
-                 (128, 0, 0), (0, 128, 0)]
+player_colors = [(255, 6, 193), (186, 46, 151), (0, 255, 234), (55, 214, 201), (234, 235, 44), (234, 235, 117),
+                 (250, 128, 87), (255, 155, 116)]
 id_playerList = []
 slider_width = 500
 slider_height = 30
@@ -85,6 +90,10 @@ manager_lobby_search = None
 lobby_search_input = None
 BLACK, WHITE, RED, VIOLETTE, CYAN, DARKBLUE, YELLOW, ORANGE = (0, 0, 0), (255, 255, 255), (255, 0, 0), (255, 6, 193), (0, 255, 234), (20, 21, 44), (234, 235, 44), (250, 128, 87)
 DARK_VIOLLETTE, DARK_CYAN, DARK_YELLOW, LIGHT_ORANGE = (186, 46, 151), (55, 214, 201), (234, 235, 117), (255, 151, 116)
-
-
-
+TRANSPARENT_WHITE = (255, 255, 255, 100)
+TRANSPARENT_RED = (255, 0, 0, 20)
+is_await = False
+player_texts = []
+is_running = False
+trackloaded = False
+singleplayer = True
