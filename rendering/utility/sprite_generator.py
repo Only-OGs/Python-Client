@@ -59,9 +59,6 @@ class SpriteGen:
     def create_player_cars():
         """ Erstellt die Spieler-Autos andhand des Parameter"""
         # var.cars = []
-        for n in range(len(var.player_cars)):
-            player = var.player_cars[n]
-            var.old_pos.append(player.get("pos"))
 
         for n in range(len(var.player_cars)):
             player = var.player_cars[n]

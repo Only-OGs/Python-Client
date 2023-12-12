@@ -239,6 +239,10 @@ class SocketIOClient:
 
     def on_wait_for_start(self, data):
         if self.sio.connected:
+            for n in range(len(var.player_cars)):
+                player = var.player_cars[n]
+                var.old_pos.append(player.get("pos"))
+
             var.player_cars.clear()
             for n in data:
                 if n.get("id") is not None:
