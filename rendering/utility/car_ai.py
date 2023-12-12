@@ -62,3 +62,20 @@ class Cars:
                         else:
                             direction = -1
                     return direction * 1 / i * (car.get("speed") - other_car.get("speed")) / var.maxSpeed
+
+    @staticmethod
+    def update_player_cars():
+        """ Bewegt die Bot Autos mit ihrer jeweiligen Geschwindigkeit """
+        for n in range(len(var.cars)):
+            car = var.cars[n]
+            oldsegment = car.get("segment")
+            for i in range(len(var.new_car_data)):
+                if car.get("id") == var.new_car_data[i].get("id"):
+                    car["offset"] = var.new_car_data[i].get("offset")
+                    car["z"] = var.new_car_data[i].get("pos")
+                    car["segment"] = Util.findSegment(car.get("z"))
+            newsegment = car.get("segment")
+            if oldsegment != newsegment:
+                index = oldsegment.get("cars").index(car)
+                oldsegment.get("cars").pop(index)
+                newsegment.get("cars").append(car)

@@ -1,6 +1,7 @@
 from rendering.game import Game
 import socketio
 import rendering.globals_vars as var
+from rendering.utility.car_ai import Cars
 from rendering.utility.sprite_generator import SpriteGen
 
 
@@ -239,11 +240,6 @@ class SocketIOClient:
 
     def on_wait_for_start(self, data):
         if self.sio.connected:
-            for n in range(len(var.player_cars)):
-                player = var.player_cars[n]
-                var.old_pos.append(player.get("pos"))
-
-            var.player_cars.clear()
             for n in data:
                 if n.get("id") is not None:
                     var.player_cars.append(n)
@@ -251,7 +247,11 @@ class SocketIOClient:
             var.help_car = True
 
     def on_updated_positions(self, data):
-        self.on_wait_for_start(data)
+        var.new_car_data.clear()
+        for n in data:
+            if n.get("id") is not None and n.get("id") != var.username:
+                var.new_car_data.append(n)
+        Cars.update_player_cars()
 
     def ingame_pos(self, position, offset):
         if var.olddata != position:
