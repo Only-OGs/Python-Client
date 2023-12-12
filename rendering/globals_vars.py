@@ -97,3 +97,5 @@ player_texts = []
 is_running = False
 trackloaded = False
 singleplayer = True
+sio = None
+player_cars = []

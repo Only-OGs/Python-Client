@@ -17,6 +17,9 @@ class Game:
         var.player_sprite_group = pygame.sprite.Group()
         var.background_sprite_group = pygame.sprite.Group()
         Road.create_road()
+        if not var.singleplayer:
+            var.client.client_is_ingame()
+        SpriteGen.create_player_cars()
         self.game_loop()
         self.timer_rest = False
 

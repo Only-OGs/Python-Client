@@ -54,3 +54,19 @@ class SpriteGen:
         """ Erstellt den Player Sprite und zentriert ihn"""
         var.player = Player(var.screen.get_width() / 2 - 30, var.screen.get_height() - 100)
         var.player_sprite_group.add(var.player)
+
+    @staticmethod
+    def create_player_cars():
+        """ Erstellt die Spieler-Autos andhand des Parameter"""
+        # var.cars = []
+
+        for n in range(len(var.player_cars)):
+            offset = var.player_cars[n][0]
+            z = var.player_cars[n][1]
+            #sprite = var.player_cars[n][2]
+            id = var.player_cars[n][2]
+            car = {"offset": offset, "z": z, "sprite": Sprite.random_car(), "speed": 0, "percent": 0, "player": True,
+                   "id": ""}
+            segment = Util.findSegment(z)
+            segment["cars"].append(car)
+            var.cars.append(car)

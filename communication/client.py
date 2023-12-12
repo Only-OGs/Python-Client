@@ -31,6 +31,7 @@ class SocketIOClient:
         self.sio.on('timer_countdown', self.on_timer)
         self.sio.on('timer_abrupt', self.on_timer_off)
         self.sio.on('load_level', self.on_level_load)
+        self.sio.on('wait_for_start', self.on_wait_for_start)
 
 
         # Initialisierung von Variablen für Erfolg/Misserfolg bei Aktionen
@@ -226,3 +227,13 @@ class SocketIOClient:
     def on_timer_off(self, args):
         if self.sio.connected:
             self.timer = None
+
+    def client_is_ingame(self):
+        if self.sio.connected:
+            self.sio.emit("client_is_ingame")
+
+    def on_wait_for_start(self, data):
+        if self.sio.connected:
+            for n in data:
+                print(n)
+                var.player_cars.append(data)
