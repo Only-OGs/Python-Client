@@ -19,7 +19,9 @@ class Game:
         Road.create_road()
         if not var.singleplayer:
             var.client.client_is_ingame()
-        SpriteGen.create_player_cars()
+        while var.help_car is not True:
+            pass
+
         self.game_loop()
         self.timer_rest = False
 

@@ -1,6 +1,7 @@
 from rendering.game import Game
 import socketio
 import rendering.globals_vars as var
+from rendering.utility.sprite_generator import SpriteGen
 
 
 # statische Mehtode, um Fehler Verbindungsprobleme zu reagieren.
@@ -206,6 +207,7 @@ class SocketIOClient:
             else:
                 data = {"user": user, "password": password}
                 var.client.playersname = user
+                var.username = user
                 self.sio.emit("login", data)
 
 
@@ -235,5 +237,7 @@ class SocketIOClient:
     def on_wait_for_start(self, data):
         if self.sio.connected:
             for n in data:
-                print(n)
-                var.player_cars.append(data)
+                if n.get("id") is not None and n.get("id") != var.username:
+                    var.player_cars.append(n)
+            SpriteGen.create_player_cars()
+            var.help_car = True

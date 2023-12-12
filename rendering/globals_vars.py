@@ -99,3 +99,5 @@ trackloaded = False
 singleplayer = True
 sio = None
 player_cars = []
+help_car = False
+username = ""
