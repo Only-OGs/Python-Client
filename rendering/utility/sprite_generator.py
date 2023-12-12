@@ -62,9 +62,13 @@ class SpriteGen:
 
         for n in range(len(var.player_cars)):
             player = var.player_cars[n]
-            car = {"offset": player.get("offset"), "z": player.get("pos"), "sprite":{"asset": "assets/cars/car01.png", "width": 80, "height": 56}, "speed": 0, "percent": 0, "player": True,
-                   "id": player.get("id")}
-            segment = Util.findSegment(player.get("pos"))
-            if car not in segment.get("cars"):
-                segment["cars"].append(car)
-                var.cars.append(car)
+            if player.get("id") != var.username:
+                car = {"offset": player.get("offset"), "z": player.get("pos"), "sprite":{"asset": "assets/cars/car01.png", "width": 80, "height": 56}, "speed": 0, "percent": 0, "player": True,
+                       "id": player.get("id")}
+                segment = Util.findSegment(player.get("pos"))
+                if car not in segment.get("cars"):
+                    segment["cars"].append(car)
+                    var.cars.append(car)
+            else:
+                var.position = player.get("pos")
+                var.playerX = player.get("offset")
