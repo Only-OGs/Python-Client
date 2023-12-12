@@ -115,3 +115,4 @@ class Game:
         # car here
         playerw = ((1 / 80) * 0.3) * 80
         Cars.update_cars(dt, playersegment, playerw)
+        var.client.ingame_pos(var.position,var.playerX)

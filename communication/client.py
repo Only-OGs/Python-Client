@@ -33,6 +33,7 @@ class SocketIOClient:
         self.sio.on('timer_abrupt', self.on_timer_off)
         self.sio.on('load_level', self.on_level_load)
         self.sio.on('wait_for_start', self.on_wait_for_start)
+        self.sio.on('updated_positions',self.on_updated_positions)
 
 
         # Initialisierung von Variablen für Erfolg/Misserfolg bei Aktionen
@@ -60,6 +61,8 @@ class SocketIOClient:
         self.chat_message = None
 
         self.is_ready = False
+
+
 
 
     def on_playerLeave(self,data):
@@ -241,3 +244,15 @@ class SocketIOClient:
                     var.player_cars.append(n)
             SpriteGen.create_player_cars()
             var.help_car = True
+
+    def on_updated_positions(self, data):
+        self.on_wait_for_start(data)
+
+    def ingame_pos(self, position, offset):
+        if var.olddata["pos"] != position:
+            data = {
+                "offset": offset,
+                "pos": position
+            }
+            var.olddata = data;
+            self.sio.emit("ingame_pos", data)

@@ -101,3 +101,4 @@ sio = None
 player_cars = []
 help_car = False
 username = ""
+olddata = {}
