@@ -59,16 +59,24 @@ class SpriteGen:
     def create_player_cars():
         """ Erstellt die Spieler-Autos andhand des Parameter"""
         # var.cars = []
+        for n in range(len(var.player_cars)):
+            player = var.player_cars[n]
+            var.old_pos.append(player.get("pos"))
 
         for n in range(len(var.player_cars)):
             player = var.player_cars[n]
             if player.get("id") != var.username:
+                oldsegment = Util.findSegment(var.old_pos[n])
                 car = {"offset": player.get("offset"), "z": player.get("pos"), "sprite":{"asset": "assets/cars/car01.png", "width": 80, "height": 56}, "speed": 0, "percent": 0, "player": True,
                        "id": player.get("id")}
                 segment = Util.findSegment(player.get("pos"))
                 if car not in segment.get("cars"):
                     segment["cars"].append(car)
                     var.cars.append(car)
+                if oldsegment != segment:
+                    index = oldsegment.get("cars").index(car)
+                    oldsegment.get("cars").pop(index)
+                    segment.get("cars").append(car)
             else:
                 var.position = player.get("pos")
                 var.playerX = player.get("offset")

@@ -239,6 +239,7 @@ class SocketIOClient:
 
     def on_wait_for_start(self, data):
         if self.sio.connected:
+            var.player_cars.clear()
             for n in data:
                 if n.get("id") is not None:
                     var.player_cars.append(n)
@@ -249,10 +250,10 @@ class SocketIOClient:
         self.on_wait_for_start(data)
 
     def ingame_pos(self, position, offset):
-        if var.olddata["pos"] != position:
+        if var.olddata != position:
             data = {
                 "offset": offset,
                 "pos": position
             }
-            var.olddata = data;
+            var.olddata = position
             self.sio.emit("ingame_pos", data)
