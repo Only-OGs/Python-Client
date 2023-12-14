@@ -58,7 +58,7 @@ class Game:
                         var.keySlower = False
 
             Render.render()
-
+            print(var.clock.get_fps())
             timer.show_speed(speed=var.speed)
             timer.count_up()
             # In Round() länge der Strecke einsetzten
@@ -72,7 +72,7 @@ class Game:
                     timer.ende_timer()
 
 
-            self.update(var.step)
+            self.update(1/int(var.clock.get_fps()))
 
             pygame.display.update()
             var.clock.tick(var.fps)
