@@ -1,6 +1,5 @@
 import threading
 from time import sleep
-
 from rendering.button import Button
 import rendering.globals_vars as var
 import pygame

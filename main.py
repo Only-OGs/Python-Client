@@ -6,6 +6,7 @@ import rendering.globals_vars as var
 from rendering.game import Game
 from rendering.utility.util import Util
 
+
 pygame.init()
 pygame.display.set_caption("OG Racer")
 run = True

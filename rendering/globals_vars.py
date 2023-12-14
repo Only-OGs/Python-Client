@@ -103,3 +103,5 @@ help_car = False
 username = ""
 olddata = 0
 new_car_data = []
+paused = False
+
