@@ -161,6 +161,6 @@ class Screens:
     @staticmethod
     def create_loadingscreen(screen):
         screen.fill((var.VIOLETTE))
-        Layout.draw_text(screen=screen, x=var.width // 2, y=var.height // 2, text="Loading...", size=45,
+        Layout.draw_text(screen=screen, x=var.width // 2 - 40, y=var.height // 2, text="Loading...", size=45,
                          color=var.DARKBLUE)
         var.menu_state = "Game"
