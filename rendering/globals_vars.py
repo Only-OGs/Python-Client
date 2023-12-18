@@ -10,6 +10,7 @@ width = 1329
 height = 886
 segments = []
 screen = None
+FONT = "assets/rocket-rinder-font/RocketRinder-yV5d.ttf"
 menu_screen = pygame.display.set_mode((width, height))
 background = None
 sprites = None
@@ -73,6 +74,8 @@ SCREEN_WIDTH = 1329
 SCREEN_HEIGHT = 886
 client = SocketIOClient()
 search_counter = 0
+game_counter = 0
+game_start = False
 player_colors = [(255, 6, 193), (186, 46, 151), (0, 255, 234), (55, 214, 201), (234, 235, 44), (234, 235, 117),
                  (250, 128, 87), (255, 155, 116)]
 id_playerList = []
