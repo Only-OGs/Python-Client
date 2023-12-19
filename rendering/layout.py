@@ -149,7 +149,7 @@ class Layout:
             var.client.loginmessage = ''
         elif text == "lobby":
             var.client.lobbymessage = ''
-        var.is_running = False
+
 
 
     @staticmethod

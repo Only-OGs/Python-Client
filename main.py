@@ -5,6 +5,7 @@ from rendering.screens import Screens
 import rendering.globals_vars as var
 from rendering.game import Game
 from rendering.utility.util import Util
+from rendering.layout import Layout
 
 
 pygame.init()
@@ -43,7 +44,13 @@ while run:
             var.manager_lobby_search.process_events(event)
 
     if var.track is not None and var.singleplayer is not True:
-        Game()
+        if not var.is_running:
+            var.menu_state = "loading"
+            thread = threading.Thread(target=Layout.threaded_function, args=(5, "game"))
+            thread.start()
+        if var.game:
+            Game()
+            var.isgame = False
 
     if var.buttons["Einzelspieler"]:
         Game()

@@ -37,9 +37,6 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                if event.type == var.CUSTOM_EVENT:
-                    sprite_to_add = event.sprite_to_add
-                    var.background_sprite_group.add(sprite_to_add)
 
 
                 if event.type == pygame.KEYDOWN:
