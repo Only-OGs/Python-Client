@@ -27,6 +27,7 @@ class Game:
         SpriteGen.create_background()
         timer = gui.Gui(screen=var.screen)
 
+
         while True:
             for event in pygame.event.get():
 

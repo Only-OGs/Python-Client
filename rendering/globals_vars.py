@@ -50,6 +50,7 @@ background_sprite_group = None
 player_sprite_group = None
 track = None
 gameStart = False
+isgame = False
 menu_state = "main_menu"
 buttons = {
     "Anmelden": False,
@@ -67,7 +68,9 @@ buttons = {
     "Suchen": False,
     "Bereit": False,
     "Nicht Bereit": False,
-    "Verlassen": False
+    "Verlassen": False,
+    "loading": False,
+    "Game":False
 }
 
 SCREEN_WIDTH = 1329

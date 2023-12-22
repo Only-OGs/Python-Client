@@ -1,6 +1,5 @@
 import threading
 from time import sleep
-
 from rendering.button import Button
 import rendering.globals_vars as var
 import pygame
@@ -149,6 +148,9 @@ class Layout:
             var.client.loginmessage = ''
         elif text == "lobby":
             var.client.lobbymessage = ''
+        elif text == "game":
+            var.menu_state == "main_menu"
+            var.isgame = True
         var.is_running = False
 
 
@@ -170,7 +172,6 @@ class Layout:
             if not var.is_running:
                 thread = threading.Thread(target=Layout.threaded_function, args=(3, "lobby"))
                 thread.start()
-
 
     @staticmethod
     def create_ingamelobby(screen):
@@ -216,6 +217,8 @@ class Layout:
         # update_gui(x=self.x, y=self.y, width=150)
         screen.blit(text, (+100, + 20))
 
+
+
         var.search_counter += 1
 
         if var.search_counter == 60:
@@ -229,4 +232,3 @@ class Layout:
                     len(player_texts) - len(var.id_playerList)))
 
         var.search_counter = 0
-
