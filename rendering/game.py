@@ -114,7 +114,6 @@ class Game:
             for n in range(len(playersegment.get("sprites"))):
                 sprite = playersegment.get("sprites")[n]
                 if sprite is not None:
-                    print(sprite)
                     sprite_w = sprite.get("source").get("width") * (0.3 * (1/80))
                     if sprite.get("offset") > 0:
                         h = 1
@@ -125,6 +124,14 @@ class Game:
                         var.position = Util.increase(playersegment.get("p1").get("world").get("z"),-var.playerZ, var.trackLength)
                         break
 
+        for n in range(len(playersegment.get("cars"))):
+            car = playersegment.get("cars")[n]
+            car_w = car.get("sprite").get("width") * (0.3 * (1/80))
+            if var.speed > car.get("speed"):
+                if Util.overlap(var.playerX, playerw,car.get("offset"), car_w, 0.8):
+                    var.speed = car.get("speed") * (car.get("speed")/var.speed)
+                    var.position = Util.increase(car.get("z"),-var.playerZ, var.trackLength)
+                    break
 
         var.playerX = Util.limit(var.playerX, -2, 2)
         var.speed = Util.limit(var.speed, 0, var.maxSpeed)
