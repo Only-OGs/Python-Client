@@ -30,7 +30,6 @@ class Game:
         SpriteGen.create_background()
         timer = gui.Gui(screen=var.screen)
 
-
         while True:
             for event in pygame.event.get():
 
@@ -55,7 +54,6 @@ class Game:
                     if event.key == pygame.K_UP:
                         var.keyFaster = False
                     if event.key == pygame.K_DOWN:
-
                         var.keySlower = False
 
             Render.render()
@@ -64,20 +62,18 @@ class Game:
             timer.count_up()
             # In Round() länge der Strecke einsetzten
 
-            if(var.position < 10000 and var.position > 1000):
+            if (var.position < 10000 and var.position > 1000):
                 self.timer_rest = True
 
-            if (var.position >= var.trackLength-1000):
-                if(self.timer_rest):
+            if (var.position >= var.trackLength - 1000):
+                if (self.timer_rest):
                     self.timer_rest = False
                     timer.ende_timer()
-
 
             self.update(var.step)
 
             pygame.display.update()
             var.clock.tick(var.fps)
-
 
     # unser KeyInputHandler, hier werden die Keyinputs überprüft und das auto dementsprechend bewegt
     def update(self, dt):
@@ -117,4 +113,4 @@ class Game:
         playerw = ((1 / 80) * 0.3) * 80
         Cars.update_cars(dt, playersegment, playerw)
         if var.singleplayer is False:
-            var.client.ingame_pos(var.position,var.playerX)
+            var.client.ingame_pos(var.position, var.playerX)

@@ -8,14 +8,13 @@ from rendering.utility.sprite_generator import SpriteGen
 # statische Mehtode, um Fehler Verbindungsprobleme zu reagieren.
 
 
-
 # erstellt Client und Serverkommunikation
 class SocketIOClient:
     def __init__(self):
 
         # Serverurl
         self.server_url = "http://89.58.1.158:8080"
-        #self.server_url = "http://localhost:8080"
+        # self.server_url = "http://localhost:8080"
         # Client mit aktivem Logging
         self.sio = socketio.Client(logger=True, engineio_logger=True)
 
@@ -34,8 +33,7 @@ class SocketIOClient:
         self.sio.on('timer_abrupt', self.on_timer_off)
         self.sio.on('load_level', self.on_level_load)
         self.sio.on('wait_for_start', self.on_wait_for_start)
-        self.sio.on('updated_positions',self.on_updated_positions)
-
+        self.sio.on('updated_positions', self.on_updated_positions)
 
         # Initialisierung von Variablen für Erfolg/Misserfolg bei Aktionen
         self.logoutstatus = None
@@ -51,7 +49,7 @@ class SocketIOClient:
         self.timer = None;
 
         self.lobbycreated = False
-        self.lobbyleaft= False
+        self.lobbyleaft = False
         self.lobbyJoined = False
         self.searchlobbyJoined = False
         self.quickLobbyJoined = False
@@ -63,14 +61,10 @@ class SocketIOClient:
 
         self.is_ready = False
 
-
-
-
-    def on_playerLeave(self,data):
+    def on_playerLeave(self, data):
         if self.sio.connected:
-            if data.get('status')=='left':
+            if data.get('status') == 'left':
                 self.lobbyleaft = True
-
 
     def on_level_load(self, data):
         if self.sio.connected:
@@ -95,7 +89,6 @@ class SocketIOClient:
                 message = data.get('message')
                 self.lobbyid = message
 
-
     # erstellt eine Lobby
     def create_lobby(self):
         if self.sio.connected:
@@ -119,6 +112,7 @@ class SocketIOClient:
             self.lobbyid = data.get("lobby")
             if self.lobbystatus == 'success':
                 self.searchlobbyJoined = True
+
     def on_logout(self, data):
         if self.sio.connected:
             status = data.get('status')
@@ -151,6 +145,7 @@ class SocketIOClient:
                 self.sio.emit("join_lobby", data)
             else:
                 self.lobbystatus = "Bitte gib eine LobbyID ein"
+
     def on_login(self, data):
         if self.sio.connected:
             message = data.get('message')
@@ -177,15 +172,12 @@ class SocketIOClient:
             self.sio.emit("not_ready")
             self.is_ready = False
 
-
     # stellt die Verbindung zum Server her.
     def connect(self):
         try:
             self.sio.connect(self.server_url, transports=['websocket'])
         except:
             print("fail")
-
-
 
     def emit_coordinate(self):
         if self.sio.connected:
@@ -214,7 +206,6 @@ class SocketIOClient:
                 var.username = user
                 self.sio.emit("login", data)
 
-
     # trennt die Verbindung zum Server
     def disconnect(self):
         if self.sio.connected:
@@ -241,15 +232,14 @@ class SocketIOClient:
     def on_wait_for_start(self, data):
         if self.sio.connected:
             for n in data:
-                if n.get("id") is not None:
-                    var.player_cars.append(n)
+                var.player_cars.append(n)
             SpriteGen.create_player_cars()
             var.help_car = True
 
     def on_updated_positions(self, data):
         var.new_car_data.clear()
         for n in data:
-            if n.get("id") is not None and n.get("id") != var.username:
+            if n.get("id") != var.username:
                 var.new_car_data.append(n)
         Cars.update_player_cars()
 

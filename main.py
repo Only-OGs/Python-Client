@@ -28,8 +28,6 @@ while run:
             run = False
             break
 
-
-
         if var.menu_state == "log_menu":
             var.manager_Login.process_events(event)
 
@@ -42,7 +40,7 @@ while run:
         if var.menu_state == "search_for_lobby":
             var.manager_lobby_search.process_events(event)
 
-    #MACH HINNE DIE KACKE MUSS FEDDICH WERDEN
+    # MACH HINNE DIE KACKE MUSS FEDDICH WERDEN
     if var.track is not None and var.singleplayer is not True:
         if not var.is_running:
             var.menu_state = "loading"
@@ -53,7 +51,7 @@ while run:
             var.isgame = False
 
     if var.buttons["Einzelspieler"]:
-           Game()
+        Game()
 
     elif var.buttons["Mehrspieler"]:
         var.menu_state = "multiplayer_menu"
