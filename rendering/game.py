@@ -57,7 +57,6 @@ class Game:
                         var.keySlower = False
 
             Render.render()
-            print(var.clock.get_fps())
             timer.show_speed(speed=var.speed)
             timer.count_up()
             # In Round() länge der Strecke einsetzten
