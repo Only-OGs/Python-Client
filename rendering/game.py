@@ -36,25 +36,25 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_LEFT:
-                        var.keyLeft = True
-                    if event.key == pygame.K_RIGHT:
-                        var.keyRight = True
-                    if event.key == pygame.K_UP:
-                        var.keyFaster = True
-                    if event.key == pygame.K_DOWN:
-                        var.keySlower = True
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_LEFT:
-                        var.keyLeft = False
-                    if event.key == pygame.K_RIGHT:
-                        var.keyRight = False
-                    if event.key == pygame.K_UP:
-                        var.keyFaster = False
-                    if event.key == pygame.K_DOWN:
-                        var.keySlower = False
+                if var.gameStart or var.singleplayer:
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_LEFT:
+                            var.keyLeft = True
+                        if event.key == pygame.K_RIGHT:
+                            var.keyRight = True
+                        if event.key == pygame.K_UP:
+                            var.keyFaster = True
+                        if event.key == pygame.K_DOWN:
+                            var.keySlower = True
+                    if event.type == pygame.KEYUP:
+                        if event.key == pygame.K_LEFT:
+                            var.keyLeft = False
+                        if event.key == pygame.K_RIGHT:
+                            var.keyRight = False
+                        if event.key == pygame.K_UP:
+                            var.keyFaster = False
+                        if event.key == pygame.K_DOWN:
+                            var.keySlower = False
 
             Render.render()
             timer.show_speed(speed=var.speed)

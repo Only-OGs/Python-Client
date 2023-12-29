@@ -34,6 +34,8 @@ class SocketIOClient:
         self.sio.on('load_level', self.on_level_load)
         self.sio.on('wait_for_start', self.on_wait_for_start)
         self.sio.on('updated_positions', self.on_updated_positions)
+        self.sio.on('start_race', self.on_start_race)
+        self.sio.on('start_race_timer', self.on_start_race_timer)
 
         # Initialisierung von Variablen für Erfolg/Misserfolg bei Aktionen
         self.logoutstatus = None
@@ -251,3 +253,11 @@ class SocketIOClient:
             }
             var.olddata = position
             self.sio.emit("ingame_pos", data)
+
+    def on_start_race(self, data):
+        if self.sio.connected:
+            var.gameStart = True
+
+    def on_start_race_timer(self, data):
+        if self.sio.connected:
+            print(data)
