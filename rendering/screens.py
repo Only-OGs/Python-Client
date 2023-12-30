@@ -1,11 +1,15 @@
-import threading
 
 from rendering.layout import Layout
 import rendering.globals_vars as var
 import pygame
 import pygame_gui
+from time import sleep
+import pygame.mixer
+
 import time
 
+pygame.mixer.init()
+soundtrack = pygame.mixer.Sound("assets/Music/robotic-countdown-43935.mp3")
 
 class Screens:
 
@@ -159,8 +163,50 @@ class Screens:
         )
 
     @staticmethod
+
+    def create_ingmae_menu(screen):
+        rect = pygame.rect.Rect(var.width//2, var.height//2, 600, 600)
+        pygame.draw.rect(screen, var.DARKBLUE, rect)
+
+#Erstellt den Countdown zu beginn eines Spiels
+    @staticmethod
+    def create_countdown(screen):
+        countdown = ""
+        color = var.RED
+        if var.game_counter <= 60:
+            countdown = "3"
+            soundtrack.play()
+        elif var.game_counter <= 120:
+            countdown = "2"
+        elif var.game_counter <= 180:
+            countdown = "1"
+        elif var.game_counter <= 240:
+            countdown = "GO"
+            color = var.VIOLETTE
+            if var.game_counter == 240:
+                var.game_start = True
+                var.game_counter = 0
+
+        Layout.draw_text(screen=screen, x=var.width//2, y=var.height//2, text=countdown, size=90, color=color)
+
     def create_loadingscreen(screen):
         screen.fill((var.VIOLETTE))
         Layout.draw_text(screen=screen, x=var.width // 2 - 40, y=var.height // 2, text="Loading...", size=45,
                          color=var.DARKBLUE)
         var.menu_state = "Game"
+
+
+    #HOTFIX
+    def threaded_function(arg, text):
+        var.is_running = True
+        for i in range(arg):
+            sleep(1)
+        if text == "login":
+            var.client.loginmessage = ''
+        elif text == "lobby":
+            var.client.lobbymessage = ''
+        elif text == "game":
+            var.menu_state == "main_menu"
+            var.isgame = True
+        var.is_running = False
+

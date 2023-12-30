@@ -5,6 +5,7 @@ from rendering.utility.car_ai import Cars
 from rendering.utility.road import Road
 from rendering.utility.util import Util
 from rendering import gui
+from rendering import screens
 from rendering.utility.sprite_generator import SpriteGen
 from rendering.utility.render import Render
 
@@ -38,6 +39,29 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                #Verhindert eingaben des Spielers, während des Countdowns
+                if not var.game_start:
+                    pass
+                else:
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_LEFT:
+                            var.keyLeft = True
+                        if event.key == pygame.K_RIGHT:
+                            var.keyRight = True
+                        if event.key == pygame.K_UP:
+                            var.keyFaster = True
+                        if event.key == pygame.K_DOWN:
+                            var.keySlower = True
+                    if event.type == pygame.KEYUP:
+                        if event.key == pygame.K_LEFT:
+                            var.keyLeft = False
+                        if event.key == pygame.K_RIGHT:
+                            var.keyRight = False
+                        if event.key == pygame.K_UP:
+                            var.keyFaster = False
+                        if event.key == pygame.K_DOWN:
+                            var.keySlower = False
+
 
 
                 if event.type == pygame.KEYDOWN:
@@ -66,11 +90,22 @@ class Game:
                             var.keyFaster = False
                         if event.key == pygame.K_DOWN:
                             var.keySlower = False
-            if not  var.paused:
-                Render.render()
-                print(var.clock.get_fps())
-                timer.show_speed(speed=var.speed)
-                timer.count_up()
+            
+              
+                
+
+          if not  var.paused:
+              Render.render()
+              timer.show_speed(speed=var.speed)
+
+             #init den ingame Countdown zu beginn eines Rennens
+              if not var.game_start:
+                  screens.Screens.create_countdown(var.screen)
+                  var.game_counter += 1
+              else:
+                  timer.count_up()
+
+
             # In Round() länge der Strecke einsetzten
 
                 if(var.position < 10000 and var.position > 1000):
@@ -81,10 +116,8 @@ class Game:
                         self.timer_rest = False
                         timer.ende_timer()
 
-                if (var.clock.get_fps() < 1):
-                    self.update(var.step)
-                else:
-                    self.update(1 / int(var.clock.get_fps()))
+
+            self.update(var.step)
 
             pygame.display.update()
             var.clock.tick(var.fps)
