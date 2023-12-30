@@ -4,7 +4,6 @@ from rendering.screens import Screens
 import rendering.globals_vars as var
 from rendering.game import Game
 from rendering.utility.util import Util
-from time import sleep
 
 pygame.init()
 pygame.display.set_caption("OG Racer")

@@ -10,6 +10,7 @@ import time
 
 pygame.mixer.init()
 soundtrack = pygame.mixer.Sound("assets/Music/robotic-countdown-43935.mp3")
+soundtrack.set_volume(0.03)
 
 class Screens:
 
@@ -209,4 +210,17 @@ class Screens:
             var.menu_state == "main_menu"
             var.isgame = True
         var.is_running = False
+
+    @staticmethod
+    def create_leaderboard():
+        screen = var.screen
+
+        rect = pygame.rect.Rect(50, 50, var.width-100,var.height-150)
+        shape_surf = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
+        pygame.draw.rect(shape_surf, var.TRANSPARENT_VIOLLETE, shape_surf.get_rect())
+        screen.blit(shape_surf, rect)
+
+        Layout.draw_text(screen=screen,y=50, x=200,text="Position",size=32,color=var.DARKBLUE)
+        Layout.draw_text(screen=screen, y=50, x= 200 + var.width//3, text="Name", size=32, color=var.DARKBLUE)
+        Layout.draw_text(screen=screen, y=50, x= 200+ (var.width//3*2), text="Zeit", size=32, color=var.DARKBLUE)
 

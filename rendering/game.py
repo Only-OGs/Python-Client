@@ -35,7 +35,7 @@ class Game:
                     pygame.quit()
                     sys.exit()
                 #Verhindert eingaben des Spielers, während des Countdowns
-                if not var.game_start:
+                if not var.game_start or var.game_end:
                     pass
                 else:
                     if event.type == pygame.KEYDOWN:
@@ -62,12 +62,20 @@ class Game:
             Render.render()
             timer.show_speed(speed=var.speed)
 
+
+
            #init den ingame Countdown zu beginn eines Rennens
             if not var.game_start:
                 screens.Screens.create_countdown(var.screen)
                 var.game_counter += 1
             else:
                 timer.count_up()
+
+            '''if funktion von pascal :
+                screens.Screens.create_leaderboard()
+                var.game_end = True
+            '''
+
 
 
             # In Round() länge der Strecke einsetzten

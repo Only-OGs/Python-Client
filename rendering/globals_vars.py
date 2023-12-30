@@ -79,6 +79,7 @@ client = SocketIOClient()
 search_counter = 0
 game_counter = 0
 game_start = False
+game_end = False
 player_colors = [(255, 6, 193), (186, 46, 151), (0, 255, 234), (55, 214, 201), (234, 235, 44), (234, 235, 117),
                  (250, 128, 87), (255, 155, 116)]
 id_playerList = []
@@ -98,6 +99,7 @@ BLACK, WHITE, RED, VIOLETTE, CYAN, DARKBLUE, YELLOW, ORANGE = (0, 0, 0), (255, 2
 DARK_VIOLLETTE, DARK_CYAN, DARK_YELLOW, LIGHT_ORANGE = (186, 46, 151), (55, 214, 201), (234, 235, 117), (255, 151, 116)
 TRANSPARENT_WHITE = (255, 255, 255, 100)
 TRANSPARENT_RED = (255, 0, 0, 20)
+TRANSPARENT_VIOLLETE = (186, 46, 151, 215)
 is_await = False
 player_texts = []
 is_running = False
