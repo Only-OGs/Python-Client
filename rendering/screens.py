@@ -1,10 +1,9 @@
 
 from rendering.layout import Layout
-import threading
 import rendering.globals_vars as var
 import pygame
 import pygame_gui
-
+from time import sleep
 import pygame.mixer
 
 import time
@@ -195,4 +194,19 @@ class Screens:
         Layout.draw_text(screen=screen, x=var.width // 2 - 40, y=var.height // 2, text="Loading...", size=45,
                          color=var.DARKBLUE)
         var.menu_state = "Game"
+
+
+    #HOTFIX
+    def threaded_function(arg, text):
+        var.is_running = True
+        for i in range(arg):
+            sleep(1)
+        if text == "login":
+            var.client.loginmessage = ''
+        elif text == "lobby":
+            var.client.lobbymessage = ''
+        elif text == "game":
+            var.menu_state == "main_menu"
+            var.isgame = True
+        var.is_running = False
 

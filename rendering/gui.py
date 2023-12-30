@@ -1,10 +1,6 @@
 import pygame
 import rendering.globals_vars as var
-from rendering import game
-import sys
-import pygame_gui
 
-import time
 
 
 '''
