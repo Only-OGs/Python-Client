@@ -171,21 +171,22 @@ class Screens:
 #Erstellt den Countdown zu beginn eines Spiels
     @staticmethod
     def create_countdown(screen):
-        countdown = ""
-        color = var.RED
-        if var.game_counter <= 60:
-            countdown = "3"
-            soundtrack.play()
-        elif var.game_counter <= 120:
-            countdown = "2"
-        elif var.game_counter <= 180:
-            countdown = "1"
-        elif var.game_counter <= 240:
-            countdown = "GO"
-            color = var.VIOLETTE
-            if var.game_counter == 240:
-                var.game_start = True
-                var.game_counter = 0
+        if(var.client.countdown_start_timer() == 4):
+            countdown = ""
+            color = var.RED
+            if var.game_counter <= 60:
+                countdown = "3"
+                soundtrack.play()
+            elif var.game_counter <= 120:
+                countdown = "2"
+            elif var.game_counter <= 180:
+                countdown = "1"
+            elif var.game_counter <= 240:
+                countdown = "GO"
+                color = var.VIOLETTE
+                if var.game_counter == 240 and var.game_start:
+                    var.game_countdown_start = True
+                    var.game_counter = 0
 
         Layout.draw_text(screen=screen, x=var.width//2, y=var.height//2, text=countdown, size=90, color=color)
 

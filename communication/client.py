@@ -31,6 +31,8 @@ class SocketIOClient:
         self.sio.on('timer_countdown', self.on_timer)
         self.sio.on('timer_abrupt', self.on_timer_off)
         self.sio.on('load_level', self.on_level_load)
+        self.sio.on('start_race_timer', self.countdown_start_timer)
+        self.sio.on('start_race', self.countdown_start_race)
 
 
         # Initialisierung von Variablen für Erfolg/Misserfolg bei Aktionen
@@ -58,6 +60,9 @@ class SocketIOClient:
         self.chat_message = None
 
         self.is_ready = False
+
+        self.start_countdown=False
+        self.start_race = False
 
 
     def on_playerLeave(self,data):
@@ -206,6 +211,13 @@ class SocketIOClient:
                 data = {"user": user, "password": password}
                 var.client.playersname = user
                 self.sio.emit("login", data)
+    def countdown_start_race(self):
+        if self.sio.connected:
+            self.start_race = True
+    def countdown_start_timer(self):
+        if self.sio.connected:
+            self.start_countdown = True
+
 
 
     # trennt die Verbindung zum Server

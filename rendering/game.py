@@ -35,7 +35,7 @@ class Game:
                     pygame.quit()
                     sys.exit()
                 #Verhindert eingaben des Spielers, während des Countdowns
-                if not var.game_start:
+                if not var.game_countdown_start:
                     pass
                 else:
                     if event.type == pygame.KEYDOWN:
@@ -63,7 +63,7 @@ class Game:
             timer.show_speed(speed=var.speed)
 
            #init den ingame Countdown zu beginn eines Rennens
-            if not var.game_start:
+            if not var.game_countdown_start:
                 screens.Screens.create_countdown(var.screen)
                 var.game_counter += 1
             else:
