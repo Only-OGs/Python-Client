@@ -1,6 +1,6 @@
 import rendering.globals_vars as var
 from rendering.utility.util import Util
-
+import pygame
 
 class Render:
 

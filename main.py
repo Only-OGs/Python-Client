@@ -1,11 +1,12 @@
 import threading
-
 import pygame
 from rendering.layout import Layout
 from rendering.screens import Screens
 import rendering.globals_vars as var
 from rendering.game import Game
 from rendering.utility.util import Util
+from time import sleep
+
 
 pygame.init()
 pygame.display.set_caption("OG Racer")
@@ -40,18 +41,19 @@ while run:
         if var.menu_state == "search_for_lobby":
             var.manager_lobby_search.process_events(event)
 
-    # MACH HINNE DIE KACKE MUSS FEDDICH WERDEN
+
+    
     if var.track is not None and var.singleplayer is not True:
         if not var.is_running:
             var.menu_state = "loading"
-            thread = threading.Thread(target=Layout.threaded_function, args=(2, "game"))
+            thread = threading.Thread(target=Screens.threaded_function, args=(2, "game"))
             thread.start()
         if var.isgame:
             Game()
             var.isgame = False
 
     if var.buttons["Einzelspieler"]:
-        Game()
+           Game()
 
     elif var.buttons["Mehrspieler"]:
         var.menu_state = "multiplayer_menu"
@@ -124,3 +126,4 @@ while run:
     pygame.display.update()
 
 pygame.quit()
+

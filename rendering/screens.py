@@ -1,21 +1,26 @@
-import threading
 
 from rendering.layout import Layout
 import rendering.globals_vars as var
 import pygame
 import pygame_gui
 import time
+import pygame.mixer
 
+
+import time
+
+pygame.mixer.init()
+soundtrack = pygame.mixer.Sound("assets/Music/robotic-countdown-43935.mp3")
 
 class Screens:
 
     @staticmethod
-    def create_menu_screen():
+    def create_menu_screen(screen):
         var.client.disconnect()
-        Layout.init_background(screen=var.menu_screen)
-        Layout.linker_button(screen=var.menu_screen, text="Einzelspieler",trigger="Einzelspieler")
-        Layout.mittlerer_button(screen=var.menu_screen, text="Optionen",trigger="Optionen")
-        Layout.rechter_button(screen=var.menu_screen, text="Mehrspieler",trigger="Mehrspieler")
+        Layout.init_background(screen=screen)
+        Layout.linker_button(screen=screen, text="Einzelspieler",trigger="Einzelspieler")
+        Layout.mittlerer_button(screen=screen, text="Optionen",trigger="Optionen")
+        Layout.rechter_button(screen=screen, text="Mehrspieler",trigger="Mehrspieler")
 
     @staticmethod
     def create_mulitplayer_screen():
@@ -92,7 +97,7 @@ class Screens:
     def screen_update():
 
         if var.menu_state == "main_menu":
-            Screens.create_menu_screen()
+            Screens.create_menu_screen(var.menu_screen)
         elif var.menu_state == "lobby_option":
             Screens.create_lobby_screen()
         elif var.menu_state == "registration_menu":
@@ -159,8 +164,47 @@ class Screens:
         )
 
     @staticmethod
+    def create_ingmae_menu(screen):
+        rect = pygame.rect.Rect(var.width//2, var.height//2, 600, 600)
+        pygame.draw.rect(screen, var.DARKBLUE, rect)
+
+#Erstellt den Countdown zu beginn eines Spiels
+    @staticmethod
+    def create_countdown(screen):
+        countdown = ""
+        color = var.RED
+        if var.game_counter <= int(var.clock.get_fps()):
+            countdown = "3"
+            soundtrack.play()
+        elif var.game_counter <= int(var.clock.get_fps())*2:
+            countdown = "2"
+        elif var.game_counter <= int(var.clock.get_fps())*3:
+            countdown = "1"
+        elif var.game_counter <= int(var.clock.get_fps())*4:
+            countdown = "GO"
+            color = var.VIOLETTE
+            if var.game_counter == int(var.clock.get_fps())*4:
+                var.game_start = True
+                var.game_counter = 0
+
+        Layout.draw_text(screen=screen, x=var.width//2, y=var.height//2, text=countdown, size=90, color=color)
+
     def create_loadingscreen(screen):
         screen.fill((var.VIOLETTE))
         Layout.draw_text(screen=screen, x=var.width // 2 - 40, y=var.height // 2, text="Loading...", size=45,
                          color=var.DARKBLUE)
         var.menu_state = "Game"
+
+    def threaded_function(arg, text):
+        var.is_running = True
+        for i in range(arg):
+            sleep(1)
+        if text == "login":
+            var.client.loginmessage = ''
+        elif text == "lobby":
+            var.client.lobbymessage = ''
+        elif text == "game":
+            var.menu_state == "main_menu"
+            var.isgame = True
+        var.is_running = False
+
