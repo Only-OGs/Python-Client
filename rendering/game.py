@@ -4,7 +4,7 @@ import rendering.globals_vars as var
 from rendering.utility.car_ai import Cars
 from rendering.utility.road import Road
 from rendering.utility.util import Util
-from rendering import gui
+from rendering import gui, screens
 from rendering.utility.sprite_generator import SpriteGen
 from rendering.utility.render import Render
 
@@ -32,6 +32,8 @@ class Game:
         timer = gui.Gui(screen=var.screen)
 
         while True:
+            if var.escape:
+                break
             for event in pygame.event.get():
 
                 if event.type == pygame.QUIT:
@@ -41,7 +43,8 @@ class Game:
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        pass
+                        var.escape = True
+                        break
 
                     if event.key == pygame.K_p:
                         self.toggle_pause()
@@ -65,6 +68,8 @@ class Game:
                             var.keyFaster = False
                         if event.key == pygame.K_DOWN:
                             var.keySlower = False
+
+
             if not  var.paused:
                 Render.render()
                 print(var.clock.get_fps())
@@ -87,6 +92,13 @@ class Game:
 
             pygame.display.update()
             var.clock.tick(var.fps)
+
+        if var.escape:
+            var.menu_state = "main_menu"
+            screens.Screens.screen_update()
+            var.position = 0
+            var.speed = 0
+            var.escape = False
 
     def toggle_pause(self):
         var.paused = not var.paused

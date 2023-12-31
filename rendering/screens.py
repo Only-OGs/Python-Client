@@ -9,12 +9,12 @@ import pygame_gui
 class Screens:
 
     @staticmethod
-    def create_menu_screen():
+    def create_menu_screen(screen):
         var.client.disconnect()
-        Layout.init_background(screen=var.menu_screen)
-        Layout.linker_button(screen=var.menu_screen, text="Einzelspieler",trigger="Einzelspieler")
-        Layout.mittlerer_button(screen=var.menu_screen, text="Optionen",trigger="Optionen")
-        Layout.rechter_button(screen=var.menu_screen, text="Mehrspieler",trigger="Mehrspieler")
+        Layout.init_background(screen=screen)
+        Layout.linker_button(screen=screen, text="Einzelspieler",trigger="Einzelspieler")
+        Layout.mittlerer_button(screen=screen, text="Optionen",trigger="Optionen")
+        Layout.rechter_button(screen=screen, text="Mehrspieler",trigger="Mehrspieler")
 
     @staticmethod
     def create_mulitplayer_screen():
@@ -92,7 +92,7 @@ class Screens:
     def screen_update():
 
         if var.menu_state == "main_menu":
-            Screens.create_menu_screen()
+            Screens.create_menu_screen(var.menu_screen)
         elif var.menu_state == "lobby_option":
             Screens.create_lobby_screen()
         elif var.menu_state == "registration_menu":
