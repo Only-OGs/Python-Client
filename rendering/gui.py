@@ -1,10 +1,6 @@
 import pygame
 import rendering.globals_vars as var
-from rendering import game
-import sys
-import pygame_gui
 
-import time
 
 
 '''
@@ -59,12 +55,12 @@ class Gui:
 
         # Print die den Runden counter
         font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
-        text = font.render("Time: {}:{}:{}".format(self.min, self.sec, self.mil_sec), True, (var.BLACK))
+        text = font.render("Time: {}:{}:{}".format(self.min, self.sec, self.mil_sec), True,(var.BLACK))
         self.background_gui(x=0, y=0, width=150, color=var.TRANSPARENT_WHITE)
         self.screen.blit(text, (0, 0 + self.text_offste))
 
         #Red Background
-        self.background_gui(x=0, y=0, width=var.width, color= var.TRANSPARENT_RED)
+        self.background_gui(x=0, y=0, width=var.width, color=var.TRANSPARENT_RED)
 
     #Beendet den Timer und setzt die neue bestzeit
     def ende_timer(self):
@@ -72,13 +68,10 @@ class Gui:
         if (self.first_lab):
             self.first_lab = False
             self.set_new_record()
-
         if(self.min < self.rec_min):
             self.set_new_record()
-
         elif(self.sec < self.rec_sec and self.min <= self.rec_min):
             self.set_new_record()
-
         elif (self.sec <= self.rec_sec and self.min <= self.rec_min and self.mil_sec < self.rec_mil_sec):
             self.set_new_record()
 

@@ -13,7 +13,6 @@ button_positions = {
 }
 
 button_image = 'assets/button.png'
-FONT = "assets/rocket-rinder-font/RocketRinder-yV5d.ttf"
 button_image_hover = 'assets/button-pressed.png'
 button_size = 2
 font_size = 20
@@ -41,7 +40,7 @@ class Layout:
 
     @staticmethod
     def draw_text(screen, x, y, text, size, color):
-        font = pygame.font.Font(FONT, size)
+        font = pygame.font.Font(var.FONT, size)
         text_surface = font.render(text, True, color)
         screen.blit(text_surface, (x, y))
 
@@ -149,7 +148,10 @@ class Layout:
             var.client.loginmessage = ''
         elif text == "lobby":
             var.client.lobbymessage = ''
-
+        elif text == "game":
+            var.menu_state == "main_menu"
+            var.isgame = True
+        var.is_running = False
 
 
     @staticmethod
@@ -171,7 +173,6 @@ class Layout:
                 thread = threading.Thread(target=Layout.threaded_function, args=(3, "lobby"))
                 thread.start()
 
-
     @staticmethod
     def create_ingamelobby(screen):
         # counter für "Suchen..."
@@ -179,7 +180,7 @@ class Layout:
         Layout.init_second_background(screen)
 
         var.search_counter = 0
-        player_texts = [pygame.font.Font(FONT, 20).render(player, True, (255, 255, 255)) for player in
+        player_texts = [pygame.font.Font(var.FONT, 20).render(player, True, (255, 255, 255)) for player in
                         var.id_playerList]
 
         #Button
@@ -199,34 +200,35 @@ class Layout:
             screen.blit(text, (110, (var.height // 16) + (80 * i) + 10))
 
         #Lobby ID
-        font = pygame.font.Font(FONT, 18)
+        font = pygame.font.Font(var.FONT, 18)
         text = font.render(f"Lobby ID: {var.client.lobbyid}", True, (var.WHITE))
         #update_gui(x=self.x, y=self.y, width=150)
         screen.blit(text, (var.width//2+400, var.height-150))
 
         #Lobby Countdown
-        font = pygame.font.Font(FONT, 18)
+        font = pygame.font.Font(var.FONT, 18)
         text = font.render(f"Starte in: {var.client.timer}", True, (var.WHITE))
         # update_gui(x=self.x, y=self.y, width=150)
         screen.blit(text, (var.width // 2 + 400, + 20))
 
         #Name
-        font = pygame.font.Font(FONT, 18)
+        font = pygame.font.Font(var.FONT, 18)
         text = font.render(f"ID: {var.client.playersname}".format(), True, (var.WHITE))
         # update_gui(x=self.x, y=self.y, width=150)
         screen.blit(text, (+100, + 20))
 
+
+
         var.search_counter += 1
 
         if var.search_counter == 60:
-            player_texts.extend([pygame.font.Font(FONT, 20).render("Suchen .", True, (0, 0, 0))] * (
+            player_texts.extend([pygame.font.Font(var.FONT, 20).render("Suchen .", True, (0, 0, 0))] * (
                     len(player_texts) - len(var.id_playerList)))
         elif var.search_counter == 120:
-            player_texts.extend([pygame.font.Font(FONT, 20).render("Suchen ..", True, (0, 0, 0))] * (
+            player_texts.extend([pygame.font.Font(var.FONT, 20).render("Suchen ..", True, (0, 0, 0))] * (
                     len(player_texts) - len(var.id_playerList)))
         elif var.search_counter == 180:
-            player_texts.extend([pygame.font.Font(FONT, 20).render("Suchen ...", True, (0, 0, 0))] * (
+            player_texts.extend([pygame.font.Font(var.FONT, 20).render("Suchen ...", True, (0, 0, 0))] * (
                     len(player_texts) - len(var.id_playerList)))
 
         var.search_counter = 0
-

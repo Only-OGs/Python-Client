@@ -31,6 +31,7 @@ class Game:
         SpriteGen.create_background()
         timer = gui.Gui(screen=var.screen)
 
+
         while True:
             if var.escape:
                 break
@@ -40,55 +41,59 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
-
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        var.escape = True
-                        break
-
-                    if event.key == pygame.K_p:
-                        self.toggle_pause()
-                    
-                    if not var.paused:
-                        if event.key == pygame.K_LEFT:
-                            var.keyLeft = True
-                        if event.key == pygame.K_RIGHT:
-                            var.keyRight = True
-                        if event.key == pygame.K_UP:
-                            var.keyFaster = True
-                        if event.key == pygame.K_DOWN:
-                            var.keySlower = True
-                if event.type == pygame.KEYUP:
-                    if not var.paused:
-                        if event.key == pygame.K_LEFT:
-                            var.keyLeft = False
-                        if event.key == pygame.K_RIGHT:
-                            var.keyRight = False
-                        if event.key == pygame.K_UP:
-                            var.keyFaster = False
-                        if event.key == pygame.K_DOWN:
-                            var.keySlower = False
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_ESCAPE:
+                            var.escape = True
+                            break
+                        if event.key == pygame.K_p:
+                            self.toggle_pause()
+                    # Verhindert eingaben des Spielers, während des Countdowns
+                    if not var.game_start:
+                        pass
+                    else:
+                        if event.type == pygame.KEYDOWN:
+                            if not var.paused:
+                                if event.key == pygame.K_LEFT:
+                                    var.keyLeft = True
+                                if event.key == pygame.K_RIGHT:
+                                    var.keyRight = True
+                                if event.key == pygame.K_UP:
+                                    var.keyFaster = True
+                                if event.key == pygame.K_DOWN:
+                                    var.keySlower = True
+                        if event.type == pygame.KEYUP:
+                            if not var.paused:
+                                if event.key == pygame.K_LEFT:
+                                    var.keyLeft = False
+                                if event.key == pygame.K_RIGHT:
+                                    var.keyRight = False
+                                if event.key == pygame.K_UP:
+                                    var.keyFaster = False
+                                if event.key == pygame.K_DOWN:
+                                    var.keySlower = False
 
 
             if not  var.paused:
-                Render.render()
-                print(var.clock.get_fps())
-                timer.show_speed(speed=var.speed)
-                timer.count_up()
-            # In Round() länge der Strecke einsetzten
+              Render.render()
+              timer.show_speed(speed=var.speed)
 
-                if(var.position < 10000 and var.position > 1000):
+                #init den ingame Countdown zu beginn eines Rennens
+              if not var.game_start:
+                  screens.Screens.create_countdown(var.screen)
+                  var.game_counter += 1
+              else:
+                  timer.count_up()
+                    # In Round() länge der Strecke einsetzten
+                  if(var.position < 10000 and var.position > 1000):
                     self.timer_rest = True
 
-                if (var.position >= var.trackLength-1000):
+                  if (var.position >= var.trackLength-1000):
                     if(self.timer_rest):
                         self.timer_rest = False
                         timer.ende_timer()
 
-                if (var.clock.get_fps() < 1):
-                    self.update(var.step)
-                else:
-                    self.update(1 / int(var.clock.get_fps()))
+
+            self.update(var.step)
 
             pygame.display.update()
             var.clock.tick(var.fps)

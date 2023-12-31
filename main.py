@@ -1,11 +1,10 @@
 import threading
-
 import pygame
 from rendering.screens import Screens
 import rendering.globals_vars as var
 from rendering.game import Game
 from rendering.utility.util import Util
-from rendering.layout import Layout
+from time import sleep
 
 
 pygame.init()
@@ -17,19 +16,17 @@ Screens.create_login_input()
 Screens.create_register_input()
 Screens.create_music_slider()
 Screens.create_lobby_search_input()
+gameload = False
 
 while run:
-    tick = var.clock.tick(var.fps)
 
+    tick = var.clock.tick(var.fps)
     Util.do_after_await()
     Screens.screen_update()
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
             break
-
-
 
         if var.menu_state == "log_menu":
             var.manager_Login.process_events(event)
@@ -43,17 +40,20 @@ while run:
         if var.menu_state == "search_for_lobby":
             var.manager_lobby_search.process_events(event)
 
+
+    '''Dieser Thread aufruf muss noch gefixed werde n'''
+    
     if var.track is not None and var.singleplayer is not True:
         if not var.is_running:
             var.menu_state = "loading"
-            thread = threading.Thread(target=Layout.threaded_function, args=(5, "game"))
+            thread = threading.Thread(target=Screens.threaded_function, args=(2, "game"))
             thread.start()
-        if var.game:
+        if var.isgame:
             Game()
             var.isgame = False
 
     if var.buttons["Einzelspieler"]:
-        Game()
+           Game()
 
     elif var.buttons["Mehrspieler"]:
         var.menu_state = "multiplayer_menu"
@@ -122,8 +122,8 @@ while run:
     elif var.menu_state == "log_menu":
         var.manager_Login.update(tick)
 
-
     Util.reset_buttons()
     pygame.display.update()
 
 pygame.quit()
+
