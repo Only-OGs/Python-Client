@@ -173,17 +173,17 @@ class Screens:
     def create_countdown(screen):
         countdown = ""
         color = var.RED
-        if var.game_counter <= 60:
+        if var.game_counter <= int(var.clock.get_fps()):
             countdown = "3"
             soundtrack.play()
-        elif var.game_counter <= 120:
+        elif var.game_counter <= int(var.clock.get_fps())*2:
             countdown = "2"
-        elif var.game_counter <= 180:
+        elif var.game_counter <= int(var.clock.get_fps())*3:
             countdown = "1"
-        elif var.game_counter <= 240:
+        elif var.game_counter <= int(var.clock.get_fps())*4:
             countdown = "GO"
             color = var.VIOLETTE
-            if var.game_counter == 240:
+            if var.game_counter == int(var.clock.get_fps())*4:
                 var.game_start = True
                 var.game_counter = 0
 

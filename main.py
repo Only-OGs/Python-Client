@@ -40,8 +40,6 @@ while run:
         if var.menu_state == "search_for_lobby":
             var.manager_lobby_search.process_events(event)
 
-
-    '''Dieser Thread aufruf muss noch gefixed werde n'''
     
     if var.track is not None and var.singleplayer is not True:
         if not var.is_running:

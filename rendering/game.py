@@ -48,7 +48,7 @@ class Game:
                         self.toggle_pause()
                 # Verhindert eingaben des Spielers, während des Countdowns
                 if not var.game_start:
-                    pass
+                    break
                 else:
                     if event.type == pygame.KEYDOWN:
                         if not var.paused:
@@ -89,8 +89,7 @@ class Game:
                         self.timer_rest = False
                         timer.ende_timer()
 
-
-            self.update(var.step)
+            self.update(1 / int(var.clock.get_fps()))
 
             pygame.display.update()
             var.clock.tick(var.fps)
@@ -100,6 +99,8 @@ class Game:
             screens.Screens.screen_update()
             var.position = 0
             var.speed = 0
+            var.game_start = False
+            var.game_counter = 0
             var.escape = False
 
     def toggle_pause(self):
