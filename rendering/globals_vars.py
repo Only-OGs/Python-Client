@@ -30,7 +30,7 @@ playerZ = (cameraHeight * cameraDepth)
 fogDensity = 15
 position = 0
 speed = 0
-maxSpeed = 24000
+maxSpeed = segmentLength/step
 accel = maxSpeed / 5
 breaking = -maxSpeed
 decel = -maxSpeed / 5
@@ -70,7 +70,7 @@ buttons = {
     "Nicht Bereit": False,
     "Verlassen": False,
     "loading": False,
-    "Game":False
+    "Game": False
 }
 
 SCREEN_WIDTH = 1329
@@ -103,3 +103,12 @@ player_texts = []
 is_running = False
 trackloaded = False
 singleplayer = True
+sio = None
+player_cars = []
+help_car = False
+username = ""
+olddata = 0
+new_car_data = []
+paused = False
+escape = False
+

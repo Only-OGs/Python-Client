@@ -6,6 +6,7 @@ from rendering.game import Game
 from rendering.utility.util import Util
 from time import sleep
 
+
 pygame.init()
 pygame.display.set_caption("OG Racer")
 run = True
@@ -27,8 +28,6 @@ while run:
             run = False
             break
 
-
-
         if var.menu_state == "log_menu":
             var.manager_Login.process_events(event)
 
@@ -41,7 +40,7 @@ while run:
         if var.menu_state == "search_for_lobby":
             var.manager_lobby_search.process_events(event)
 
-    '''Dieser Thread aufruf muss noch gefixed werde n'''
+    
     if var.track is not None and var.singleplayer is not True:
         if not var.is_running:
             var.menu_state = "loading"

@@ -1,6 +1,8 @@
 from rendering.game import Game
 import socketio
 import rendering.globals_vars as var
+from rendering.utility.car_ai import Cars
+from rendering.utility.sprite_generator import SpriteGen
 
 
 # statische Mehtode, um Fehler Verbindungsprobleme zu reagieren.
@@ -31,6 +33,8 @@ class SocketIOClient:
         self.sio.on('timer_countdown', self.on_timer)
         self.sio.on('timer_abrupt', self.on_timer_off)
         self.sio.on('load_level', self.on_level_load)
+        self.sio.on('wait_for_start', self.on_wait_for_start)
+        self.sio.on('updated_positions',self.on_updated_positions)
 
 
         # Initialisierung von Variablen für Erfolg/Misserfolg bei Aktionen
@@ -58,6 +62,8 @@ class SocketIOClient:
         self.chat_message = None
 
         self.is_ready = False
+
+
 
 
     def on_playerLeave(self,data):
@@ -205,6 +211,7 @@ class SocketIOClient:
             else:
                 data = {"user": user, "password": password}
                 var.client.playersname = user
+                var.username = user
                 self.sio.emit("login", data)
 
 
@@ -226,3 +233,31 @@ class SocketIOClient:
     def on_timer_off(self, args):
         if self.sio.connected:
             self.timer = None
+
+    def client_is_ingame(self):
+        if self.sio.connected:
+            self.sio.emit("client_is_ingame")
+
+    def on_wait_for_start(self, data):
+        if self.sio.connected:
+            for n in data:
+                if n.get("id") is not None:
+                    var.player_cars.append(n)
+            SpriteGen.create_player_cars()
+            var.help_car = True
+
+    def on_updated_positions(self, data):
+        var.new_car_data.clear()
+        for n in data:
+            if n.get("id") is not None and n.get("id") != var.username:
+                var.new_car_data.append(n)
+        Cars.update_player_cars()
+
+    def ingame_pos(self, position, offset):
+        if var.olddata != position:
+            data = {
+                "offset": offset,
+                "pos": position
+            }
+            var.olddata = position
+            self.sio.emit("ingame_pos", data)
