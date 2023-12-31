@@ -16,7 +16,6 @@ class Road:
         """
         var.segments = []
 
-        print("test")
         Road.load_road()
         #SpriteGen.create_bot_cars()
         #SpriteGen.create_street_objectives(var.segments)

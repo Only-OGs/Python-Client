@@ -93,7 +93,7 @@ class Game:
         playersegment = Util.findSegment(var.position + var.playerZ)
         speedpercent = var.speed / var.maxSpeed
         var.position = Util.increase(var.position, dt * var.speed, var.trackLength)
-
+        playerw = 80 *  (0.3 * (1/80))
         dx = dt * 2 * speedpercent
 
         if var.keyLeft:
@@ -118,6 +118,33 @@ class Game:
 
         if (var.playerX < -1 or var.playerX > 1) and (var.speed > var.offRoadLimit):
             var.speed = Util.accelerate(var.speed, var.offRoadDecel, var.dt)
+
+        if var.playerX < -1 or var.playerX > 1:
+
+            if var.speed > var.offRoadLimit:
+                var.speed = Util.accelerate(var.speed, var.offRoadDecel, var.dt)
+
+            for n in range(len(playersegment.get("sprites"))):
+                sprite = playersegment.get("sprites")[n]
+                if sprite is not None:
+                    sprite_w = sprite.get("source").get("width") * (0.3 * (1/80))
+                    if sprite.get("offset") > 0:
+                        h = 1
+                    else:
+                        h = 0
+                    if Util.overlap(var.playerX, playerw, sprite.get("offset") + sprite_w/2 * h, sprite_w):
+                        var.speed = var.maxSpeed/5
+                        var.position = Util.increase(playersegment.get("p1").get("world").get("z"),-var.playerZ, var.trackLength)
+                        break
+
+        for n in range(len(playersegment.get("cars"))):
+            car = playersegment.get("cars")[n]
+            car_w = car.get("sprite").get("width") * (0.3 * (1/80))
+            if var.speed > car.get("speed"):
+                if Util.overlap(var.playerX, playerw,car.get("offset"), car_w, 0.8):
+                    var.speed = car.get("speed") * (car.get("speed")/var.speed)
+                    var.position = Util.increase(car.get("z"),-var.playerZ, var.trackLength)
+                    break
 
         var.playerX = Util.limit(var.playerX, -2, 2)
         var.speed = Util.limit(var.speed, 0, var.maxSpeed)
