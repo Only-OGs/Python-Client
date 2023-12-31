@@ -48,6 +48,7 @@ while run:
             thread = threading.Thread(target=Screens.threaded_function, args=(2, "game"))
             thread.start()
         if var.isgame:
+            var.singleplayer_start = True
             Game()
             var.isgame = False
 

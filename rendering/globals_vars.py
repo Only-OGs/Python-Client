@@ -70,7 +70,8 @@ buttons = {
     "Nicht Bereit": False,
     "Verlassen": False,
     "loading": False,
-    "Game":False
+    "Game": False,
+    "multi_on": False
 }
 
 SCREEN_WIDTH = 1329
@@ -78,6 +79,7 @@ SCREEN_HEIGHT = 886
 client = SocketIOClient()
 search_counter = 0
 game_counter = 0
+singleplayer_start = False
 game_countdown_start = client.start_countdown
 game_start = client.start_race
 player_colors = [(255, 6, 193), (186, 46, 151), (0, 255, 234), (55, 214, 201), (234, 235, 44), (234, 235, 117),

@@ -10,11 +10,13 @@ import time
 
 pygame.mixer.init()
 soundtrack = pygame.mixer.Sound("assets/Music/robotic-countdown-43935.mp3")
+soundtrack.set_volume(0.03)
 
 class Screens:
 
     @staticmethod
     def create_menu_screen():
+        var.buttons["multi_on"] = False
         var.client.disconnect()
         Layout.init_background(screen=var.menu_screen)
         Layout.linker_button(screen=var.menu_screen, text="Einzelspieler",trigger="Einzelspieler")
@@ -27,6 +29,7 @@ class Screens:
             var.client.connect()
         else:
             pass
+        var.buttons["multi_on"] = True
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus_gui()
         Layout.linker_button(screen=var.menu_screen, text="Anmelden",trigger="Jetzt Anmelden")
@@ -158,8 +161,8 @@ class Screens:
         var.music_slider = pygame_gui.elements.UIHorizontalSlider(
             relative_rect=pygame.Rect((var.width // 2 - (
                     var.slider_width // 2), var.height - 100),
-                                      (var.slider_width, var.slider_height)), start_value=0.01,
-            value_range=((0.008), (0.05)), manager=var.manager_option
+                                      (var.slider_width, var.slider_height)), start_value=0.025,
+            value_range=((0.000), (0.05)), manager=var.manager_option
         )
 
     @staticmethod
@@ -168,27 +171,47 @@ class Screens:
         rect = pygame.rect.Rect(var.width//2, var.height//2, 600, 600)
         pygame.draw.rect(screen, var.DARKBLUE, rect)
 
-#Erstellt den Countdown zu beginn eines Spiels
+    #Erstellt den Countdown zu beginn eines Spiels
     @staticmethod
-    def create_countdown(screen):
-        if(var.client.countdown_start_timer() == 4):
+    def create_countdown_multiplayer(screen):
+            color = var.RED
+            countdown = var.game_countdown_start
+            print(var.game_countdown_start)
+            if var.game_countdown_start == "3":
+                soundtrack.play()
+
+            elif var.game_start:
+                countdown = "GO"
+                color = var.VIOLETTE
+
+            Layout.draw_text(screen=screen, x=var.width // 2, y=var.height // 2, text=countdown, size=90, color=color)
+
+    @staticmethod
+    def create_countdown_singleplayer(screen):
+        if var.buttons["Einzelspieler"]:
             countdown = ""
             color = var.RED
             if var.game_counter <= 60:
-                countdown = "3"
-                soundtrack.play()
+                countdown = "5"
             elif var.game_counter <= 120:
-                countdown = "2"
+                countdown = "4"
             elif var.game_counter <= 180:
-                countdown = "1"
+                soundtrack.play()
+                countdown = "3"
             elif var.game_counter <= 240:
+                countdown = "2"
+            elif var.game_counter <= 300:
+                countdown = "1"
+            elif var.game_counter <= 360:
                 countdown = "GO"
                 color = var.VIOLETTE
-                if var.game_counter == 240 and var.game_start:
-                    var.game_countdown_start = True
+                if var.game_counter == 360 and var.buttons["Einzelspieler"]:
+                    var.buttons["Einzelspieler"] = False
+                    var.singleplayer_start = True
+                    print(var.singleplayer_start)
                     var.game_counter = 0
 
-        Layout.draw_text(screen=screen, x=var.width//2, y=var.height//2, text=countdown, size=90, color=color)
+            Layout.draw_text(screen=screen, x=var.width//2, y=var.height//2, text=countdown, size=90, color=color)
 
     def create_loadingscreen(screen):
         screen.fill((var.VIOLETTE))

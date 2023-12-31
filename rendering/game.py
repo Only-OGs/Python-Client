@@ -21,6 +21,7 @@ class Game:
         self.game_loop()
         self.timer_rest = False
 
+
     # main loop wo alles passiert
     def game_loop(self):
         SpriteGen.create_player()
@@ -34,9 +35,13 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+
+                if var.buttons["Einzelspieler"]:
+                    break
+
                 #Verhindert eingaben des Spielers, während des Countdowns
-                if not var.game_countdown_start:
-                    pass
+                if var.game_start or not var.singleplayer_start:
+                    break
                 else:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_LEFT:
@@ -59,16 +64,19 @@ class Game:
 
 
 
+
+
             Render.render()
             timer.show_speed(speed=var.speed)
 
            #init den ingame Countdown zu beginn eines Rennens
-            if not var.game_countdown_start:
-                screens.Screens.create_countdown(var.screen)
+            if not var.singleplayer_start and var.buttons["Einzelspieler"]:
+                screens.Screens.create_countdown_singleplayer(var.screen)
                 var.game_counter += 1
+            elif not var.singleplayer:
+                screens.Screens.create_countdown_multiplayer(var.screen)
             else:
                 timer.count_up()
-
 
             # In Round() länge der Strecke einsetzten
 

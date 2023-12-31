@@ -1,9 +1,23 @@
 from rendering.game import Game
 import socketio
 import rendering.globals_vars as var
+from rendering.utility.car_ai import Cars
+from rendering.utility.sprite_generator import SpriteGen
 
+'''    
+self.sio.on('start_race_timer', self.on_countdown_start_timer)
+        self.sio.on('start_race', self.on_countdown_start_race)
 
-# statische Mehtode, um Fehler Verbindungsprobleme zu reagieren.
+def on_countdown_start_race(self, data):
+        if self.sio.connected:
+            print(data)
+            self.start_countdown = data
+            self.start_race = True
+
+    def on_countdown_start_timer(self, data):
+        if self.sio.connected:
+            print(data)
+            self.start_countdown = data'''
 
 
 
@@ -13,7 +27,7 @@ class SocketIOClient:
 
         # Serverurl
         self.server_url = "http://89.58.1.158:8080"
-        #self.server_url = "http://localhost:8080"
+        # self.server_url = "http://localhost:8080"
         # Client mit aktivem Logging
         self.sio = socketio.Client(logger=True, engineio_logger=True)
 
@@ -31,9 +45,10 @@ class SocketIOClient:
         self.sio.on('timer_countdown', self.on_timer)
         self.sio.on('timer_abrupt', self.on_timer_off)
         self.sio.on('load_level', self.on_level_load)
-        self.sio.on('start_race_timer', self.countdown_start_timer)
-        self.sio.on('start_race', self.countdown_start_race)
-
+        self.sio.on('wait_for_start', self.on_wait_for_start)
+        self.sio.on('updated_positions', self.on_updated_positions)
+        self.sio.on('start_race', self.on_start_race)
+        self.sio.on('start_race_timer', self.on_start_race_timer)
 
         # Initialisierung von Variablen für Erfolg/Misserfolg bei Aktionen
         self.logoutstatus = None
@@ -49,7 +64,7 @@ class SocketIOClient:
         self.timer = None;
 
         self.lobbycreated = False
-        self.lobbyleaft= False
+        self.lobbyleaft = False
         self.lobbyJoined = False
         self.searchlobbyJoined = False
         self.quickLobbyJoined = False
@@ -61,15 +76,13 @@ class SocketIOClient:
 
         self.is_ready = False
 
-        self.start_countdown=False
+        self.start_countdown = ""
         self.start_race = False
 
-
-    def on_playerLeave(self,data):
+    def on_playerLeave(self, data):
         if self.sio.connected:
-            if data.get('status')=='left':
+            if data.get('status') == 'left':
                 self.lobbyleaft = True
-
 
     def on_level_load(self, data):
         if self.sio.connected:
@@ -94,7 +107,6 @@ class SocketIOClient:
                 message = data.get('message')
                 self.lobbyid = message
 
-
     # erstellt eine Lobby
     def create_lobby(self):
         if self.sio.connected:
@@ -118,6 +130,7 @@ class SocketIOClient:
             self.lobbyid = data.get("lobby")
             if self.lobbystatus == 'success':
                 self.searchlobbyJoined = True
+
     def on_logout(self, data):
         if self.sio.connected:
             status = data.get('status')
@@ -150,6 +163,7 @@ class SocketIOClient:
                 self.sio.emit("join_lobby", data)
             else:
                 self.lobbystatus = "Bitte gib eine LobbyID ein"
+
     def on_login(self, data):
         if self.sio.connected:
             message = data.get('message')
@@ -176,15 +190,12 @@ class SocketIOClient:
             self.sio.emit("not_ready")
             self.is_ready = False
 
-
     # stellt die Verbindung zum Server her.
     def connect(self):
         try:
             self.sio.connect(self.server_url, transports=['websocket'])
         except:
             print("fail")
-
-
 
     def emit_coordinate(self):
         if self.sio.connected:
@@ -210,15 +221,8 @@ class SocketIOClient:
             else:
                 data = {"user": user, "password": password}
                 var.client.playersname = user
+                var.username = user
                 self.sio.emit("login", data)
-    def countdown_start_race(self):
-        if self.sio.connected:
-            self.start_race = True
-    def countdown_start_timer(self):
-        if self.sio.connected:
-            self.start_countdown = True
-
-
 
     # trennt die Verbindung zum Server
     def disconnect(self):
@@ -238,3 +242,49 @@ class SocketIOClient:
     def on_timer_off(self, args):
         if self.sio.connected:
             self.timer = None
+
+    def client_is_ingame(self):
+        if self.sio.connected:
+            self.sio.emit("client_is_ingame")
+
+    def on_wait_for_start(self, data):
+        if self.sio.connected:
+            for n in data:
+                var.player_cars.append(n)
+            SpriteGen.create_player_cars()
+            var.help_car = True
+
+    def on_updated_positions(self, data):
+        var.new_car_data.clear()
+        for n in data:
+            if n.get("id") != var.username:
+                var.new_car_data.append(n)
+        Cars.update_player_cars()
+
+    def ingame_pos(self, position, offset):
+        if var.olddata != position:
+            data = {
+                "offset": offset,
+                "pos": position
+            }
+            var.olddata = position
+            self.sio.emit("ingame_pos", data)
+
+    def on_start_race(self, data):
+        if self.sio.connected:
+            var.gameStart = True
+
+    def on_start_race_timer(self, data):
+        if self.sio.connected:
+            print(data)
+
+    def start_race_timer(self, data):
+        if self.sio.connected:
+            print(data)
+            self.start_countdown = data
+            self.start_race = True
+
+    def on_start_race(self, data):
+        if self.sio.connected:
+            print(data)
+            self.start_countdown = data
