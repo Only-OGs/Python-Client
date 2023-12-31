@@ -70,7 +70,7 @@ buttons = {
     "Nicht Bereit": False,
     "Verlassen": False,
     "loading": False,
-    "Game":False
+    "Game": False
 }
 
 SCREEN_WIDTH = 1329

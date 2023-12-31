@@ -31,7 +31,6 @@ class Game:
         SpriteGen.create_background()
         timer = gui.Gui(screen=var.screen)
 
-
         while True:
             if var.escape:
                 break
@@ -41,37 +40,35 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        var.escape = True
+                        break
+                    if event.key == pygame.K_p:
+                        self.toggle_pause()
+                # Verhindert eingaben des Spielers, während des Countdowns
+                if not var.game_start:
+                    pass
+                else:
                     if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_ESCAPE:
-                            var.escape = True
-                            break
-                        if event.key == pygame.K_p:
-                            self.toggle_pause()
-                    # Verhindert eingaben des Spielers, während des Countdowns
-                    if not var.game_start:
-                        pass
-                    else:
-                        if event.type == pygame.KEYDOWN:
-                            if not var.paused:
-                                if event.key == pygame.K_LEFT:
-                                    var.keyLeft = True
-                                if event.key == pygame.K_RIGHT:
-                                    var.keyRight = True
-                                if event.key == pygame.K_UP:
-                                    var.keyFaster = True
-                                if event.key == pygame.K_DOWN:
-                                    var.keySlower = True
-                        if event.type == pygame.KEYUP:
-                            if not var.paused:
-                                if event.key == pygame.K_LEFT:
-                                    var.keyLeft = False
-                                if event.key == pygame.K_RIGHT:
-                                    var.keyRight = False
-                                if event.key == pygame.K_UP:
-                                    var.keyFaster = False
-                                if event.key == pygame.K_DOWN:
-                                    var.keySlower = False
-
+                        if not var.paused:
+                            if event.key == pygame.K_LEFT:
+                                var.keyLeft = True
+                            if event.key == pygame.K_RIGHT:
+                                var.keyRight = True
+                            if event.key == pygame.K_UP:
+                                var.keyFaster = True
+                            if event.key == pygame.K_DOWN:
+                                var.keySlower = True
+                    if event.type == pygame.KEYUP:
+                            if event.key == pygame.K_LEFT:
+                                var.keyLeft = False
+                            if event.key == pygame.K_RIGHT:
+                                var.keyRight = False
+                            if event.key == pygame.K_UP:
+                                var.keyFaster = False
+                            if event.key == pygame.K_DOWN:
+                                var.keySlower = False
 
             if not  var.paused:
               Render.render()
