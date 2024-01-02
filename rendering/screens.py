@@ -12,15 +12,16 @@ import time
 pygame.mixer.init()
 soundtrack = pygame.mixer.Sound("assets/Music/robotic-countdown-43935.mp3")
 
+
 class Screens:
 
     @staticmethod
     def create_menu_screen(screen):
         var.client.disconnect()
         Layout.init_background(screen=screen)
-        Layout.linker_button(screen=screen, text="Einzelspieler",trigger="Einzelspieler")
-        Layout.mittlerer_button(screen=screen, text="Optionen",trigger="Optionen")
-        Layout.rechter_button(screen=screen, text="Mehrspieler",trigger="Mehrspieler")
+        Layout.linker_button(screen=screen, text="Einzelspieler", trigger="Einzelspieler")
+        Layout.mittlerer_button(screen=screen, text="Optionen", trigger="Optionen")
+        Layout.rechter_button(screen=screen, text="Mehrspieler", trigger="Mehrspieler")
 
     @staticmethod
     def create_mulitplayer_screen():
@@ -30,15 +31,16 @@ class Screens:
             pass
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus_gui()
-        Layout.linker_button(screen=var.menu_screen, text="Anmelden",trigger="Jetzt Anmelden")
-        Layout.mittlerer_button(screen=var.menu_screen, text="Zurueck",trigger="Zurueck")
-        Layout.rechter_button(screen=var.menu_screen, text="Registrieren",trigger="Jetzt Registrieren")
+        Layout.linker_button(screen=var.menu_screen, text="Anmelden", trigger="Jetzt Anmelden")
+        Layout.mittlerer_button(screen=var.menu_screen, text="Zurueck", trigger="Zurueck")
+        Layout.rechter_button(screen=var.menu_screen, text="Registrieren", trigger="Jetzt Registrieren")
 
     @staticmethod
     def create_option_screen():
         Layout.init_background(screen=var.menu_screen)
-        Layout.linker_button(screen=var.menu_screen, text="Zurueck",trigger="Zurueck")
-        Layout.draw_text(screen=var.menu_screen, x=var.slider_width // 2 + 150, y=var.height-150, text="Musik Lautstaerke", size=31, color=var.WHITE)
+        Layout.linker_button(screen=var.menu_screen, text="Zurueck", trigger="Zurueck")
+        Layout.draw_text(screen=var.menu_screen, x=var.slider_width // 2 + 150, y=var.height - 150,
+                         text="Musik Lautstaerke", size=31, color=var.WHITE)
         pygame.mixer.music.set_volume(var.music_slider.current_value)
         var.manager_option.draw_ui(var.menu_screen)
 
@@ -51,7 +53,7 @@ class Screens:
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus_gui()
         Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="Lobbyauswahl", size=45,
-                         color=(255,6,193))
+                         color=(255, 6, 193))
         Layout.create_loginstatus_gui()
         Layout.create_lobbystatus_gui()
         Layout.search_lobby_button(screen=var.menu_screen, text="Lobby suchen")
@@ -59,24 +61,21 @@ class Screens:
         Layout.quick_game_button(screen=var.menu_screen, text="Schnelles Spiel")
         Layout.log_out_button(screen=var.menu_screen, text="Abmelden")
 
-
     @staticmethod
     def create_lobby_search():
         Layout.init_second_background(screen=var.menu_screen)
         Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="Lobby suchen", size=35,
                          color=(255, 6, 193))
-        Layout.mittlerer_button(screen=var.menu_screen, text="Suchen",trigger="Suchen")
+        Layout.mittlerer_button(screen=var.menu_screen, text="Suchen", trigger="Suchen")
         Layout.rechter_button(screen=var.menu_screen, text="Zurueck", trigger="Zurueck")
         Layout.create_lobbystatus_gui()
         var.manager_lobby_search.draw_ui(var.menu_screen)
-
-
 
     @staticmethod
     def create_log_screen():
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus_gui()
-        Layout.linker_button(screen=var.menu_screen, text="Zurueck",trigger="Mehrspieler")
+        Layout.linker_button(screen=var.menu_screen, text="Zurueck", trigger="Mehrspieler")
         Layout.log_reg_button(screen=var.menu_screen, text="Anmelden")
         var.manager_Login.draw_ui(var.menu_screen)
 
@@ -84,7 +83,7 @@ class Screens:
     def create_registration_screen():
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus_gui()
-        Layout.linker_button(screen=var.menu_screen, text="Zurueck",trigger="Mehrspieler")
+        Layout.linker_button(screen=var.menu_screen, text="Zurueck", trigger="Mehrspieler")
         Layout.log_reg_button(screen=var.menu_screen, text="Registrieren")
         var.manager_register.draw_ui(var.menu_screen)
 
@@ -121,15 +120,13 @@ class Screens:
         pygame.mixer.music.play(loops=5, fade_ms=40, start=0)
         pygame.mixer.music.set_volume(0.01)
 
-
     @staticmethod
     def create_lobby_search_input():
         var.manager_lobby_search = pygame_gui.UIManager((var.width, var.height))
-        var.lobby_search_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect(((var.width-360)//2, (var.height-120)//2), (360, 60)),
-                                                                manager=var.manager_lobby_search, object_id="#search",
-                                                                placeholder_text="LobbyID")
-
-
+        var.lobby_search_input = pygame_gui.elements.UITextEntryLine(
+            relative_rect=pygame.Rect(((var.width - 360) // 2, (var.height - 120) // 2), (360, 60)),
+            manager=var.manager_lobby_search, object_id="#search",
+            placeholder_text="LobbyID")
 
     @staticmethod
     def create_register_input():
@@ -165,10 +162,10 @@ class Screens:
 
     @staticmethod
     def create_ingmae_menu(screen):
-        rect = pygame.rect.Rect(var.width//2, var.height//2, 600, 600)
+        rect = pygame.rect.Rect(var.width // 2, var.height // 2, 600, 600)
         pygame.draw.rect(screen, var.DARKBLUE, rect)
 
-#Erstellt den Countdown zu beginn eines Spiels
+    # Erstellt den Countdown zu beginn eines Spiels
     @staticmethod
     def create_countdown(screen):
         countdown = ""
@@ -176,18 +173,18 @@ class Screens:
         if var.game_counter <= int(var.clock.get_fps()):
             countdown = "3"
             soundtrack.play()
-        elif var.game_counter <= int(var.clock.get_fps())*2:
+        elif var.game_counter <= int(var.clock.get_fps()) * 2:
             countdown = "2"
-        elif var.game_counter <= int(var.clock.get_fps())*3:
+        elif var.game_counter <= int(var.clock.get_fps()) * 3:
             countdown = "1"
-        elif var.game_counter <= int(var.clock.get_fps())*4:
+        elif var.game_counter <= int(var.clock.get_fps()) * 4:
             countdown = "GO"
             color = var.VIOLETTE
-            if var.game_counter == int(var.clock.get_fps())*4:
+            if var.game_counter == int(var.clock.get_fps()) * 4:
                 var.game_start = True
                 var.game_counter = 0
 
-        Layout.draw_text(screen=screen, x=var.width//2, y=var.height//2, text=countdown, size=90, color=color)
+        Layout.draw_text(screen=screen, x=var.width // 2, y=var.height // 2, text=countdown, size=90, color=color)
 
     def create_loadingscreen(screen):
         screen.fill((var.VIOLETTE))
@@ -198,7 +195,7 @@ class Screens:
     def threaded_function(arg, text):
         var.is_running = True
         for i in range(arg):
-            sleep(1)
+            time.sleep(1)
         if text == "login":
             var.client.loginmessage = ''
         elif text == "lobby":
@@ -207,4 +204,3 @@ class Screens:
             var.menu_state == "main_menu"
             var.isgame = True
         var.is_running = False
-

@@ -24,7 +24,6 @@ class Game:
         self.game_loop()
         self.timer_rest = False
 
-
     # main loop wo alles passiert
     def game_loop(self):
         SpriteGen.create_player()
@@ -50,51 +49,50 @@ class Game:
                 if not var.game_start:
                     break
                 else:
-                   if var.gameStart or var.singleplayer:
-                      if event.type == pygame.KEYDOWN:
-                          if not var.paused:
-                              if event.key == pygame.K_LEFT:
-                                  var.keyLeft = True
-                              if event.key == pygame.K_RIGHT:
-                                  var.keyRight = True
-                              if event.key == pygame.K_UP:
-                                  var.keyFaster = True
-                              if event.key == pygame.K_DOWN:
-                                  var.keySlower = True
-                      if event.type == pygame.KEYUP:
-                              if event.key == pygame.K_LEFT:
-                                  var.keyLeft = False
-                              if event.key == pygame.K_RIGHT:
-                                  var.keyRight = False
-                              if event.key == pygame.K_UP:
-                                  var.keyFaster = False
-                              if event.key == pygame.K_DOWN:
-                                  var.keySlower = False
+                    if var.gameStart or var.singleplayer:
+                        if event.type == pygame.KEYDOWN:
+                            if not var.paused:
+                                if event.key == pygame.K_LEFT:
+                                    var.keyLeft = True
+                                if event.key == pygame.K_RIGHT:
+                                    var.keyRight = True
+                                if event.key == pygame.K_UP:
+                                    var.keyFaster = True
+                                if event.key == pygame.K_DOWN:
+                                    var.keySlower = True
+                        if event.type == pygame.KEYUP:
+                            if event.key == pygame.K_LEFT:
+                                var.keyLeft = False
+                            if event.key == pygame.K_RIGHT:
+                                var.keyRight = False
+                            if event.key == pygame.K_UP:
+                                var.keyFaster = False
+                            if event.key == pygame.K_DOWN:
+                                var.keySlower = False
 
-            if not  var.paused:
-              Render.render()
-              timer.show_speed(speed=var.speed)
+            if not var.paused:
+                Render.render()
+                timer.show_speed(speed=var.speed)
 
-                #init den ingame Countdown zu beginn eines Rennens
-              if not var.game_start:
-                  screens.Screens.create_countdown(var.screen)
-                  var.game_counter += 1
-              else:
-                  timer.count_up()
+                # init den ingame Countdown zu beginn eines Rennens
+                if not var.game_start:
+                    screens.Screens.create_countdown(var.screen)
+                    var.game_counter += 1
+                else:
+                    timer.count_up()
                     # In Round() länge der Strecke einsetzten
-                  if(var.position < 10000 and var.position > 1000):
-                    self.timer_rest = True
+                    if (var.position < 10000 and var.position > 1000):
+                        self.timer_rest = True
 
-                  if (var.position >= var.trackLength-1000):
-                    if(self.timer_rest):
-                        self.timer_rest = False
-                        timer.ende_timer()
+                    if (var.position >= var.trackLength - 1000):
+                        if (self.timer_rest):
+                            self.timer_rest = False
+                            timer.ende_timer()
 
             self.update(1 / int(var.clock.get_fps()))
 
             pygame.display.update()
             var.clock.tick(var.fps)
-
 
         if var.escape:
             var.menu_state = "main_menu"
@@ -113,7 +111,7 @@ class Game:
         playersegment = Util.findSegment(var.position + var.playerZ)
         speedpercent = var.speed / var.maxSpeed
         var.position = Util.increase(var.position, dt * var.speed, var.trackLength)
-        playerw = 80 *  (0.3 * (1/80))
+        playerw = 80 * (0.3 * (1 / 80))
         dx = dt * 2 * speedpercent
 
         if var.keyLeft:
@@ -147,23 +145,24 @@ class Game:
             for n in range(len(playersegment.get("sprites"))):
                 sprite = playersegment.get("sprites")[n]
                 if sprite is not None:
-                    sprite_w = sprite.get("source").get("width") * (0.3 * (1/80))
+                    sprite_w = sprite.get("source").get("width") * (0.3 * (1 / 80))
                     if sprite.get("offset") > 0:
                         h = 1
                     else:
                         h = 0
-                    if Util.overlap(var.playerX, playerw, sprite.get("offset") + sprite_w/2 * h, sprite_w):
-                        var.speed = var.maxSpeed/5
-                        var.position = Util.increase(playersegment.get("p1").get("world").get("z"),-var.playerZ, var.trackLength)
+                    if Util.overlap(var.playerX, playerw, sprite.get("offset") + sprite_w / 2 * h, sprite_w):
+                        var.speed = var.maxSpeed / 5
+                        var.position = Util.increase(playersegment.get("p1").get("world").get("z"), -var.playerZ,
+                                                     var.trackLength)
                         break
 
         for n in range(len(playersegment.get("cars"))):
             car = playersegment.get("cars")[n]
-            car_w = car.get("sprite").get("width") * (0.3 * (1/80))
+            car_w = car.get("sprite").get("width") * (0.3 * (1 / 80))
             if var.speed > car.get("speed"):
-                if Util.overlap(var.playerX, playerw,car.get("offset"), car_w, 0.8):
-                    var.speed = car.get("speed") * (car.get("speed")/var.speed)
-                    var.position = Util.increase(car.get("z"),-var.playerZ, var.trackLength)
+                if Util.overlap(var.playerX, playerw, car.get("offset"), car_w, 0.8):
+                    var.speed = car.get("speed") * (car.get("speed") / var.speed)
+                    var.position = Util.increase(car.get("z"), -var.playerZ, var.trackLength)
                     break
 
         var.playerX = Util.limit(var.playerX, -2, 2)
