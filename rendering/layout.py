@@ -39,10 +39,20 @@ class Layout:
         screen.blit(background_image, (0, 0))
 
     @staticmethod
+    def exit_background(screen):
+        background_image = pygame.image.load("assets/exitBackground.png")
+        new_height = int((background_image.get_width() / var.width) * var.height)
+        background_image = pygame.transform.scale(background_image, (var.width // 2, new_height // 2))
+        background_rect = background_image.get_rect(center=(var.width // 2, var.height // 2))
+        screen.blit(background_image, background_rect.topleft)
+
+
+    @staticmethod
     def draw_text(screen, x, y, text, size, color):
         font = pygame.font.Font(var.FONT, size)
         text_surface = font.render(text, True, color)
-        screen.blit(text_surface, (x, y))
+        text_rect = text_surface.get_rect(center=(x, y))
+        screen.blit(text_surface, text_rect)
 
     @staticmethod
     def linker_button(screen, text, trigger):
@@ -158,7 +168,7 @@ class Layout:
     def create_loginstatus_gui():
 
         if var.client.loginmessage != '':
-            Layout.draw_text(screen=var.menu_screen, x=50, y=var.height - 50, text=var.client.loginmessage, size=20,
+            Layout.draw_text(screen=var.menu_screen, x=var.width//2, y=var.height - 50, text=var.client.loginmessage, size=20,
                              color=(255, 6, 193))
             if not var.is_running:
                 thread = threading.Thread(target=Layout.threaded_function, args=(3, "login"))
@@ -167,7 +177,7 @@ class Layout:
     @staticmethod
     def create_lobbystatus_gui():
         if var.client.lobbymessage != '':
-            Layout.draw_text(screen=var.menu_screen, x=50, y=var.height - 50, text=var.client.lobbymessage, size=20,
+            Layout.draw_text(screen=var.menu_screen,  x=var.width//2, y=var.height - 50, text=var.client.lobbymessage, size=20,
                              color=(255, 6, 193))
             if not var.is_running:
                 thread = threading.Thread(target=Layout.threaded_function, args=(3, "lobby"))

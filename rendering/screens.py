@@ -39,7 +39,7 @@ class Screens:
     def create_option_screen():
         Layout.init_background(screen=var.menu_screen)
         Layout.linker_button(screen=var.menu_screen, text="Zurueck", trigger="Zurueck")
-        Layout.draw_text(screen=var.menu_screen, x=var.slider_width // 2 + 150, y=var.height - 150,
+        Layout.draw_text(screen=var.menu_screen, x=var.slider_width // 2 , y=var.height - 150,
                          text="Musik Lautstaerke", size=31, color=var.WHITE)
         pygame.mixer.music.set_volume(var.music_slider.current_value)
         var.manager_option.draw_ui(var.menu_screen)
@@ -52,7 +52,7 @@ class Screens:
     def create_lobby_screen():
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus_gui()
-        Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="Lobbyauswahl", size=45,
+        Layout.draw_text(screen=var.menu_screen, x=var.width // 2, y=60, text="Lobbyauswahl", size=45,
                          color=(255, 6, 193))
         Layout.create_loginstatus_gui()
         Layout.create_lobbystatus_gui()
@@ -64,7 +64,7 @@ class Screens:
     @staticmethod
     def create_lobby_search():
         Layout.init_second_background(screen=var.menu_screen)
-        Layout.draw_text(screen=var.menu_screen, x=var.width / 2 - 160, y=60, text="Lobby suchen", size=35,
+        Layout.draw_text(screen=var.menu_screen, x=var.width // 2, y=60, text="Lobby suchen", size=35,
                          color=(255, 6, 193))
         Layout.mittlerer_button(screen=var.menu_screen, text="Suchen", trigger="Suchen")
         Layout.rechter_button(screen=var.menu_screen, text="Zurueck", trigger="Zurueck")
@@ -129,6 +129,23 @@ class Screens:
             placeholder_text="LobbyID")
 
     @staticmethod
+    def create_loadingscreen(screen):
+        screen.fill((var.VIOLETTE))
+        Layout.draw_text(screen=screen, x=var.width // 2, y=100 // 2, text="Das Spiel startet gleich...", size=45,
+                         color=var.DARKBLUE)
+        var.menu_state = "Game"
+
+    @staticmethod
+    def create_pause_menu(screen):
+        color = var.VIOLETTE
+        Layout.exit_background(screen)
+        if var.singleplayer:
+            Layout.draw_text(screen=screen, x=var.width // 2, y=var.height // 2, text="P = Pause", size=25, color=color)
+
+        Layout.draw_text(screen=screen, x=var.width // 2, y=var.height // 2 + 30, text="ESC = Hauptmenue", size=25,
+                         color=color)
+
+    @staticmethod
     def create_register_input():
         var.manager_register = pygame_gui.UIManager((var.width, var.height))
         var.register_name = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 350), (360, 60)),
@@ -186,11 +203,6 @@ class Screens:
 
         Layout.draw_text(screen=screen, x=var.width // 2, y=var.height // 2, text=countdown, size=90, color=color)
 
-    def create_loadingscreen(screen):
-        screen.fill((var.VIOLETTE))
-        Layout.draw_text(screen=screen, x=var.width // 2 - 40, y=var.height // 2, text="Loading...", size=45,
-                         color=var.DARKBLUE)
-        var.menu_state = "Game"
 
     def threaded_function(arg, text):
         var.is_running = True

@@ -70,24 +70,27 @@ class Game:
                             if event.key == pygame.K_DOWN:
                                 var.keySlower = False
 
-            if not var.paused:
-                Render.render()
-                timer.show_speed(speed=var.speed)
+            Render.render()
+            timer.show_speed(speed=var.speed)
 
-                # init den ingame Countdown zu beginn eines Rennens
-                if not var.game_start:
-                    screens.Screens.create_countdown(var.screen)
-                    var.game_counter += 1
-                else:
-                    timer.count_up()
-                    # In Round() länge der Strecke einsetzten
-                    if (var.position < 10000 and var.position > 1000):
-                        self.timer_rest = True
+            if var.paused:
+                screens.Screens.create_pause_menu(var.screen)
 
-                    if (var.position >= var.trackLength - 1000):
-                        if (self.timer_rest):
-                            self.timer_rest = False
-                            timer.ende_timer()
+            # init den ingame Countdown zu beginn eines Rennens
+            if not var.game_start:
+                screens.Screens.create_countdown(var.screen)
+                var.game_counter += 1
+            else:
+                timer.count_up()
+                # In Round() länge der Strecke einsetzten
+                if (var.position < 10000 and var.position > 1000):
+                    self.timer_rest = True
+
+                if (var.position >= var.trackLength - 1000):
+                    if (self.timer_rest):
+                        self.timer_rest = False
+                        timer.ende_timer()
+
 
             self.update(1 / int(var.clock.get_fps()))
 
@@ -95,13 +98,19 @@ class Game:
             var.clock.tick(var.fps)
 
         if var.escape:
+            var.client.disconnect()
             var.menu_state = "main_menu"
             screens.Screens.screen_update()
             var.position = 0
+            var.keyFaster = False
             var.speed = 0
             var.game_start = False
             var.game_counter = 0
             var.escape = False
+            var.track = None
+            var.singleplayer = True
+
+
 
     def toggle_pause(self):
         var.paused = not var.paused
