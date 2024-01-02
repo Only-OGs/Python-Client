@@ -23,8 +23,7 @@ class Render:
     @staticmethod
     def render_cars(segment):
         """ Rendert alle Autos"""
-        for n in range(len(segment.get("cars"))):
-            car = segment.get("cars")[n]
+        for car in segment.get("cars"):
             sprite = car.get("sprite")
             car["percent"] = Util.percent_remaining(car.get("z"), var.segmentLength)
 

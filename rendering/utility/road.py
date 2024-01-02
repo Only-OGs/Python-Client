@@ -17,8 +17,9 @@ class Road:
         var.segments = []
 
         Road.load_road()
-        #SpriteGen.create_bot_cars()
-        #SpriteGen.create_street_objectives(var.segments)
+        if var.singleplayer:
+            SpriteGen.create_bot_cars()
+            SpriteGen.create_street_objectives(var.segments)
 
         var.segments[Util.findSegment(var.playerZ)["index"] + 2]["color"] = Color.get_start()
         var.segments[Util.findSegment(var.playerZ)["index"] + 3]["color"] = Color.get_start()
