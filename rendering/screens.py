@@ -256,9 +256,9 @@ class Screens:
         for row in var.leaderboard:
             rect = pygame.rect.Rect(90, 60+const, var.width - 170, 35)
             pygame.draw.rect(screen, var.CYAN, rect)
-            Layout.draw_text(screen=screen, y=75+const, x=200, text=row.get("posi"), size=25, color=var.DARKBLUE)
-            Layout.draw_text(screen=screen, y=75+const, x=200 + var.width // 3, text=row.get("name"), size=25, color=var.DARKBLUE)
-            Layout.draw_text(screen=screen, y=75+const, x=200 + (var.width // 3 * 2), text=(row.get("time")), size=25,
+            Layout.draw_text(screen=screen, y=75+const, x=200, text=str(row.get("posi")), size=25, color=var.DARKBLUE)
+            Layout.draw_text(screen=screen, y=75+const, x=200 + var.width // 3, text=str(row.get("name")), size=25, color=var.DARKBLUE)
+            Layout.draw_text(screen=screen, y=75+const, x=200 + (var.width // 3 * 2), text=str(row.get("time")), size=25,
                              color=var.DARKBLUE)
             const += 50
 

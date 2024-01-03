@@ -96,7 +96,7 @@ class Game:
                         timer.ende_timer()
 
             if var.game_end:
-                screens.Screens.create_leaderboard(var.screen)
+                screens.Screens.create_leaderboard()
 
             self.update(1 / int(var.clock.get_fps()))
 
