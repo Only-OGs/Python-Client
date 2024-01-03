@@ -51,7 +51,7 @@ player_sprite_group = None
 track = None
 gameStart = False
 #bool for leaderboard
-game_end = True
+game_end = False
 isgame = False
 menu_state = "main_menu"
 buttons = {
@@ -116,7 +116,7 @@ olddata = 0
 new_car_data = []
 paused = False
 escape = False
-leaderboard = [{"posi": "1", "name": "Pascal","time": "00:46:56"},{"posi": "2", "name": "LOL","time": "00:47:00"},{"posi": "3", "name": "Phil","time": "00:47:50"}]
-IsMulti = False
+leaderboard = []
+
 
 

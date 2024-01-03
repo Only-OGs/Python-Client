@@ -95,6 +95,8 @@ class Game:
                         self.timer_rest = False
                         timer.ende_timer()
 
+            if var.game_end:
+                screens.Screens.create_leaderboard(var.screen)
 
             self.update(1 / int(var.clock.get_fps()))
 
@@ -115,6 +117,7 @@ class Game:
             var.track = None
             var.singleplayer = True
             var.leaderboard = None
+            var.game_end = False
 
     def toggle_pause(self):
         var.paused = not var.paused
