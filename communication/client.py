@@ -73,6 +73,7 @@ class SocketIOClient:
         if self.sio.connected:
             if data != '':
                 var.leaderboard = data
+                var.game_end = True
 
 
     def on_playerLeave(self, data):
