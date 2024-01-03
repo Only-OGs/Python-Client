@@ -48,7 +48,7 @@ class Game:
 
 
                 # Verhindert eingaben des Spielers, während des Countdowns
-                if var.game_start or not var.singleplayer_start:
+                if not var.game_start or not var.singleplayer_start:
                     break
                 else:
                     if var.gameStart or var.singleplayer:
@@ -76,16 +76,15 @@ class Game:
             timer.show_speed(speed=var.speed)
 
 
-
             if var.paused:
                 screens.Screens.create_pause_menu(var.screen)
 
             if not var.singleplayer_start:
                 screens.Screens.create_countdown_singleplayer(var.screen)
                 var.game_counter += 1
-            elif not var.singleplayer:
+            elif var.buttons["multi_on"] and not var.game_start:
                 screens.Screens.create_countdown_multiplayer(var.screen)
-            else:
+            elif var.game_start:
                 timer.count_up()
             # In Round() länge der Strecke einsetzten
                 if (var.position < 10000 and var.position > 1000):

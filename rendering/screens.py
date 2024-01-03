@@ -31,6 +31,7 @@ class Screens:
         else:
             pass
         var.buttons["multi_on"] = True
+        var.singleplayer_start = True
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus_gui()
         Layout.linker_button(screen=var.menu_screen, text="Anmelden", trigger="Jetzt Anmelden")
@@ -96,7 +97,6 @@ class Screens:
 
     @staticmethod
     def screen_update():
-
         if var.menu_state == "main_menu":
             Screens.create_menu_screen(var.menu_screen)
         elif var.menu_state == "lobby_option":
@@ -189,46 +189,48 @@ class Screens:
         # Erstellt den Countdown zu beginn eines Spiels
     @staticmethod
     def create_countdown_multiplayer(screen):
-            color = var.RED
-            countdown = var.game_countdown_start
-            print(var.game_countdown_start)
-            if var.game_countdown_start == "3":
-                soundtrack.play()
+        color = var.RED
+        countdown = str(var.game_countdown_start)
+        print(var.game_countdown_start)
+        print("hier rein")
+        if var.game_countdown_start == 3:
+            print("Sound")
+            soundtrack.play()
 
-            elif var.game_start:
-                countdown = "GO"
-                color = var.VIOLETTE
+        elif var.game_start:
+            print("start")
+            countdown = "GO"
+            color = var.VIOLETTE
 
-            Layout.draw_text(screen=screen, x=var.width // 2, y=var.height // 2, text=countdown, size=90, color=color)
+        Layout.draw_text(screen=screen, x=var.width // 2, y=var.height // 2, text=countdown, size=90, color=color)
 
     @staticmethod
     def create_countdown_singleplayer(screen):
-            print("COUNTDOWN")
-            if var.buttons["Einzelspieler"]:
-                countdown = ""
-                color = var.RED
-                if var.game_counter <= 60:
-                    countdown = "5"
-                elif var.game_counter <= 120:
-                    countdown = "4"
-                elif var.game_counter <= 180:
-                    soundtrack.play()
-                    countdown = "3"
-                elif var.game_counter <= 240:
-                    countdown = "2"
-                elif var.game_counter <= 300:
-                    countdown = "1"
-                elif var.game_counter <= 360:
-                    countdown = "GO"
-                    color = var.VIOLETTE
-                    if var.game_counter == 360 and var.buttons["Einzelspieler"]:
-                        var.buttons["Einzelspieler"] = False
-                        var.singleplayer_start = True
-                        print(var.singleplayer_start)
-                        var.game_counter = 0
+        if var.buttons["Einzelspieler"]:
+            countdown = ""
+            color = var.RED
+            if var.game_counter <= 60:
+                countdown = "5"
+            elif var.game_counter <= 120:
+                countdown = "4"
+            elif var.game_counter <= 180:
+                soundtrack.play()
+                countdown = "3"
+            elif var.game_counter <= 240:
+                countdown = "2"
+            elif var.game_counter <= 300:
+                countdown = "1"
+            elif var.game_counter <= 360:
+                countdown = "GO"
+                color = var.VIOLETTE
+                if var.game_counter == 360 and var.buttons["Einzelspieler"]:
+                    var.buttons["Einzelspieler"] = False
+                    var.singleplayer_start = True
+                    print(var.singleplayer_start)
+                    var.game_counter = 0
 
-                Layout.draw_text(screen=screen, x=var.width // 2, y=var.height // 2, text=countdown, size=90,
-                                 color=color)
+            Layout.draw_text(screen=screen, x=var.width // 2, y=var.height // 2, text=countdown, size=90,
+                             color=color)
 
 
     def threaded_function(arg, text):

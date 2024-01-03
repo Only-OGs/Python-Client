@@ -270,6 +270,7 @@ class SocketIOClient:
         if self.sio.connected:
             var.game_countdown_start = data
             var.gameStart = True
+            var.game_start = True
 
     def on_start_race_timer(self, data):
         if self.sio.connected:
