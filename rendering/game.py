@@ -119,6 +119,8 @@ class Game:
             var.leaderboard = None
             var.game_end = False
             var.client.lobbymessage = ''
+            var.singleplayer_start = False
+            var.game_start = False
 
     def toggle_pause(self):
         var.paused = not var.paused
