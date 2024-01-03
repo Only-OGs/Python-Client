@@ -72,8 +72,7 @@ buttons = {
     "Nicht Bereit": False,
     "Verlassen": False,
     "loading": False,
-    "Game": False,
-    "multi_on": False
+    "Game": False
 }
 
 SCREEN_WIDTH = 1329
@@ -118,5 +117,6 @@ new_car_data = []
 paused = False
 escape = False
 leaderboard = [{"posi": "1", "name": "Pascal","time": "00:46:56"},{"posi": "2", "name": "LOL","time": "00:47:00"},{"posi": "3", "name": "Phil","time": "00:47:50"}]
+IsMulti = False
 
 

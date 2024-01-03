@@ -18,7 +18,6 @@ class Screens:
     @staticmethod
     def create_menu_screen(screen):
         var.client.disconnect()
-        var.buttons["multi_on"] = False
         Layout.init_background(screen=screen)
         Layout.linker_button(screen=screen, text="Einzelspieler", trigger="Einzelspieler")
         Layout.mittlerer_button(screen=screen, text="Optionen", trigger="Optionen")
@@ -30,7 +29,6 @@ class Screens:
             var.client.connect()
         else:
             pass
-        var.buttons["multi_on"] = True
         var.singleplayer_start = True
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus_gui()
@@ -209,21 +207,22 @@ class Screens:
         if var.buttons["Einzelspieler"]:
             countdown = ""
             color = var.RED
-            if var.game_counter <= 60:
+            if var.game_counter <= int(var.clock.get_fps()):
                 countdown = "5"
-            elif var.game_counter <= 120:
+            elif var.game_counter <= int(var.clock.get_fps())*2:
                 countdown = "4"
-            elif var.game_counter <= 180:
+            elif var.game_counter <= int(var.clock.get_fps())*3:
                 soundtrack.play()
                 countdown = "3"
-            elif var.game_counter <= 240:
+            elif var.game_counter <= int(var.clock.get_fps())*4:
                 countdown = "2"
-            elif var.game_counter <= 300:
+            elif var.game_counter <= int(var.clock.get_fps())*5:
                 countdown = "1"
-            elif var.game_counter <= 360:
+            elif var.game_counter <= int(var.clock.get_fps())*6:
                 countdown = "GO"
                 color = var.VIOLETTE
-                if var.game_counter == 360 and var.buttons["Einzelspieler"]:
+                if int(var.clock.get_fps())*6 == 360 and var.buttons["Einzelspieler"]:
+                    var.game_start = True
                     var.buttons["Einzelspieler"] = False
                     var.singleplayer_start = True
                     print(var.singleplayer_start)

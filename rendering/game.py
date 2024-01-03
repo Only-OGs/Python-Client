@@ -82,9 +82,9 @@ class Game:
             if not var.singleplayer_start:
                 screens.Screens.create_countdown_singleplayer(var.screen)
                 var.game_counter += 1
-            elif var.buttons["multi_on"] and not var.game_start:
+            elif var.client.sio.connected and not var.game_start:
                 screens.Screens.create_countdown_multiplayer(var.screen)
-            elif var.game_start:
+            elif var.game_start or var.singleplayer_start:
                 timer.count_up()
             # In Round() länge der Strecke einsetzten
                 if (var.position < 10000 and var.position > 1000):
