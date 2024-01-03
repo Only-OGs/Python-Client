@@ -189,14 +189,12 @@ class Screens:
     def create_countdown_multiplayer(screen):
         color = var.RED
         countdown = str(var.game_countdown_start)
-        print(var.game_countdown_start)
-        print("hier rein")
-        if var.game_countdown_start == 3:
-            print("Sound")
+        if var.game_countdown_start == "3":
+
             soundtrack.play()
 
         elif var.game_start:
-            print("start")
+
             countdown = "GO"
             color = var.VIOLETTE
 

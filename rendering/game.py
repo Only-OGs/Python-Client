@@ -116,9 +116,6 @@ class Game:
             var.singleplayer = True
             var.leaderboard = None
 
-
-
-
     def toggle_pause(self):
         var.paused = not var.paused
 
