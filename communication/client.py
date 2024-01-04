@@ -254,7 +254,7 @@ class SocketIOClient:
         if self.sio.connected:
             for n in data:
                 var.player_cars.append(n)
-            SpriteGen.create_player_cars()
+            SpriteGen.create_Server_cars()
             var.help_car = True
 
     def on_updated_positions(self, data):
