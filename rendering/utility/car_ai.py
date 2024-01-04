@@ -79,6 +79,7 @@ class Cars:
                 oldsegment.get("cars").pop(index)
                 newsegment.get("cars").append(car)
 
+    '''deploys server data for the HUD'''
     @staticmethod
     def update_player(n):
         var.current_time = n["current_time"]

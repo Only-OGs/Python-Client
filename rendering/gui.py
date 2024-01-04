@@ -1,15 +1,12 @@
 import pygame
 import rendering.globals_vars as var
 
-
-
 '''
 In dieser Class, wird das gesamte GUI erstellt.
 Sämtliche Anzeigen werden pro X Framerate mal in der Sekunde ausgegeben.
 Im folgenden Frame werden alle Elemente mit einem Rechteck übermalt,
 um im Anschluss wieder gezeichnet zu werden.
 '''
-
 
 class Gui:
 
