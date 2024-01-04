@@ -23,6 +23,10 @@ class Gui:
         self.rec_sec = 0
         self.rec_mil_sec = 0
 
+        self.last_min = 0
+        self.last_sec = 0
+        self.last_mil_sec = 0
+
         self.screen = screen
         #self.Highscore
         self.add = 1
@@ -32,12 +36,14 @@ class Gui:
     #Zählt den Timer hoch, muss im Game-Loop aufgerufen werden
     def count_up(self):
         font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
+
         # Multiplayer layout
         if var.client.sio.connected:
-            text = font.render("schnellste Runde {}".format(var.best_time), True
-                               ,(var.BLACK))
-            self.background_gui(x=var.width // 2 - 175, y=0, width=300, color=var.TRANSPARENT_WHITE, length=40)
+            text = font.render("schnellste Runde {}".format(var.best_time), True, (var.BLACK))
+            text2 = font.render("letzte Runde {}".format(var.lap_time), True, (var.BLACK))
+            self.background_gui(x=var.width // 2 - 175, y=0, width=300, color=var.TRANSPARENT_WHITE, length=80)
             self.screen.blit(text, (var.width // 2 - 150, 0 + self.text_offste))
+            self.screen.blit(text2, (var.width // 2 - 150, 0 + self.text_offste + 40))
 
             # schreibt die aktuelle Zeit
             text = font.render("Time: {}".format(var.current_time), True,(var.BLACK))
@@ -63,10 +69,12 @@ class Gui:
                 self.sec = 0
                 self.min = 0
 
-            text = font.render("schnellste Runde {}:{}:{}".format(self.rec_min, self.rec_sec, self.rec_mil_sec), True
-                               , (var.BLACK))
-            self.background_gui(x=var.width // 2 - 175, y=0, width=300, color=var.TRANSPARENT_WHITE, length=40)
+            text = font.render("schnellste Runde {}:{}:{}".format(self.rec_min, self.rec_sec, self.rec_mil_sec), True, (var.BLACK))
+            text2 = font.render("letzte {}:{}:{}".format(self.last_min, self.last_sec, self.last_mil_sec), True,
+                               (var.BLACK))
+            self.background_gui(x=var.width // 2 - 175, y=0, width=300, color=var.TRANSPARENT_WHITE, length=80)
             self.screen.blit(text, (var.width // 2 - 150, 0 + self.text_offste))
+            self.screen.blit(text2, (var.width // 2 - 150, 0 + self.text_offste + 40))
 
             # Print die den Runden counter
             text = font.render("Time: {}:{}:{}".format(self.min, self.sec, self.mil_sec), True, (var.BLACK))
@@ -75,6 +83,10 @@ class Gui:
 
     #Beendet den Timer und setzt die neue bestzeit
     def ende_timer(self):
+
+        self.last_min = self.min
+        self.last_sec = self.sec
+        self.last_mil_sec = self.mil_sec
 
         if (self.first_lab):
             self.first_lab = False
