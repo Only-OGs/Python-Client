@@ -65,7 +65,6 @@ class Cars:
 
     @staticmethod
     def update_player_cars():
-        """ Bewegt die Bot Autos mit ihrer jeweiligen Geschwindigkeit """
         for n in range(len(var.cars)):
             car = var.cars[n]
             oldsegment = car.get("segment")
@@ -79,3 +78,11 @@ class Cars:
                 index = oldsegment.get("cars").index(car)
                 oldsegment.get("cars").pop(index)
                 newsegment.get("cars").append(car)
+
+    @staticmethod
+    def update_player(n):
+        var.current_time = n["current_time"]
+        var.lap_time = n["lap_time"]
+        var.best_time = n["best_time"]
+        var.lap = n["lap"]
+

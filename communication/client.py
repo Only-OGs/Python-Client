@@ -38,6 +38,7 @@ class SocketIOClient:
         self.sio.on('start_race_timer', self.on_start_race_timer)
         self.sio.on('get_leaderboard', self.on_get_leaderboard)
 
+
         # Initialisierung von Variablen für Erfolg/Misserfolg bei Aktionen
         self.logoutstatus = None
         self.loginstatus = None
@@ -63,6 +64,7 @@ class SocketIOClient:
         self.chat_message = None
 
         self.is_ready = False
+
 
     def game_leave(self):
         if self.sio.connected:
@@ -256,7 +258,11 @@ class SocketIOClient:
         for n in data:
             if n.get("id") != var.username:
                 var.new_car_data.append(n)
+            else:
+                Cars.update_player(n)
+
         Cars.update_player_cars()
+
 
     def ingame_pos(self, position, offset):
         if var.olddata != position:
@@ -278,3 +284,6 @@ class SocketIOClient:
         if self.sio.connected:
             var.game_countdown_start = data
             print(data)
+
+
+

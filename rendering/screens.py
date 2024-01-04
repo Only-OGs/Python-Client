@@ -219,7 +219,7 @@ class Screens:
             elif var.game_counter <= int(var.clock.get_fps())*6:
                 countdown = "GO"
                 color = var.VIOLETTE
-                if var.game_counter == int(var.clock.get_fps())*6 and var.buttons["Einzelspieler"]:
+                if var.game_counter == int(var.clock.get_fps())*6:
                     var.game_start = True
                     var.buttons["Einzelspieler"] = False
                     var.singleplayer_start = True
