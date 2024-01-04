@@ -117,6 +117,4 @@ new_car_data = []
 paused = False
 escape = False
 leaderboard = []
-
-
-
+assets = []

@@ -64,8 +64,7 @@ class Cars:
                     return direction * 1 / i * (car.get("speed") - other_car.get("speed")) / var.maxSpeed
 
     @staticmethod
-    def update_player_cars():
-        """ Bewegt die Bot Autos mit ihrer jeweiligen Geschwindigkeit """
+    def update_server_cars():
         for n in range(len(var.cars)):
             car = var.cars[n]
             oldsegment = car.get("segment")
