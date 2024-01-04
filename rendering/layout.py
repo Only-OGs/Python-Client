@@ -3,6 +3,7 @@ from time import sleep
 from rendering.button import Button
 import rendering.globals_vars as var
 import pygame
+import pygame_gui
 
 
 button_positions = {
@@ -53,6 +54,8 @@ class Layout:
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect(center=(x, y))
         screen.blit(text_surface, text_rect)
+
+
 
     @staticmethod
     def linker_button(screen, text, trigger):
@@ -116,6 +119,15 @@ class Layout:
         var.buttons[text] = clicked
 
     @staticmethod
+    def send(screen, x, y, text):
+        send_button = Button(x, y,
+                                      button_image, 2, button_image_hover)
+
+        clicked = send_button.check()
+        send_button.render(screen=screen, text=text, size=18, color="WHITE")
+        var.buttons[text] = clicked
+
+    @staticmethod
     def quick_game_button(screen, text):
         quick_game_button = Button(var.width // 2, var.height // 2 + (6*20),
                                    button_image, 2, button_image_hover)
@@ -141,6 +153,7 @@ class Layout:
         log_out_button.render(screen=screen, text=text, size=font_size, color="WHITE")
         var.buttons[text] = clicked
 
+
     @staticmethod
     def create_Serverstatus_gui():
         if var.client.sio.connected:
@@ -156,22 +169,37 @@ class Layout:
             sleep(1)
         if text == "login":
             var.client.loginmessage = ''
+            var.client.errormessage = ''
         elif text == "lobby":
             var.client.lobbymessage = ''
+        elif text == 'register':
+            var.client.errormessage = ''
         elif text == "game":
             var.menu_state == "main_menu"
             var.isgame = True
         var.is_running = False
 
-
     @staticmethod
-    def create_loginstatus_gui():
-
-        if var.client.loginmessage != '':
-            Layout.draw_text(screen=var.menu_screen, x=var.width//2, y=var.height - 50, text=var.client.loginmessage, size=20,
+    def create_loginstatus_gui(text):
+        if text == "login":
+            text = var.client.loginmessage
+        else:
+            text = var.client.errormessage
+        if text != '':
+            Layout.draw_text(screen=var.menu_screen, x=var.width // 2, y=var.height - 50, text=text,
+                             size=20,
                              color=(255, 6, 193))
             if not var.is_running:
                 thread = threading.Thread(target=Layout.threaded_function, args=(3, "login"))
+                thread.start()
+    @staticmethod
+    def create_registerstatus_gui():
+        if var.client.errormessage != '':
+            Layout.draw_text(screen=var.menu_screen, x=var.width // 2, y=var.height - 50, text=var.client.errormessage,
+                             size=20,
+                             color=(255, 6, 193))
+            if not var.is_running:
+                thread = threading.Thread(target=Layout.threaded_function, args=(3, "register"))
                 thread.start()
 
     @staticmethod
@@ -184,10 +212,29 @@ class Layout:
                 thread.start()
 
     @staticmethod
+    def draw_text_not_Center(screen, x, y, text, size, color):
+        font = pygame.font.Font(var.FONT, size)
+        text_surface = font.render(text, True, color)
+        screen.blit(text_surface, (x, y))
+
+    @staticmethod
     def create_ingamelobby(screen):
         # counter für "Suchen..."
-
         Layout.init_second_background(screen)
+
+        rect = pygame.rect.Rect(700, 100, var.width// 3, var.height - 400)
+        shape_surf = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
+        pygame.draw.rect(shape_surf, var.TRANSPARENT_VIOLLETE, shape_surf.get_rect())
+        screen.blit(shape_surf, rect)
+
+        Layout.send(x=var.width // 2 + 400, y=var.height - 50, screen=var.menu_screen, text="Senden")
+        const = 110
+        for i, (user, message) in enumerate(zip(var.client.chat_player, var.client.chat_message)):
+            if const != var.height - 400:
+                Layout.draw_text_not_Center(screen=screen, y=const, x=720, text=str(user+":"), size=18, color=var.CYAN)
+                Layout.draw_text_not_Center(screen=screen, y=const, x=830, text=str(message), size=18,
+                            color=var.WHITE)
+                const+=20
 
         var.search_counter = 0
         player_texts = [pygame.font.Font(var.FONT, 20).render(player, True, (255, 255, 255)) for player in
@@ -221,13 +268,11 @@ class Layout:
         # update_gui(x=self.x, y=self.y, width=150)
         screen.blit(text, (var.width // 2 + 400, + 20))
 
-        #Name
+        # Name
         font = pygame.font.Font(var.FONT, 18)
         text = font.render(f"ID: {var.client.playersname}".format(), True, (var.WHITE))
         # update_gui(x=self.x, y=self.y, width=150)
         screen.blit(text, (+100, + 20))
-
-
 
         var.search_counter += 1
 
@@ -242,3 +287,4 @@ class Layout:
                     len(player_texts) - len(var.id_playerList)))
 
         var.search_counter = 0
+        var.manager_chat.draw_ui(var.menu_screen)

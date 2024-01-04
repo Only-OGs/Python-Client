@@ -126,6 +126,7 @@ class Game:
             var.game_end = False
             var.client.lobbymessage = ''
             var.singleplayer_start = False
+            var.lap_count = 0
 
     def toggle_pause(self):
         var.paused = not var.paused

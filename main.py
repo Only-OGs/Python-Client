@@ -11,6 +11,7 @@ run = True
 
 Screens.init_music()
 Screens.create_login_input()
+Screens.create_message_output()
 Screens.create_register_input()
 Screens.create_music_slider()
 Screens.create_lobby_search_input()
@@ -37,6 +38,10 @@ while run:
 
         if var.menu_state == "search_for_lobby":
             var.manager_lobby_search.process_events(event)
+
+        if var.menu_state =="ingame_lobby":
+            var.manager_chat.process_events(event)
+
 
     if var.track is not None and var.singleplayer is not True:
         if not var.is_running:
@@ -87,6 +92,8 @@ while run:
         var.client.ready()
         var.is_await = True
 
+    elif var.buttons["Senden"]:
+        var.client.newMessage(var.chat_massage.get_text())
 
     elif var.buttons["Lobby suchen"]:
         var.menu_state = "search_for_lobby"
@@ -116,6 +123,9 @@ while run:
 
     elif var.menu_state == "log_menu":
         var.manager_Login.update(tick)
+
+    elif var.menu_state == "ingame_lobby":
+        var.manager_chat.update(tick)
 
     Util.reset_buttons()
     pygame.display.update()

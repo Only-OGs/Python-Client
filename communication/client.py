@@ -50,7 +50,7 @@ class SocketIOClient:
 
         self.lobbystatus = None
         self.lobbymessage = None
-        self.timer = None;
+        self.timer = None
 
         self.lobbycreated = False
         self.lobbyleaft = False
@@ -61,7 +61,9 @@ class SocketIOClient:
         self.lobbyplayer = None
         self.lobbyid = None
         self.playersname = None
-        self.chat_message = None
+        self.chat_player = []
+        self.chat_message = []
+        self.errormessage = ""
 
         self.is_ready = False
 
@@ -115,7 +117,9 @@ class SocketIOClient:
         if self.sio.connected:
             if isinstance(data, str):
                 try:
-                    self.playersname, self.chat_message = data.split(';')
+                    user, message = data.split(';')
+                    self.chat_player.append(user)
+                    self.chat_message.append(message)
                 except ValueError:
                     raise Exception("Fehler beim Aufteilen")
             else:
@@ -170,7 +174,7 @@ class SocketIOClient:
             if data.get('status') == "login_success":
                 self.logincomplete = True
             else:
-                self.playersname = ''
+                self.playersname  = ''
 
     def on_register(self, data):
         if self.sio.connected:
@@ -205,8 +209,8 @@ class SocketIOClient:
     def send_register_data(self, user, password):
         if self.sio.connected:
             if len(user) < 3 or len(password) < 6:
-                raise Exception(
-                    "Der Username muss mindestens 3 Zeichen lang sein \nDas Passwort mindestens 6 Zeichen lang sein.")
+               self.errormessage =  "Der Username muss mindestens 3 Zeichen lang sein. Das Passwort mindestens 6 Zeichen lang sein."
+
             else:
                 data = {"user": user, "password": password}
                 self.sio.emit("register", data)
@@ -215,8 +219,7 @@ class SocketIOClient:
     def send_login_data(self, user, password):
         if self.sio.connected:
             if len(user) < 3 or len(password) < 6:
-                raise Exception(
-                    "Der Username muss mindestens 3 Zeichen lang sein \nDas Passwort mindestens 6 Zeichen lang sein.")
+                self.errormessage =  "Der Username muss mindestens 3 Zeichen lang sein.Das Passwort mindestens 6 Zeichen lang sein."
             else:
                 data = {"user": user, "password": password}
                 var.client.playersname = user
@@ -231,7 +234,9 @@ class SocketIOClient:
     # sendet eine neue Nachricht
     def newMessage(self, message):
         if self.sio.connected:
-            message = {"message": message}
+            self.chat_player.append(self.playersname)
+            self.chat_message.append(message)
+            print(message)
             self.sio.emit('new_message', message)
 
     def on_timer(self, countdown):

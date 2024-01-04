@@ -92,7 +92,8 @@ buttons = {
     "Nicht Bereit": False,
     "Verlassen": False,
     "loading": False,
-    "Game": False
+    "Game": False,
+    "Senden": False
 }
 
 """MULTIPLAYER"""
@@ -108,10 +109,12 @@ login_name = None
 login_password = None
 register_name = None
 register_password = None
+chat_massage = None
 manager_option = None
 manager_register = None
 manager_Login = None
 manager_lobby_search = None
+manager_chat = None
 lobby_search_input = None
 is_await = False
 player_texts = []
