@@ -50,6 +50,8 @@ background_sprite_group = None
 player_sprite_group = None
 track = None
 gameStart = False
+#bool for leaderboard
+game_end = False
 isgame = False
 menu_state = "main_menu"
 buttons = {
@@ -70,12 +72,14 @@ buttons = {
     "Nicht Bereit": False,
     "Verlassen": False,
     "loading": False,
-    "Game":False
+    "Game": False
 }
 
 SCREEN_WIDTH = 1329
 SCREEN_HEIGHT = 886
 client = SocketIOClient()
+singleplayer_start = False
+game_countdown_start = ''
 search_counter = 0
 game_counter = 0
 game_start = False
@@ -98,6 +102,7 @@ BLACK, WHITE, RED, VIOLETTE, CYAN, DARKBLUE, YELLOW, ORANGE = (0, 0, 0), (255, 2
 DARK_VIOLLETTE, DARK_CYAN, DARK_YELLOW, LIGHT_ORANGE = (186, 46, 151), (55, 214, 201), (234, 235, 117), (255, 151, 116)
 TRANSPARENT_WHITE = (255, 255, 255, 100)
 TRANSPARENT_RED = (255, 0, 0, 20)
+TRANSPARENT_VIOLLETE = (186, 46, 151, 215)
 is_await = False
 player_texts = []
 is_running = False
@@ -111,5 +116,7 @@ olddata = 0
 new_car_data = []
 paused = False
 escape = False
+leaderboard = []
+
 
 

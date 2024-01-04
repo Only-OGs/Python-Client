@@ -11,7 +11,7 @@ import time
 
 pygame.mixer.init()
 soundtrack = pygame.mixer.Sound("assets/Music/robotic-countdown-43935.mp3")
-
+soundtrack.set_volume(0.03)
 
 class Screens:
 
@@ -29,6 +29,7 @@ class Screens:
             var.client.connect()
         else:
             pass
+        var.singleplayer_start = True
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus_gui()
         Layout.linker_button(screen=var.menu_screen, text="Anmelden", trigger="Jetzt Anmelden")
@@ -94,7 +95,6 @@ class Screens:
 
     @staticmethod
     def screen_update():
-
         if var.menu_state == "main_menu":
             Screens.create_menu_screen(var.menu_screen)
         elif var.menu_state == "lobby_option":
@@ -113,6 +113,7 @@ class Screens:
             Screens.create_lobby_search()
         elif var.menu_state == "loading":
             Screens.create_loadingscreen(screen=var.menu_screen)
+
 
     @staticmethod
     def init_music():
@@ -174,7 +175,7 @@ class Screens:
             relative_rect=pygame.Rect((var.width // 2 - (
                     var.slider_width // 2), var.height - 100),
                                       (var.slider_width, var.slider_height)), start_value=0.01,
-            value_range=((0.008), (0.05)), manager=var.manager_option
+            value_range=((0.000), (0.05)), manager=var.manager_option
         )
 
     @staticmethod
@@ -183,25 +184,50 @@ class Screens:
         pygame.draw.rect(screen, var.DARKBLUE, rect)
 
     # Erstellt den Countdown zu beginn eines Spiels
+        # Erstellt den Countdown zu beginn eines Spiels
     @staticmethod
-    def create_countdown(screen):
-        countdown = ""
+    def create_countdown_multiplayer(screen):
         color = var.RED
-        if var.game_counter <= int(var.clock.get_fps()):
-            countdown = "3"
+        countdown = str(var.game_countdown_start)
+        if var.game_countdown_start == "3":
+
             soundtrack.play()
-        elif var.game_counter <= int(var.clock.get_fps()) * 2:
-            countdown = "2"
-        elif var.game_counter <= int(var.clock.get_fps()) * 3:
-            countdown = "1"
-        elif var.game_counter <= int(var.clock.get_fps()) * 4:
+
+        elif var.game_start:
+
             countdown = "GO"
             color = var.VIOLETTE
-            if var.game_counter == int(var.clock.get_fps()) * 4:
-                var.game_start = True
-                var.game_counter = 0
 
         Layout.draw_text(screen=screen, x=var.width // 2, y=var.height // 2, text=countdown, size=90, color=color)
+
+    @staticmethod
+    def create_countdown_singleplayer(screen):
+        if var.buttons["Einzelspieler"]:
+            countdown = ""
+            color = var.RED
+            if var.game_counter <= int(var.clock.get_fps()):
+                countdown = "5"
+            elif var.game_counter <= int(var.clock.get_fps())*2:
+                countdown = "4"
+            elif var.game_counter <= int(var.clock.get_fps())*3:
+                soundtrack.play()
+                countdown = "3"
+            elif var.game_counter <= int(var.clock.get_fps())*4:
+                countdown = "2"
+            elif var.game_counter <= int(var.clock.get_fps())*5:
+                countdown = "1"
+            elif var.game_counter <= int(var.clock.get_fps())*6:
+                countdown = "GO"
+                color = var.VIOLETTE
+                if var.game_counter == int(var.clock.get_fps())*6 and var.buttons["Einzelspieler"]:
+                    var.game_start = True
+                    var.buttons["Einzelspieler"] = False
+                    var.singleplayer_start = True
+                    print(var.singleplayer_start)
+                    var.game_counter = 0
+
+            Layout.draw_text(screen=screen, x=var.width // 2, y=var.height // 2, text=countdown, size=90,
+                             color=color)
 
 
     def threaded_function(arg, text):
@@ -216,3 +242,26 @@ class Screens:
             var.menu_state == "main_menu"
             var.isgame = True
         var.is_running = False
+
+    @staticmethod
+    def create_leaderboard():
+        screen = var.screen
+
+        rect = pygame.rect.Rect(50, 50, var.width - 100, var.height - 150)
+        shape_surf = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
+        pygame.draw.rect(shape_surf, var.TRANSPARENT_VIOLLETE, shape_surf.get_rect())
+        screen.blit(shape_surf, rect)
+
+        const = 100
+        for row in var.leaderboard:
+            rect = pygame.rect.Rect(90, 60+const, var.width - 170, 35)
+            pygame.draw.rect(screen, var.CYAN, rect)
+            Layout.draw_text(screen=screen, y=75+const, x=200, text=str(row.get("posi")), size=25, color=var.DARKBLUE)
+            Layout.draw_text(screen=screen, y=75+const, x=200 + var.width // 3, text=str(row.get("name")), size=25, color=var.DARKBLUE)
+            Layout.draw_text(screen=screen, y=75+const, x=200 + (var.width // 3 * 2), text=str(row.get("time")), size=25,
+                             color=var.DARKBLUE)
+            const += 50
+
+        Layout.draw_text(screen=screen, y=80, x=200, text="Position", size=32, color=var.DARKBLUE)
+        Layout.draw_text(screen=screen, y=80, x=200 + var.width // 3, text="Name", size=32, color=var.DARKBLUE)
+        Layout.draw_text(screen=screen, y=80, x=200 + (var.width // 3 * 2), text="Zeit", size=32, color=var.DARKBLUE)

@@ -45,8 +45,10 @@ class Game:
                         break
                     if event.key == pygame.K_p:
                         self.toggle_pause()
+
+
                 # Verhindert eingaben des Spielers, während des Countdowns
-                if not var.game_start:
+                if not var.game_start or not var.singleplayer_start:
                     break
                 else:
                     if var.gameStart or var.singleplayer:
@@ -73,16 +75,18 @@ class Game:
             Render.render()
             timer.show_speed(speed=var.speed)
 
+
             if var.paused:
                 screens.Screens.create_pause_menu(var.screen)
 
-            # init den ingame Countdown zu beginn eines Rennens
-            if not var.game_start:
-                screens.Screens.create_countdown(var.screen)
+            if not var.singleplayer_start:
+                screens.Screens.create_countdown_singleplayer(var.screen)
                 var.game_counter += 1
-            else:
+            elif var.client.sio.connected and not var.game_start:
+                screens.Screens.create_countdown_multiplayer(var.screen)
+            elif var.game_start or var.singleplayer_start:
                 timer.count_up()
-                # In Round() länge der Strecke einsetzten
+            # In Round() länge der Strecke einsetzten
                 if (var.position < 10000 and var.position > 1000):
                     self.timer_rest = True
 
@@ -91,6 +95,8 @@ class Game:
                         self.timer_rest = False
                         timer.ende_timer()
 
+            if var.game_end:
+                screens.Screens.create_leaderboard()
 
             self.update(1 / int(var.clock.get_fps()))
 
@@ -98,7 +104,8 @@ class Game:
             var.clock.tick(var.fps)
 
         if var.escape:
-            var.client.disconnect()
+            if not var.singleplayer:
+                var.client.game_leave()
             var.menu_state = "main_menu"
             screens.Screens.screen_update()
             var.position = 0
@@ -109,8 +116,11 @@ class Game:
             var.escape = False
             var.track = None
             var.singleplayer = True
-
-
+            var.leaderboard = None
+            var.game_end = False
+            var.client.lobbymessage = ''
+            var.singleplayer_start = False
+            var.game_start = False
 
     def toggle_pause(self):
         var.paused = not var.paused
