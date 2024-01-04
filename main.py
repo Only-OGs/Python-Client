@@ -82,6 +82,8 @@ while run:
 
     elif var.buttons["Verlassen"]:
         var.client.leave_lobby()
+        var.client.chat_message.clear()
+        var.client.chat_player.clear()
         var.menu_state = "lobby_option"
 
     elif var.buttons["Bereit"]:

@@ -234,10 +234,7 @@ class SocketIOClient:
     # sendet eine neue Nachricht
     def newMessage(self, message):
         if self.sio.connected:
-            self.chat_player.append(self.playersname)
-            self.chat_message.append(message)
-            print(message)
-            self.sio.emit('new_message', message)
+            self.sio.emit('sent_message', message)
 
     def on_timer(self, countdown):
         if self.sio.connected:

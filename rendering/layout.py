@@ -217,6 +217,8 @@ class Layout:
         text_surface = font.render(text, True, color)
         screen.blit(text_surface, (x, y))
 
+
+
     @staticmethod
     def create_ingamelobby(screen):
         # counter für "Suchen..."
@@ -229,12 +231,25 @@ class Layout:
 
         Layout.send(x=var.width // 2 + 400, y=var.height - 50, screen=var.menu_screen, text="Senden")
         const = 110
+
         for i, (user, message) in enumerate(zip(var.client.chat_player, var.client.chat_message)):
-            if const != var.height - 400:
-                Layout.draw_text_not_Center(screen=screen, y=const, x=720, text=str(user+":"), size=18, color=var.CYAN)
-                Layout.draw_text_not_Center(screen=screen, y=const, x=830, text=str(message), size=18,
-                            color=var.WHITE)
-                const+=20
+            if const >= 500:
+                username = var.client.chat_player[len(var.client.chat_player)-1]
+                lastmessage = var.client.chat_message[len(var.client.chat_message)-1]
+                var.client.chat_player.clear()
+                var.client.chat_message.clear()
+                var.client.chat_player.append(username)
+                var.client.chat_message.append(lastmessage)
+                const = 110
+            Layout.draw_text_not_Center(screen=screen, y=const, x=720, text=str(user+":"), size=18, color=var.CYAN)
+            lines = [message[i:i + 23] for i in range(0, len(message), 23)]
+
+            for line_number, line in enumerate(lines):
+                Layout.draw_text_not_Center(screen=screen, y=const + line_number * 20, x=830, text=str(line),
+                                            size=18,
+                                            color=var.WHITE)
+
+            const += len(lines) * 20
 
         var.search_counter = 0
         player_texts = [pygame.font.Font(var.FONT, 20).render(player, True, (255, 255, 255)) for player in
