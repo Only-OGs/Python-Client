@@ -55,12 +55,14 @@ class Screens:
         Layout.create_Serverstatus_gui()
         Layout.draw_text(screen=var.menu_screen, x=var.width // 2, y=60, text="Lobbyauswahl", size=45,
                          color=(255, 6, 193))
-        Layout.create_loginstatus_gui()
+        Layout.create_loginstatus_gui("login")
         Layout.create_lobbystatus_gui()
         Layout.search_lobby_button(screen=var.menu_screen, text="Lobby suchen")
         Layout.lobby_create_button(screen=var.menu_screen, text="Lobby erstellen")
         Layout.quick_game_button(screen=var.menu_screen, text="Schnelles Spiel")
         Layout.log_out_button(screen=var.menu_screen, text="Abmelden")
+
+
 
     @staticmethod
     def create_lobby_search():
@@ -76,6 +78,8 @@ class Screens:
     def create_log_screen():
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus_gui()
+        Layout.create_loginstatus_gui("login")
+        Layout.create_loginstatus_gui("error")
         Layout.linker_button(screen=var.menu_screen, text="Zurueck", trigger="Mehrspieler")
         Layout.log_reg_button(screen=var.menu_screen, text="Anmelden")
         var.manager_Login.draw_ui(var.menu_screen)
@@ -84,6 +88,7 @@ class Screens:
     def create_registration_screen():
         Layout.init_background(screen=var.menu_screen)
         Layout.create_Serverstatus_gui()
+        Layout.create_registerstatus_gui()
         Layout.linker_button(screen=var.menu_screen, text="Zurueck", trigger="Mehrspieler")
         Layout.log_reg_button(screen=var.menu_screen, text="Registrieren")
         var.manager_register.draw_ui(var.menu_screen)
@@ -169,6 +174,14 @@ class Screens:
                                                                  placeholder_text="Passwort", visible=str)
 
     @staticmethod
+    def create_message_output():
+        var.manager_chat = pygame_gui.UIManager((var.width, var.height))
+        var.chat_massage = pygame_gui.elements.UITextEntryLine(
+            relative_rect=pygame.Rect((700, 600), (var.width // 3, 60)),
+            manager=var.manager_chat, object_id="#chat",
+            placeholder_text="message")
+
+    @staticmethod
     def create_music_slider():
         var.manager_option = pygame_gui.UIManager((var.width, var.height))
         var.music_slider = pygame_gui.elements.UIHorizontalSlider(
@@ -219,7 +232,7 @@ class Screens:
             elif var.game_counter <= int(var.clock.get_fps())*6:
                 countdown = "GO"
                 color = var.VIOLETTE
-                if var.game_counter == int(var.clock.get_fps())*6:
+                if var.game_counter <= int(var.clock.get_fps())*6:
                     var.game_start = True
                     var.buttons["Einzelspieler"] = False
                     var.singleplayer_start = True
@@ -236,6 +249,8 @@ class Screens:
             time.sleep(1)
         if text == "login":
             var.client.loginmessage = ''
+        elif text == "register":
+            var.client.errormessage = ''
         elif text == "lobby":
             var.client.lobbymessage = ''
         elif text == "game":
