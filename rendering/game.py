@@ -75,25 +75,31 @@ class Game:
             Render.render()
             timer.show_speed(speed=var.speed)
 
-
             if var.paused:
                 screens.Screens.create_pause_menu(var.screen)
 
             if not var.singleplayer_start:
                 screens.Screens.create_countdown_singleplayer(var.screen)
                 var.game_counter += 1
+
             elif var.client.sio.connected and not var.game_start:
                 screens.Screens.create_countdown_multiplayer(var.screen)
             elif var.game_start or var.singleplayer_start:
                 timer.count_up()
-            # In Round() länge der Strecke einsetzten
-                if (var.position < 10000 and var.position > 1000):
-                    self.timer_rest = True
 
-                if (var.position >= var.trackLength - 1000):
-                    if (self.timer_rest):
-                        self.timer_rest = False
-                        timer.ende_timer()
+                if not var.client.sio.connected:
+
+                    if (var.position < 10000 and var.position > 1000):
+                        self.timer_rest = True
+
+
+                    if (var.position >= var.trackLength - 1000):
+                        if (self.timer_rest):
+                            self.timer_rest = False
+                            timer.ende_timer()
+                            var.lap_count += 1
+
+            # In Round() länge der Strecke einsetzten
 
             if var.game_end:
                 screens.Screens.create_leaderboard()
@@ -120,7 +126,7 @@ class Game:
             var.game_end = False
             var.client.lobbymessage = ''
             var.singleplayer_start = False
-            var.game_start = False
+            var.lap_count = 0
 
     def toggle_pause(self):
         var.paused = not var.paused

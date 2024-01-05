@@ -8,9 +8,26 @@ fps = 60
 step = 1 / fps
 width = 1329
 height = 886
+
+SCREEN_WIDTH = 1329
+SCREEN_HEIGHT = 886
+
+"""Colours"""
+BLACK, WHITE, RED, VIOLETTE, CYAN, DARKBLUE, YELLOW, ORANGE = (0, 0, 0), (255, 255, 255), (255, 0, 0), (255, 6, 193), (0, 255, 234), (20, 21, 44), (234, 235, 44), (250, 128, 87)
+DARK_VIOLLETTE, DARK_CYAN, DARK_YELLOW, LIGHT_ORANGE = (186, 46, 151), (55, 214, 201), (234, 235, 117), (255, 151, 116)
+TRANSPARENT_WHITE = (255, 255, 255, 100)
+TRANSPARENT_RED = (255, 0, 0, 20)
+TRANSPARENT_VIOLLETE = (186, 46, 151, 215)
+player_colors = [(255, 6, 193), (186, 46, 151), (0, 255, 234), (55, 214, 201), (234, 235, 44), (234, 235, 117),
+                 (250, 128, 87), (255, 155, 116)]
+"""pygame_gui"""
+FONT = "assets/rocket-rinder-font/RocketRinder-yV5d.ttf"
+slider_width = 500
+slider_height = 30
+music_slider = None
+"""GAME"""
 segments = []
 screen = None
-FONT = "assets/rocket-rinder-font/RocketRinder-yV5d.ttf"
 menu_screen = pygame.display.set_mode((width, height))
 background = None
 sprites = None
@@ -53,7 +70,10 @@ gameStart = False
 #bool for leaderboard
 game_end = False
 isgame = False
+lap_count = 0
+"""Screens"""
 menu_state = "main_menu"
+escape = False
 buttons = {
     "Anmelden": False,
     "Zurueck": False,
@@ -72,37 +92,30 @@ buttons = {
     "Nicht Bereit": False,
     "Verlassen": False,
     "loading": False,
-    "Game": False
+    "Game": False,
+    "Senden": False
 }
 
-SCREEN_WIDTH = 1329
-SCREEN_HEIGHT = 886
-client = SocketIOClient()
+"""MULTIPLAYER"""
 singleplayer_start = False
 game_countdown_start = ''
 search_counter = 0
 game_counter = 0
 game_start = False
-player_colors = [(255, 6, 193), (186, 46, 151), (0, 255, 234), (55, 214, 201), (234, 235, 44), (234, 235, 117),
-                 (250, 128, 87), (255, 155, 116)]
 id_playerList = []
-slider_width = 500
-slider_height = 30
-music_slider = None
+"""SocketIO"""
+client = SocketIOClient()
 login_name = None
 login_password = None
 register_name = None
 register_password = None
+chat_massage = None
 manager_option = None
 manager_register = None
 manager_Login = None
 manager_lobby_search = None
+manager_chat = None
 lobby_search_input = None
-BLACK, WHITE, RED, VIOLETTE, CYAN, DARKBLUE, YELLOW, ORANGE = (0, 0, 0), (255, 255, 255), (255, 0, 0), (255, 6, 193), (0, 255, 234), (20, 21, 44), (234, 235, 44), (250, 128, 87)
-DARK_VIOLLETTE, DARK_CYAN, DARK_YELLOW, LIGHT_ORANGE = (186, 46, 151), (55, 214, 201), (234, 235, 117), (255, 151, 116)
-TRANSPARENT_WHITE = (255, 255, 255, 100)
-TRANSPARENT_RED = (255, 0, 0, 20)
-TRANSPARENT_VIOLLETE = (186, 46, 151, 215)
 is_await = False
 player_texts = []
 is_running = False
@@ -115,6 +128,10 @@ username = ""
 olddata = 0
 new_car_data = []
 paused = False
-escape = False
 leaderboard = []
 assets = []
+"""HUD im Online Mouds"""
+lap = ""
+best_time = ""
+lap_time = ""
+current_time = ""
