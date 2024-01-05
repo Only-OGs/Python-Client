@@ -103,8 +103,11 @@ class Game:
 
             if var.game_end:
                 screens.Screens.create_leaderboard()
-
-            self.update(1 / int(var.clock.get_fps()))
+            if int(var.clock.get_fps()) == 0:
+                fps_help = 1
+            else:
+                fps_help = 0
+            self.update(1 / int(var.clock.get_fps()+fps_help))
 
             pygame.display.update()
             var.clock.tick(var.fps)
@@ -138,6 +141,9 @@ class Game:
         var.position = Util.increase(var.position, dt * var.speed, var.trackLength)
         playerw = 80 * (0.3 * (1 / 80))
         dx = dt * 2 * speedpercent
+        var.sky_offset = Util.increase(var.sky_offset, var.skySpeed*playersegment.get('curve')*speedpercent, 1)
+        var.hill_offset = Util.increase(var.hill_offset, var.hillSpeed*playersegment.get('curve')*speedpercent, 1)
+        var.tree_offset = Util.increase(var.tree_offset, var.treeSpeed * playersegment.get('curve') * speedpercent, 1)
 
         if var.keyLeft:
             var.playerX = var.playerX - dx
