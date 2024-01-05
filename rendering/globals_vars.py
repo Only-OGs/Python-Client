@@ -67,7 +67,6 @@ background_sprite_group = None
 player_sprite_group = None
 track = None
 gameStart = False
-#bool for leaderboard
 game_end = False
 isgame = False
 lap_count = 0

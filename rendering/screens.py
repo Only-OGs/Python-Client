@@ -13,6 +13,11 @@ pygame.mixer.init()
 soundtrack = pygame.mixer.Sound("assets/Music/robotic-countdown-43935.mp3")
 soundtrack.set_volume(0.03)
 
+'''
+In this class all screens get build together with different components
+'''
+
+
 class Screens:
 
     @staticmethod
@@ -119,7 +124,7 @@ class Screens:
         elif var.menu_state == "loading":
             Screens.create_loadingscreen(screen=var.menu_screen)
 
-
+    #initialis the game Music
     @staticmethod
     def init_music():
         pygame.mixer.music.load(filename="assets/Music/StartMenuMusic.mp3")
@@ -172,7 +177,7 @@ class Screens:
         var.login_password = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 450), (360, 60)),
                                                                  manager=var.manager_Login, object_id="#passwort",
                                                                  placeholder_text="Passwort", visible=str)
-
+    # message output field
     @staticmethod
     def create_message_output():
         var.manager_chat = pygame_gui.UIManager((var.width, var.height))
@@ -181,6 +186,7 @@ class Screens:
             manager=var.manager_chat, object_id="#chat",
             placeholder_text="message")
 
+    # music slider for the options
     @staticmethod
     def create_music_slider():
         var.manager_option = pygame_gui.UIManager((var.width, var.height))
@@ -190,6 +196,7 @@ class Screens:
                                       (var.slider_width, var.slider_height)), start_value=0.01,
             value_range=((0.000), (0.05)), manager=var.manager_option
         )
+
 
     @staticmethod
     def create_ingmae_menu(screen):

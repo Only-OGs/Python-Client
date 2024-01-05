@@ -5,14 +5,13 @@ import rendering.globals_vars as var
 import pygame
 import pygame_gui
 
-
+#default values for all buttons
 button_positions = {
     "linker": {"x": var.width / 2 - var.width / 3, "y": var.height / 2},
     "mittlerer": {"x": var.width / 2, "y": var.height / 2 + 50},
     "rechter": {"x": var.width / 2 + var.width / 3, "y": var.height / 2},
     "log_reg": {"x": var.width - 400, "y": var.height // 2 + 150}
 }
-
 button_image = 'assets/button.png'
 button_image_hover = 'assets/button-pressed.png'
 button_size = 2
@@ -20,7 +19,7 @@ font_size = 20
 
 
 class Layout:
-
+    #Default button constructor
     def __create_button(screen, x, y, text, trigger):
         button = Button(x=x, y=y, image=button_image, size=button_size, hover=button_image_hover)
         button.render(screen=screen, text=text, size=font_size, color="WHITE")
@@ -56,7 +55,7 @@ class Layout:
         screen.blit(text_surface, text_rect)
 
 
-
+    #Default button layouts
     @staticmethod
     def linker_button(screen, text, trigger):
         return Layout.__create_button(screen, **button_positions["linker"], text=text, trigger=trigger)
@@ -212,7 +211,7 @@ class Layout:
                 thread.start()
 
     @staticmethod
-    def draw_text_not_Center(screen, x, y, text, size, color):
+    def draw_text_not_center(screen, x, y, text, size, color):
         font = pygame.font.Font(var.FONT, size)
         text_surface = font.render(text, True, color)
         screen.blit(text_surface, (x, y))
@@ -241,11 +240,11 @@ class Layout:
                 var.client.chat_player.append(username)
                 var.client.chat_message.append(lastmessage)
                 const = 110
-            Layout.draw_text_not_Center(screen=screen, y=const, x=720, text=str(user+":"), size=18, color=var.CYAN)
+            Layout.draw_text_not_center(screen=screen, y=const, x=720, text=str(user + ":"), size=18, color=var.CYAN)
             lines = [message[i:i + 23] for i in range(0, len(message), 23)]
 
             for line_number, line in enumerate(lines):
-                Layout.draw_text_not_Center(screen=screen, y=const + line_number * 20, x=830, text=str(line),
+                Layout.draw_text_not_center(screen=screen, y=const + line_number * 20, x=830, text=str(line),
                                             size=18,
                                             color=var.WHITE)
 

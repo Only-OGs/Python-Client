@@ -3,13 +3,13 @@ import time
 
 class Button:
 
-    ''' Erstellt einen neuen Button, mit hover effekt.
-    :param int x: X Kordinate
-    :param int y: Y Kordinate
-    :param str image: pfad zum default button
-    :param int size: skalierungsfaktor
-    :param str hover: pfad zum hover button
-    '''
+    ''' Creates a new button, with hover effect.
+        :param int x: X coordinate
+        :param int y: Y coordinate
+        :param str image: path to the default button
+        :param int size: scale factor
+        :param str hover: path to the hover button
+        '''
 
     def __init__(self, x, y, image, size, hover):
         skalierungsfaktor = size
@@ -37,12 +37,12 @@ class Button:
         self.rect.center = (x, y)
         self.clicked = False
 
-    ''' Erstellt den Text für einen Button.
-        :param screen: default screen übergeben
-        :param str text: beschriftung
-        :param int size: größe des schrift
-        :param color color: farbe
-    '''
+    ''' Creates the text for a button.
+            :param screen: pass default screen
+            :param str text: label
+            :param int size: size of the font
+            :param color color: color
+        '''
 
     def render(self, screen, text, size, color):
         font = pygame.font.Font("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", size)
@@ -55,7 +55,7 @@ class Button:
         screen.blit(img, (self.x - 90, self.y - 15))
 
     ''' 
-    Erstellt die Funktionalität hinter dem button.
+    Give the button his functionality.
     '''
     def check(self):
 

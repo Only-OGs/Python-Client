@@ -27,6 +27,8 @@ while run:
             run = False
             break
 
+        #@menu_state regulates which menu screen or game screen will be showen
+
         if var.menu_state == "log_menu":
             var.manager_Login.process_events(event)
 
@@ -51,6 +53,10 @@ while run:
         if var.isgame:
             Game()
             var.isgame = False
+
+    '''All button controlles are managed throu var.button
+        if a button is pressd the var.button state will switch to the given button state
+    '''
 
     if var.buttons["Einzelspieler"]:
         Game()
@@ -129,6 +135,8 @@ while run:
     elif var.menu_state == "ingame_lobby":
         var.manager_chat.update(tick)
 
+
+    #After any button input, all buttons will be set to False by default
     Util.reset_buttons()
     pygame.display.update()
 

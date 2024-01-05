@@ -24,7 +24,7 @@ class Game:
         self.game_loop()
         self.timer_rest = False
 
-    # main loop wo alles passiert
+    # main loop which runs the hole game
     def game_loop(self):
         SpriteGen.create_player()
         SpriteGen.create_background()
@@ -47,7 +47,7 @@ class Game:
                         self.toggle_pause()
 
 
-                # Verhindert eingaben des Spielers, während des Countdowns
+                # Locks entering key events before the race starts
                 if not var.game_start or not var.singleplayer_start:
                     break
                 else:
@@ -78,10 +78,13 @@ class Game:
             if var.paused:
                 screens.Screens.create_pause_menu(var.screen)
 
+            '''Switch between Singleplayer and Multiplayer countdown'''
+            #Singleplayer Countdown
             if not var.singleplayer_start:
                 screens.Screens.create_countdown_singleplayer(var.screen)
                 var.game_counter += 1
 
+            #Multiplayer Countdown
             elif var.client.sio.connected and not var.game_start:
                 screens.Screens.create_countdown_multiplayer(var.screen)
             elif var.game_start or var.singleplayer_start:
@@ -89,6 +92,7 @@ class Game:
 
                 if not var.client.sio.connected:
 
+                    #Counts the laps in the Singleplayer rest the timer
                     if (var.position < 10000 and var.position > 1000):
                         self.timer_rest = True
 
@@ -99,8 +103,7 @@ class Game:
                             timer.ende_timer()
                             var.lap_count += 1
 
-            # In Round() länge der Strecke einsetzten
-
+            #Draws the leaderboard on the screen if the race is over
             if var.game_end:
                 screens.Screens.create_leaderboard()
 
@@ -109,6 +112,8 @@ class Game:
             pygame.display.update()
             var.clock.tick(var.fps)
 
+
+        #All actions which execute after pressing ESC
         if var.escape:
             if not var.singleplayer:
                 var.client.game_leave()
