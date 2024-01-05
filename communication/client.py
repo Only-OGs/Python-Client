@@ -31,7 +31,8 @@ class SocketIOClient:
         self.sio.on('player_leave', self.on_playerLeave)
         self.sio.on('timer_countdown', self.on_timer)
         self.sio.on('timer_abrupt', self.on_timer_off)
-        self.sio.on('load_level', self.on_level_load)
+        self.sio.on('load_level', self.on_load_level)
+        self.sio.on('load_assets', self.on_load_assets)
         self.sio.on('wait_for_start', self.on_wait_for_start)
         self.sio.on('updated_positions', self.on_updated_positions)
         self.sio.on('start_race', self.on_start_race)
@@ -85,11 +86,16 @@ class SocketIOClient:
             if data.get('status') == 'left':
                 self.lobbyleaft = True
 
-    def on_level_load(self, data):
+    def on_load_level(self, data):
         if self.sio.connected:
             if data != '':
                 var.singleplayer = False
                 var.track = data
+
+    def on_load_assets(self, data):
+        if self.sio.connected:
+            if data != '':
+                var.assets = data
 
     def on_get_lobby(self, data):
         if self.sio.connected:
@@ -252,7 +258,7 @@ class SocketIOClient:
         if self.sio.connected:
             for n in data:
                 var.player_cars.append(n)
-            SpriteGen.create_player_cars()
+            SpriteGen.create_Server_cars()
             var.help_car = True
 
     def on_updated_positions(self, data):
@@ -262,8 +268,8 @@ class SocketIOClient:
                 var.new_car_data.append(n)
             else:
                 Cars.update_player(n)
+        Cars.update_server_cars()
 
-        Cars.update_player_cars()
 
 
     def ingame_pos(self, position, offset):

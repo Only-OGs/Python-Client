@@ -20,6 +20,8 @@ class Road:
         if var.singleplayer:
             SpriteGen.create_bot_cars()
             SpriteGen.create_street_objectives(var.segments)
+        else:
+            SpriteGen.create_server_street_objects()
 
         var.segments[Util.findSegment(var.playerZ)["index"] + 2]["color"] = Color.get_start()
         var.segments[Util.findSegment(var.playerZ)["index"] + 3]["color"] = Color.get_start()
@@ -127,3 +129,4 @@ class Road:
         else:
             for n in var.track:
                 Road.add_street(n.get("segment_length"), n.get("curve_strength"), n.get("hill_height"))
+            var.trackloaded = True

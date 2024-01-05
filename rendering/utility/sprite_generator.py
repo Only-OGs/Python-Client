@@ -20,8 +20,8 @@ class SpriteGen:
     def create_street_objectives(segments):
         """ Erstellt die Objekte am Rande der Straße"""
         for n in range(0, len(segments), 100):
-            SpriteGen.add_sprite(segments, n, Sprite.random_tree(), 1)
-            SpriteGen.add_sprite(segments, n, Sprite.random_billboard(), -1)
+            SpriteGen.add_sprite(segments, n, Sprite.random_asset(), 1.2)
+            SpriteGen.add_sprite(segments, n, Sprite.random_asset(), -1.2)
 
     @staticmethod
     def create_bot_cars():
@@ -56,13 +56,12 @@ class SpriteGen:
         var.player_sprite_group.add(var.player)
 
     @staticmethod
-    def create_player_cars():
-        """ Erstellt die Spieler-Autos andhand des Parameter"""
-
+    def create_Server_cars():
         for player in var.player_cars:
             if player.get("id") != var.username:
                 segment = Util.findSegment(player.get("pos"))
-                car = {"offset": player.get("offset"), "z": player.get("pos"), "sprite":{"asset": "assets/cars/car01.png", "width": 80, "height": 56}, "speed": 0, "percent": 0, "player": True,
+                car = {"offset": player.get("offset"), "z": player.get("pos"),
+                       "sprite": Sprite.random_car(player.get('asset')), "speed": 0, "percent": 0, "player": True,
                        "id": player.get("id"), "segment": segment}
                 if car not in segment.get("cars"):
                     segment["cars"].append(car)
@@ -70,3 +69,11 @@ class SpriteGen:
             else:
                 var.position = player.get("pos")
                 var.playerX = player.get("offset")
+
+    @staticmethod
+    def create_server_street_objects():
+        while var.trackloaded is False:
+            pass
+        for n in var.assets:
+            seg = Util.findSegment(n.get('pos'))
+            seg['sprites'].append({"source":  Sprite.random_asset(n.get('model')), "offset": n.get('side')})

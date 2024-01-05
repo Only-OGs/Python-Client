@@ -64,15 +64,15 @@ class Cars:
                     return direction * 1 / i * (car.get("speed") - other_car.get("speed")) / var.maxSpeed
 
     @staticmethod
-    def update_player_cars():
-        for n in range(len(var.cars)):
-            car = var.cars[n]
+    def update_server_cars():
+        for car in var.cars:
             oldsegment = car.get("segment")
-            for i in range(len(var.new_car_data)):
-                if car.get("id") == var.new_car_data[i].get("id"):
-                    car["offset"] = var.new_car_data[i].get("offset")
-                    car["z"] = var.new_car_data[i].get("pos")
+            for newcar in var.new_car_data:
+                if car.get("id") == newcar.get("id"):
+                    car["offset"] = newcar.get("offset")
+                    car["z"] = newcar.get("pos")
                     car["segment"] = Util.findSegment(car.get("z"))
+                    break
             newsegment = car.get("segment")
             if oldsegment != newsegment:
                 index = oldsegment.get("cars").index(car)

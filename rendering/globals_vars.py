@@ -129,6 +129,7 @@ olddata = 0
 new_car_data = []
 paused = False
 leaderboard = []
+assets = []
 """HUD im Online Mouds"""
 lap = ""
 best_time = ""
