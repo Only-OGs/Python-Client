@@ -41,13 +41,33 @@ class SpriteGen:
     @staticmethod
     def create_background():
         """Erstellt die Background Sprites"""
-        bg_sky = Background(0, pygame.image.load("assets/sky.png"))
-        bg_hills = Background(0, pygame.image.load("assets/hills.png"))
-        bg_tree = Background(0, pygame.image.load("assets/trees.png"))
+        var.bg_sky_mid = Background(0, pygame.image.load("assets/sky.png"))
+        var.bg_sky_left = Background(0, pygame.image.load("assets/sky.png"))
+        var.bg_sky_left.rect.topright = (0, 0)
+        var.bg_sky_right = Background(1280, pygame.image.load("assets/sky.png"))
 
-        var.background_sprite_group.add(bg_sky)
-        var.background_sprite_group.add(bg_hills)
-        var.background_sprite_group.add(bg_tree)
+        var.bg_hills_mid = Background(0, pygame.image.load("assets/hills.png"))
+        var.bg_hills_left = Background(0, pygame.image.load("assets/hills.png"))
+        var.bg_hills_left.rect.topright = (0, 0)
+        var.bg_hills_right = Background(1280, pygame.image.load("assets/hills.png"))
+
+        var.bg_tree_mid = Background(0, pygame.image.load("assets/trees.png"))
+        var.bg_tree_left = Background(0, pygame.image.load("assets/trees.png"))
+        var.bg_tree_left.rect.topright = (0, 0)
+        var.bg_tree_right = Background(1280, pygame.image.load("assets/trees.png"))
+
+
+        var.background_sprite_group.add(var.bg_sky_mid)
+        var.background_sprite_group.add(var.bg_sky_left)
+        var.background_sprite_group.add(var.bg_sky_right)
+
+        var.background_sprite_group.add(var.bg_hills_mid)
+        var.background_sprite_group.add(var.bg_hills_left)
+        var.background_sprite_group.add(var.bg_hills_right)
+
+        var.background_sprite_group.add(var.bg_tree_mid)
+        var.background_sprite_group.add(var.bg_tree_left)
+        var.background_sprite_group.add(var.bg_tree_right)
 
     @staticmethod
     def create_player():

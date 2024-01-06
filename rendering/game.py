@@ -147,14 +147,8 @@ class Game:
 
         if var.keyLeft:
             var.playerX = var.playerX - dx
-            if var.speed > 0:
-                var.player.drive_left()
         elif var.keyRight:
             var.playerX = var.playerX + dx
-            if var.speed > 0:
-                var.player.drive_right()
-        else:
-            var.player.drive_straight()
 
         var.playerX = var.playerX - (dx * speedpercent * playersegment.get("curve") * var.centrifugal)
 
