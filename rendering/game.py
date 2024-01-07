@@ -181,13 +181,17 @@ class Game:
                                                      var.trackLength)
                         break
 
-        for n in range(len(playersegment.get("cars"))):
-            car = playersegment.get("cars")[n]
+        for car in (playersegment.get("cars")):
             car_w = car.get("sprite").get("width") * (0.3 * (1 / 80))
             if var.speed > car.get("speed"):
                 if Util.overlap(var.playerX, playerw, car.get("offset"), car_w, 0.8):
+                    if 'player' in car.keys():
+                        player_knockback = -200
+                    else:
+                        player_knockback = 0
                     var.speed = car.get("speed") * (car.get("speed") / var.speed)
                     var.position = Util.increase(car.get("z"), -var.playerZ, var.trackLength)
+                    var.position += player_knockback
                     break
 
         var.playerX = Util.limit(var.playerX, -2, 2)
