@@ -14,8 +14,5 @@ class Background(pygame.sprite.DirtySprite):
         self.rect.top = x
         self.image = pygame.transform.scale_by(self.image, 1.6)
 
-    def mv_x(self, x):
-        self.offset += x / 100
-        if x == 0:
-            self.offset = 0
-        self.rect.x += self.offset
+    def move_x(self, x):
+        self.rect.top = x

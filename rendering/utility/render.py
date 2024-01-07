@@ -146,7 +146,7 @@ class Render:
 
         "Die Position der Bäume werden berechnet"
         mid_rect = var.bg_tree_mid.image.get_rect()
-        mid_rect.x = mid_rect.x + round(var.tree_offset)
+        mid_rect.x = mid_rect.x + round(var.tree_offset * 400)
         var.bg_tree_mid.rect = mid_rect
         if mid_rect.x > 0:
             left_rect = var.bg_tree_left.image.get_rect()
@@ -165,6 +165,7 @@ class Render:
     @staticmethod
     def render_player(player_segment):
         uphill = player_segment.get('p2').get('world').get('y') - player_segment.get('p1').get('world').get('y')
+        bounce = (player_segment.get('index') % 3) * 1.5
         if var.keyLeft:
             if uphill > 0:
                 var.player.drive_left(True)
@@ -180,4 +181,5 @@ class Render:
                 var.player.drive_straight(True)
             else:
                 var.player.drive_straight(False)
+        var.player.bounce(bounce)
         var.player_sprite_group.draw(var.screen)
