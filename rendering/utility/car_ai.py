@@ -72,7 +72,10 @@ class Cars:
                     car["offset"] = newcar.get("offset")
                     car["z"] = newcar.get("pos")
                     car["segment"] = Util.findSegment(car.get("z"))
+                    if newcar.get('race_finished'):
+                        var.race_finished = True
                     break
+
             newsegment = car.get("segment")
             if oldsegment != newsegment:
                 index = oldsegment.get("cars").index(car)

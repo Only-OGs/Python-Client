@@ -103,6 +103,7 @@ search_counter = 0
 game_counter = 0
 game_start = False
 id_playerList = []
+race_finished = False
 """SocketIO"""
 client = SocketIOClient()
 login_name = None
@@ -130,6 +131,7 @@ new_car_data = []
 paused = False
 leaderboard = []
 assets = []
+
 """HUD im Online Mouds"""
 lap = ""
 best_time = ""

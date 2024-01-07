@@ -61,6 +61,8 @@ class Util:
         else:
             return value
 
+
+
     @staticmethod
     def segment(screen, width, lanes, x1, y1, w1, x2, y2, w2, color, fog):
         r1 = Util._rumble_width(w1, lanes)
@@ -240,3 +242,18 @@ class Util:
             elif var.menu_state == "ingame_lobby":
                 var.is_await = False
                 var.menu_state = "ingame_lobby"
+
+    @staticmethod
+    def clear_input(text):
+        if text == "loginname":
+            var.login_name.set_text('')
+        elif text == "loginpw":
+            var.login_password.set_text('')
+        elif text == "registername":
+            var.register_name.set_text('')
+        elif text == "registerpw":
+            var.register_password.set_text('')
+        elif text == "chat":
+            var.chat_massage.set_text('')
+        elif text == "search":
+            var.lobby_search_input.set_text('')
