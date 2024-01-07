@@ -104,7 +104,14 @@ class Game:
             if var.game_end:
                 screens.Screens.create_leaderboard()
 
-            self.update(1 / int(var.clock.get_fps()))
+            if int(var.clock.get_fps()) == 0:
+                fps_help = 1
+            else:
+                fps_help = 0
+
+
+            self.update(min(1 / int(var.clock.get_fps() + fps_help), 60))
+
 
             pygame.display.update()
             var.clock.tick(var.fps)

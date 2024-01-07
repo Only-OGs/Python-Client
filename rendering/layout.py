@@ -3,7 +3,6 @@ from time import sleep
 from rendering.button import Button
 import rendering.globals_vars as var
 import pygame
-import pygame_gui
 
 
 button_positions = {
@@ -12,7 +11,6 @@ button_positions = {
     "rechter": {"x": var.width / 2 + var.width / 3, "y": var.height / 2},
     "log_reg": {"x": var.width - 400, "y": var.height // 2 + 150}
 }
-
 button_image = 'assets/button.png'
 button_image_hover = 'assets/button-pressed.png'
 button_size = 2
@@ -26,6 +24,7 @@ class Layout:
         button.render(screen=screen, text=text, size=font_size, color="WHITE")
         clicked = button.check()
         var.buttons[trigger] = clicked
+
 
     @staticmethod
     def init_second_background(screen):

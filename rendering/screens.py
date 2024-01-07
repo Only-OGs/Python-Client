@@ -20,7 +20,7 @@ class Screens:
         var.client.disconnect()
         Layout.init_background(screen=screen)
         Layout.linker_button(screen=screen, text="Einzelspieler", trigger="Einzelspieler")
-        Layout.mittlerer_button(screen=screen, text="Optionen", trigger="Optionen")
+        Layout.mittlerer_button(screen=screen, text="Einstellungen", trigger="Optionen")
         Layout.rechter_button(screen=screen, text="Mehrspieler", trigger="Mehrspieler")
 
     @staticmethod

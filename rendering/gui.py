@@ -39,14 +39,14 @@ class Gui:
 
         # Multiplayer layout
         if var.client.sio.connected:
-            text = font.render("schnellste Runde {}".format(var.best_time), True, (var.BLACK))
-            text2 = font.render("letzte Runde {}".format(var.lap_time), True, (var.BLACK))
+            text = font.render("Schnellste Runde {}".format(var.best_time), True, (var.BLACK))
+            text2 = font.render("Letzte Runde: {}".format(var.lap_time), True, (var.BLACK))
             self.background_gui(x=var.width // 2 - 175, y=0, width=300, color=var.TRANSPARENT_WHITE, length=80)
             self.screen.blit(text, (var.width // 2 - 150, 0 + self.text_offste))
             self.screen.blit(text2, (var.width // 2 - 150, 0 + self.text_offste + 40))
 
             # schreibt die aktuelle Zeit
-            text = font.render("Time: {}".format(var.current_time), True,(var.BLACK))
+            text = font.render("Zeit: {}".format(var.current_time), True,(var.BLACK))
             self.background_gui(x=0, y=0, width=200, color=var.TRANSPARENT_WHITE, length=40)
             self.screen.blit(text, (0, 0 + self.text_offste))
 
@@ -69,15 +69,15 @@ class Gui:
                 self.sec = 0
                 self.min = 0
 
-            text = font.render("schnellste Runde {}:{}:{}".format(self.rec_min, self.rec_sec, self.rec_mil_sec), True, (var.BLACK))
-            text2 = font.render("letzte {}:{}:{}".format(self.last_min, self.last_sec, self.last_mil_sec), True,
+            text = font.render("Schnellste Runde: {}:{}:{}".format(self.rec_min, self.rec_sec, self.rec_mil_sec), True, (var.BLACK))
+            text2 = font.render("Letzte Runde: {}:{}:{}".format(self.last_min, self.last_sec, self.last_mil_sec), True,
                                (var.BLACK))
             self.background_gui(x=var.width // 2 - 175, y=0, width=300, color=var.TRANSPARENT_WHITE, length=80)
             self.screen.blit(text, (var.width // 2 - 150, 0 + self.text_offste))
             self.screen.blit(text2, (var.width // 2 - 150, 0 + self.text_offste + 40))
 
             # Print die den Runden counter
-            text = font.render("Time: {}:{}:{}".format(self.min, self.sec, self.mil_sec), True, (var.BLACK))
+            text = font.render("Zeit: {}:{}:{}".format(self.min, self.sec, self.mil_sec), True, (var.BLACK))
             self.background_gui(x=0, y=0, width=200, color=var.TRANSPARENT_WHITE, length=40)
             self.screen.blit(text, (0, 0 + self.text_offste))
 
@@ -109,7 +109,7 @@ class Gui:
     #Zeigt dem Spieler seine Gewschwindigkeit
     def show_speed(self, speed):
         font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
-        text = font.render("{} kmh".format(round(speed/100)), True, (var.BLACK))
+        text = font.render("{} km/h".format(round(speed/100)), True, (var.BLACK))
         if var.client.sio.connected:
             textRunde = font.render("Runde: {}".format(var.lap), True, (var.BLACK))
         else:
