@@ -17,10 +17,13 @@ class Cars:
             car["z"] = Util.increase(car.get("z"), dt * car.get("speed"), var.trackLength)
             car["percent"] = Util.percent_remaining(car.get("z"), var.segmentLength)
             newsegment = Util.findSegment(car.get("z"))
-            if oldsegment != newsegment:
-                index = oldsegment.get("cars").index(car)
-                oldsegment.get("cars").pop(index)
-                newsegment.get("cars").append(car)
+            try:
+                if oldsegment != newsegment:
+                    index = oldsegment.get("cars").index(car)
+                    oldsegment.get("cars").pop(index)
+                    newsegment.get("cars").append(car)
+            except ValueError:
+                pass
 
     @staticmethod
     def update_car_offset(car, carsegment, playersegment, playerw):
@@ -73,7 +76,8 @@ class Cars:
                     car["z"] = newcar.get("pos")
                     car["segment"] = Util.findSegment(car.get("z"))
                     if newcar.get('race_finished'):
-                        var.race_finished = True
+                        if newcar.get("id") == var.username:
+                            var.race_finished = True
                     break
 
             newsegment = car.get("segment")
