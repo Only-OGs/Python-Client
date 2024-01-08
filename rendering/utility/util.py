@@ -197,7 +197,7 @@ class Util:
         else:
             clip_h = 0
 
-        if clip_h < dest_h and (dest_w <= (sprite.get("width") * 5) or (dest_h <= sprite.get("height") * 5)):
+        if clip_h < dest_h and (dest_w <= (sprite.get("width") * 7) or (dest_h <= sprite.get("height") * 7)):
             img = pygame.image.load(sprite.get("asset")).convert_alpha()
             test = pygame.transform.scale(img, (dest_w, dest_h))
             test = pygame.transform.chop(test, (

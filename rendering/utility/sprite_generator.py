@@ -41,13 +41,10 @@ class SpriteGen:
     @staticmethod
     def create_background():
         """Erstellt die Background Sprites"""
-        bg_sky = Background(0, pygame.image.load("assets/sky.png"))
-        bg_hills = Background(0, pygame.image.load("assets/hills.png"))
-        bg_tree = Background(0, pygame.image.load("assets/trees.png"))
+        var.bg_sky_mid = Background(0, pygame.image.load("assets/sky.png"))
+        var.bg_hills_mid = Background(0, pygame.image.load("assets/hills.png"))
+        var.bg_tree_mid = Background(0, pygame.image.load("assets/trees.png"))
 
-        var.background_sprite_group.add(bg_sky)
-        var.background_sprite_group.add(bg_hills)
-        var.background_sprite_group.add(bg_tree)
 
     @staticmethod
     def create_player():
@@ -76,4 +73,4 @@ class SpriteGen:
             pass
         for n in var.assets:
             seg = Util.findSegment(n.get('pos'))
-            seg['sprites'].append({"source":  Sprite.random_asset(n.get('model')), "offset": n.get('side')})
+            seg['sprites'].append({"source": Sprite.random_asset(n.get('model')), "offset": n.get('side')})

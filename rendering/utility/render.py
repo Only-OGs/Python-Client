@@ -1,6 +1,10 @@
+import math
+
 import rendering.globals_vars as var
+from rendering.sprites.background import Background
 from rendering.utility.util import Util
 import pygame
+
 
 class Render:
 
@@ -43,6 +47,7 @@ class Render:
     @staticmethod
     def render():
         """ Rendert alles mithilfe der Util.segment, Render.render_cars, und Render.render_sprites Methoden"""
+        var.screen.fill((0, 0, 0), (0, 0, var.width, var.height))
         base_segment = Util.findSegment(var.position)
         base_percent = Util.percent_remaining(var.position, var.segmentLength)
         player_segment = Util.findSegment(var.position + var.playerZ)
@@ -53,8 +58,8 @@ class Render:
         dx = -(base_segment.get("curve") * base_percent)
         x = 0
         maxy = var.height
-        var.background_sprite_group.draw(var.screen)
 
+        Render.render_background(player_y)
         for n in range(var.drawDistance):
             segment = var.segments[(base_segment.get("index") + n) % len(var.segments)]
             segment_looped = segment.get("index") < base_segment.get("index")
@@ -107,4 +112,37 @@ class Render:
             segment = var.segments[(base_segment.get("index") + n) % len(var.segments)]
             Render.render_sprites(segment)
             Render.render_cars(segment)
+
+        Render.render_player(player_segment)
+
+    @staticmethod
+    def render_background(player_y):
+        """Methode zum Berechnen und Rendern des Parallax Background"""
+        var.bg_sky_mid.move(var.sky_offset, var.screen)
+        var.bg_hills_mid.move(var.hill_offset, var.screen)
+        var.bg_tree_mid.move(var.tree_offset, var.screen)
+
+        "Alle neu berechneten Background Sprites werden gerendert"
+        var.background_sprite_group.draw(var.screen)
+
+    @staticmethod
+    def render_player(player_segment):
+        uphill = player_segment.get('p2').get('world').get('y') - player_segment.get('p1').get('world').get('y')
+        bounce = (player_segment.get('index') % 3) * 1.5
+        if var.keyLeft:
+            if uphill > 0:
+                var.player.drive_left(True)
+            else:
+                var.player.drive_left(False)
+        elif var.keyRight:
+            if uphill > 0:
+                var.player.drive_right(True)
+            else:
+                var.player.drive_right(False)
+        else:
+            if uphill > 0:
+                var.player.drive_straight(True)
+            else:
+                var.player.drive_straight(False)
+        var.player.bounce(bounce)
         var.player_sprite_group.draw(var.screen)
