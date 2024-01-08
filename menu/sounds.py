@@ -11,7 +11,7 @@ class sounds:
 
     @staticmethod
     def stop_music():
-        pygame.mixer.music.stop()
+        pygame.mixer.music.pause()
 
     @staticmethod
     def start_music():

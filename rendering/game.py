@@ -7,6 +7,7 @@ from rendering.utility.util import Util
 from menu import screens, gui
 from rendering.utility.sprite_generator import SpriteGen
 from rendering.utility.render import Render
+from menu.sounds import sounds
 
 
 class Game:
@@ -30,6 +31,7 @@ class Game:
         SpriteGen.create_background()
         timer = gui.Gui(screen=var.screen)
         var.play_music = False
+        sounds.stop_music()
 
         while True:
             if var.escape:

@@ -14,9 +14,7 @@ class Screens:
 
     @staticmethod
     def create_menu_screen(screen):
-        sounds.start_music()
         var.client.disconnect()
-        var.play_music = True
         Components.init_background(screen=screen)
         Components.linker_button(screen=screen, text="Einzelspieler", trigger="Einzelspieler")
         Components.mittlerer_button(screen=screen, text="Einstellungen", trigger="Optionen")
@@ -29,7 +27,6 @@ class Screens:
         else:
             pass
         var.singleplayer_start = True
-        var.play_music = True
         Components.init_background(screen=var.menu_screen)
         Components.create_Serverstatus_gui()
         Components.linker_button(screen=var.menu_screen, text="Anmelden", trigger="Jetzt Anmelden")
