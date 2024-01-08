@@ -1,14 +1,12 @@
 
 from menu.components import Components
+from menu.sounds import sounds
 import rendering.globals_vars as var
 import pygame
 import pygame_gui
 import pygame.mixer
 import time
 
-pygame.mixer.init()
-soundtrack = pygame.mixer.Sound("assets/Music/robotic-countdown-43935.mp3")
-soundtrack.set_volume(0.03)
 '''
 Erstellt die verschiedenen Menüs mit ihren einzelnen Komponenten
 '''
@@ -16,7 +14,9 @@ class Screens:
 
     @staticmethod
     def create_menu_screen(screen):
+        sounds.start_music()
         var.client.disconnect()
+        var.play_music = True
         Components.init_background(screen=screen)
         Components.linker_button(screen=screen, text="Einzelspieler", trigger="Einzelspieler")
         Components.mittlerer_button(screen=screen, text="Einstellungen", trigger="Optionen")
@@ -29,6 +29,7 @@ class Screens:
         else:
             pass
         var.singleplayer_start = True
+        var.play_music = True
         Components.init_background(screen=var.menu_screen)
         Components.create_Serverstatus_gui()
         Components.linker_button(screen=var.menu_screen, text="Anmelden", trigger="Jetzt Anmelden")
@@ -179,11 +180,7 @@ class Screens:
 
 
     # Initialsiert die Music
-    @staticmethod
-    def init_music():
-        pygame.mixer.music.load(filename="assets/Music/StartMenuMusic.mp3")
-        pygame.mixer.music.play(loops=5, fade_ms=40, start=0)
-        pygame.mixer.music.set_volume(0.01)
+
 
 
     # Definition aller Eingabefelder

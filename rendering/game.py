@@ -29,6 +29,7 @@ class Game:
         SpriteGen.create_player()
         SpriteGen.create_background()
         timer = gui.Gui(screen=var.screen)
+        var.play_music = False
 
         while True:
             if var.escape:

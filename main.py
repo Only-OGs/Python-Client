@@ -4,12 +4,13 @@ from menu.screens import Screens
 import rendering.globals_vars as var
 from rendering.game import Game
 from rendering.utility.util import Util
+from menu.sounds import sounds
 
 pygame.init()
 pygame.display.set_caption("OG Racer")
 run = True
 
-Screens.init_music()
+sounds.init_music()
 Screens.create_login_input()
 Screens.create_message_output()
 Screens.create_register_input()
@@ -49,10 +50,12 @@ while run:
             thread = threading.Thread(target=Screens.threaded_function, args=(1, "game"))
             thread.start()
         if var.isgame:
+            sounds.stop_music()
             Game()
             var.isgame = False
 
     if var.buttons["Einzelspieler"]:
+        sounds.stop_music()
         Game()
 
     elif var.buttons["Mehrspieler"]:
