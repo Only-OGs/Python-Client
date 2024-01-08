@@ -75,16 +75,16 @@ class Cars:
                     car["offset"] = newcar.get("offset")
                     car["z"] = newcar.get("pos")
                     car["segment"] = Util.findSegment(car.get("z"))
-                    if newcar.get('race_finished'):
-                        if newcar.get("id") == var.username:
-                            var.race_finished = True
                     break
 
             newsegment = car.get("segment")
-            if oldsegment != newsegment:
-                index = oldsegment.get("cars").index(car)
-                oldsegment.get("cars").pop(index)
-                newsegment.get("cars").append(car)
+            try:
+                if oldsegment != newsegment:
+                    index = oldsegment.get("cars").index(car)
+                    oldsegment.get("cars").pop(index)
+                    newsegment.get("cars").append(car)
+            except ValueError:
+                pass
 
     @staticmethod
     def update_player(n):
@@ -92,4 +92,9 @@ class Cars:
         var.lap_time = n["lap_time"]
         var.best_time = n["best_time"]
         var.lap = n["lap"]
+        var.race_finished = n.get("race_finished")
+        if var.race_finished:
+            var.keyFaster = False
+
+
 
