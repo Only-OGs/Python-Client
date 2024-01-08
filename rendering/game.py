@@ -103,8 +103,11 @@ class Game:
 
             if var.game_end:
                 screens.Screens.create_leaderboard()
-
-            self.update(1 / int(var.clock.get_fps()))
+            if int(var.clock.get_fps()) == 0:
+                fps_help = 1
+            else:
+                fps_help = 0
+            self.update(1 / int(var.clock.get_fps()+fps_help))
 
             pygame.display.update()
             var.clock.tick(var.fps)
@@ -138,17 +141,14 @@ class Game:
         var.position = Util.increase(var.position, dt * var.speed, var.trackLength)
         playerw = 80 * (0.3 * (1 / 80))
         dx = dt * 2 * speedpercent
+        var.sky_offset = Util.increase(var.sky_offset, var.skySpeed*playersegment.get('curve')*speedpercent, 1)
+        var.hill_offset = Util.increase(var.hill_offset, var.hillSpeed*playersegment.get('curve')*speedpercent, 1)
+        var.tree_offset = Util.increase(var.tree_offset, var.treeSpeed * playersegment.get('curve') * speedpercent, 1)
 
         if var.keyLeft:
             var.playerX = var.playerX - dx
-            if var.speed > 0:
-                var.player.drive_left()
         elif var.keyRight:
             var.playerX = var.playerX + dx
-            if var.speed > 0:
-                var.player.drive_right()
-        else:
-            var.player.drive_straight()
 
         var.playerX = var.playerX - (dx * speedpercent * playersegment.get("curve") * var.centrifugal)
 
@@ -181,13 +181,17 @@ class Game:
                                                      var.trackLength)
                         break
 
-        for n in range(len(playersegment.get("cars"))):
-            car = playersegment.get("cars")[n]
+        for car in (playersegment.get("cars")):
             car_w = car.get("sprite").get("width") * (0.3 * (1 / 80))
             if var.speed > car.get("speed"):
                 if Util.overlap(var.playerX, playerw, car.get("offset"), car_w, 0.8):
+                    if 'player' in car.keys():
+                        player_knockback = -200
+                    else:
+                        player_knockback = 0
                     var.speed = car.get("speed") * (car.get("speed") / var.speed)
                     var.position = Util.increase(car.get("z"), -var.playerZ, var.trackLength)
+                    var.position += player_knockback
                     break
 
         var.playerX = Util.limit(var.playerX, -2, 2)
