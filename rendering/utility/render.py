@@ -59,7 +59,7 @@ class Render:
         x = 0
         maxy = var.height
 
-        Render.render_background()
+        Render.render_background(player_y)
         for n in range(var.drawDistance):
             segment = var.segments[(base_segment.get("index") + n) % len(var.segments)]
             segment_looped = segment.get("index") < base_segment.get("index")
@@ -116,16 +116,11 @@ class Render:
         Render.render_player(player_segment)
 
     @staticmethod
-    def render_background():
+    def render_background(player_y):
         """Methode zum Berechnen und Rendern des Parallax Background"""
-        var.bg_sky_left.move(var.sky_offset)
-        var.bg_sky_right.move(var.sky_offset)
-
-        var.bg_hills_left.move(var.hill_offset)
-        var.bg_hills_right.move(var.hill_offset)
-
-        var.bg_tree_left.move(var.tree_offset)
-        var.bg_tree_right.move(var.tree_offset)
+        var.bg_sky_mid.move(var.sky_offset, var.screen)
+        var.bg_hills_mid.move(var.hill_offset, var.screen)
+        var.bg_tree_mid.move(var.tree_offset, var.screen)
 
         "Alle neu berechneten Background Sprites werden gerendert"
         var.background_sprite_group.draw(var.screen)
