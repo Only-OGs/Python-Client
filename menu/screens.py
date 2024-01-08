@@ -193,7 +193,9 @@ class Screens:
 
         var.register_password = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 450), (360, 60)),
                                                                     manager=var.manager_register, object_id="#passwort",
-                                                                    placeholder_text="Passwort", visible=str)
+                                                                    placeholder_text="Passwort")
+
+        var.register_password.set_text_hidden()
     @staticmethod
     def create_login_input():
         var.manager_Login = pygame_gui.UIManager((var.width, var.height))
@@ -203,7 +205,8 @@ class Screens:
 
         var.login_password = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 450), (360, 60)),
                                                                  manager=var.manager_Login, object_id="#passwort",
-                                                                 placeholder_text="Passwort", visible=str)
+                                                                 placeholder_text="Passwort")
+        var.login_password.set_text_hidden()
 
     @staticmethod
     def create_message_output():

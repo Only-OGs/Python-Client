@@ -16,4 +16,3 @@ class sounds:
     @staticmethod
     def start_music():
         pygame.mixer.music.play(loops=5, fade_ms=40, start=0)
-
