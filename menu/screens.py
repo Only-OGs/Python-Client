@@ -14,6 +14,7 @@ class Screens:
 
     @staticmethod
     def create_menu_screen(screen):
+        var.play_music = True
         var.client.disconnect()
         Components.init_background(screen=screen)
         Components.linker_button(screen=screen, text="Einzelspieler", trigger="Einzelspieler")
@@ -26,6 +27,7 @@ class Screens:
             var.client.connect()
         else:
             pass
+        var.play_music = True
         var.singleplayer_start = True
         Components.init_background(screen=var.menu_screen)
         Components.create_Serverstatus_gui()

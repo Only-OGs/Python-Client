@@ -27,6 +27,8 @@ while run:
             run = False
             break
 
+
+
         if var.menu_state == "log_menu":
             var.manager_Login.process_events(event)
 
@@ -42,6 +44,11 @@ while run:
         if var.menu_state =="ingame_lobby":
             var.manager_chat.process_events(event)
 
+    #Spielt und Pausiert die Musik
+    if var.play_music:
+        sounds.start_music()
+    else:
+        sounds.pause_music()
 
     if var.track is not None and var.singleplayer is not True:
         if not var.is_running:
@@ -53,7 +60,6 @@ while run:
             var.isgame = False
 
     if var.buttons["Einzelspieler"]:
-        sounds.stop_music()
         Game()
 
     elif var.buttons["Mehrspieler"]:
@@ -150,6 +156,7 @@ while run:
 
     elif var.menu_state == "ingame_lobby":
         var.manager_chat.update(tick)
+
 
     Util.reset_buttons()
     pygame.display.update()
