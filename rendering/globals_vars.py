@@ -137,3 +137,6 @@ lap = ""
 best_time = ""
 lap_time = ""
 current_time = ""
+
+"""Music"""
+play_music = True

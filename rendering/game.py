@@ -27,11 +27,12 @@ class Game:
 
     # main loop wo alles passiert
     def game_loop(self):
+        var.play_music = False
         SpriteGen.create_player()
         SpriteGen.create_background()
         timer = gui.Gui(screen=var.screen)
         var.play_music = False
-        sounds.stop_music()
+        sounds.pause_music()
 
         while True:
             if var.escape:
@@ -144,6 +145,7 @@ class Game:
             var.client.chat_player.clear()
             var.client.time = ""
             var.race_finished = False
+            var.play_music = True
 
     def toggle_pause(self):
         var.paused = not var.paused
