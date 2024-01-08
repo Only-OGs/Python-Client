@@ -5,6 +5,7 @@ from rendering.sprites.background import Background
 from rendering.utility.util import Util
 import pygame
 
+
 class Render:
 
     @staticmethod
@@ -46,6 +47,7 @@ class Render:
     @staticmethod
     def render():
         """ Rendert alles mithilfe der Util.segment, Render.render_cars, und Render.render_sprites Methoden"""
+        var.screen.fill((0, 0, 0), (0, 0, var.width, var.height))
         base_segment = Util.findSegment(var.position)
         base_percent = Util.percent_remaining(var.position, var.segmentLength)
         player_segment = Util.findSegment(var.position + var.playerZ)
@@ -58,7 +60,6 @@ class Render:
         maxy = var.height
 
         Render.render_background()
-
         for n in range(var.drawDistance):
             segment = var.segments[(base_segment.get("index") + n) % len(var.segments)]
             segment_looped = segment.get("index") < base_segment.get("index")
@@ -114,53 +115,20 @@ class Render:
 
         Render.render_player(player_segment)
 
-
     @staticmethod
     def render_background():
         """Methode zum Berechnen und Rendern des Parallax Background"""
-        "Die Position des Himmels wird berechnet"
-        mid_rect = var.bg_sky_mid.image.get_rect()
-        mid_rect.x = mid_rect.x + round(var.sky_offset * 400)
-        var.bg_sky_mid.rect = mid_rect
-        if mid_rect.x > 0:
-            left_rect = var.bg_sky_left.image.get_rect()
-            left_rect.topright = (left_rect.top + round(var.sky_offset * 400), 0)
-            var.bg_sky_left.rect = left_rect
-        if mid_rect.x < 0:
-            right_rect = var.bg_sky_right.image.get_rect()
-            right_rect.topleft = (right_rect.top + 1280 + round(var.sky_offset * 400), 0)
-            var.bg_sky_right.rect = right_rect
+        var.bg_sky_left.move(var.sky_offset)
+        var.bg_sky_right.move(var.sky_offset)
 
-        "Die Position der Hügel werden berechnet"
-        mid_rect = var.bg_hills_mid.image.get_rect()
-        mid_rect.x = mid_rect.x + round(var.hill_offset * 400)
-        var.bg_hills_mid.rect = mid_rect
-        if mid_rect.x > 0:
-            left_rect = var.bg_hills_left.image.get_rect()
-            left_rect.topright = (left_rect.top + round(var.hill_offset * 400), 0)
-            var.bg_hills_left.rect = left_rect
-        if mid_rect.x < 0:
-            right_rect = var.bg_hills_right.image.get_rect()
-            right_rect.topleft = (right_rect.top + 1280 + round(var.hill_offset * 400), 0)
-            var.bg_hills_right.rect = right_rect
+        var.bg_hills_left.move(var.hill_offset)
+        var.bg_hills_right.move(var.hill_offset)
 
-        "Die Position der Bäume werden berechnet"
-        mid_rect = var.bg_tree_mid.image.get_rect()
-        mid_rect.x = mid_rect.x + round(var.tree_offset * 400)
-        var.bg_tree_mid.rect = mid_rect
-        if mid_rect.x > 0:
-            left_rect = var.bg_tree_left.image.get_rect()
-            left_rect.topright = (left_rect.top + round(var.tree_offset * 400), 0)
-            var.bg_tree_left.rect = left_rect
-        if mid_rect.x < 0:
-            right_rect = var.bg_tree_right.image.get_rect()
-            right_rect.topleft = (right_rect.top + 1280 + round(var.tree_offset * 400), 0)
-            var.bg_tree_right.rect = right_rect
-
+        var.bg_tree_left.move(var.tree_offset)
+        var.bg_tree_right.move(var.tree_offset)
 
         "Alle neu berechneten Background Sprites werden gerendert"
         var.background_sprite_group.draw(var.screen)
-
 
     @staticmethod
     def render_player(player_segment):

@@ -1,18 +1,22 @@
+import math
+
 import pygame
 
 
-class Background(pygame.sprite.DirtySprite):
+class Background(pygame.sprite.Sprite):
     # läd das Bild als ein Screen und transformiert diesem damit der passt
-
-    offset = 0.0
-
-    def __init__(self, x, img):
+    def __init__(self, x, img, pos, sc):
         super().__init__()
         self.image = img.convert_alpha()
 
         self.rect = self.image.get_rect()
-        self.rect.top = x
-        self.image = pygame.transform.scale_by(self.image, 1.6)
+        if pos == 0:
+            self.rect.left = x
+        elif pos == 1:
+            self.rect.right = x
+        self.image = pygame.transform.scale_by(self.image, sc)
 
-    def move_x(self, x):
-        self.rect.top = x
+    def move(self, x):
+        source_x = int(math.floor(x * self.image.get_width()))
+        source_w = min(self.image.get_width(), self.image.get_width()-source_x)
+        self.rect.x = source_x

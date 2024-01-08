@@ -41,32 +41,22 @@ class SpriteGen:
     @staticmethod
     def create_background():
         """Erstellt die Background Sprites"""
-        var.bg_sky_mid = Background(0, pygame.image.load("assets/sky.png"))
-        var.bg_sky_left = Background(0, pygame.image.load("assets/sky.png"))
-        var.bg_sky_left.rect.topright = (0, 0)
-        var.bg_sky_right = Background(1280, pygame.image.load("assets/sky.png"))
+        var.bg_sky_left = Background(var.width / 2, pygame.image.load("assets/sky.png"), 0, 1.2)
+        var.bg_hills_left = Background(var.width / 2, pygame.image.load("assets/hills.png"), 0, 2)
+        var.bg_tree_left = Background(var.width / 2, pygame.image.load("assets/trees.png"), 0, 1.6)
 
-        var.bg_hills_mid = Background(0, pygame.image.load("assets/hills.png"))
-        var.bg_hills_left = Background(0, pygame.image.load("assets/hills.png"))
-        var.bg_hills_left.rect.topright = (0, 0)
-        var.bg_hills_right = Background(1280, pygame.image.load("assets/hills.png"))
-
-        var.bg_tree_mid = Background(0, pygame.image.load("assets/trees.png"))
-        var.bg_tree_left = Background(0, pygame.image.load("assets/trees.png"))
-        var.bg_tree_left.rect.topright = (0, 0)
-        var.bg_tree_right = Background(1280, pygame.image.load("assets/trees.png"))
+        var.bg_sky_right = Background(var.width / 2, pygame.image.load("assets/sky.png"), 1, 1.2)
+        var.bg_hills_right = Background(var.width / 2, pygame.image.load("assets/hills.png"), 1, 2)
+        var.bg_tree_right = Background(var.width / 2, pygame.image.load("assets/trees.png"), 1, 1.6)
 
 
-        var.background_sprite_group.add(var.bg_sky_mid)
+
         var.background_sprite_group.add(var.bg_sky_left)
-        var.background_sprite_group.add(var.bg_sky_right)
-
-        var.background_sprite_group.add(var.bg_hills_mid)
         var.background_sprite_group.add(var.bg_hills_left)
-        var.background_sprite_group.add(var.bg_hills_right)
-
-        var.background_sprite_group.add(var.bg_tree_mid)
         var.background_sprite_group.add(var.bg_tree_left)
+
+        var.background_sprite_group.add(var.bg_sky_right)
+        var.background_sprite_group.add(var.bg_hills_right)
         var.background_sprite_group.add(var.bg_tree_right)
 
     @staticmethod
@@ -96,4 +86,4 @@ class SpriteGen:
             pass
         for n in var.assets:
             seg = Util.findSegment(n.get('pos'))
-            seg['sprites'].append({"source":  Sprite.random_asset(n.get('model')), "offset": n.get('side')})
+            seg['sprites'].append({"source": Sprite.random_asset(n.get('model')), "offset": n.get('side')})
