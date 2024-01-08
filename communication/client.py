@@ -16,7 +16,7 @@ class SocketIOClient:
         self.server_url = "http://89.58.1.158:8080"
         # self.server_url = "http://localhost:8080"
         # Client mit aktivem Logging
-        self.sio = socketio.Client(logger=True, engineio_logger=True)
+        self.sio = socketio.Client(logger=False, engineio_logger=False)
 
         # reagiert auf die das angeg. Event
         self.sio.on('connection_success', self.on_connection_success)
@@ -45,34 +45,27 @@ class SocketIOClient:
         self.loginstatus = None
         self.loginmessage = None
         self.logincomplete = False
-
         self.registerstatus = None
         self.registercomplete = False
-
         self.lobbystatus = None
         self.lobbymessage = None
-        self.timer = None
-
+        self.timer = ""
         self.lobbycreated = False
         self.lobbyleaft = False
         self.lobbyJoined = False
         self.searchlobbyJoined = False
         self.quickLobbyJoined = False
-
         self.lobbyplayer = None
         self.lobbyid = None
         self.playersname = None
         self.chat_player = []
         self.chat_message = []
         self.errormessage = ""
-
         self.is_ready = False
 
 
-    def game_leave(self):
-        if self.sio.connected:
-            self.sio.emit('game_leave')
 
+    # Funktionen, welche aufgerufen werden, wenn der client die entstprechenden Events erhält
 
     def on_get_leaderboard(self, data):
         if self.sio.connected:
@@ -104,20 +97,14 @@ class SocketIOClient:
             if self.lobbystatus == 'success':
                 self.quickLobbyJoined = True
 
-    def on_connection_success(self, data):
-        print(f"Verbindung zum Server erfolgreich")
-
     def on_lobbycreated(self, data):
         if self.sio.connected:
             if data.get('status') == 'lobby_created':
                 self.lobbycreated = True
                 message = data.get('message')
                 self.lobbyid = message
-
-    # erstellt eine Lobby
-    def create_lobby(self):
-        if self.sio.connected:
-            self.sio.emit("create_lobby");
+    def on_connection_success(self, data):
+        print(f"Verbindung zum Server erfolgreich")
 
     def on_newMessage(self, data):
         if self.sio.connected:
@@ -154,25 +141,6 @@ class SocketIOClient:
             self.lobbyid = data.get("lobby")
             var.id_playerList = data.get("players").split(';')
 
-    def leave_lobby(self):
-        self.lobbymessage = ''
-        var.id_playerList = []
-        self.is_ready = False
-        self.timer = None
-        self.sio.emit("leave_lobby")
-
-    def get_lobby(self):
-        if self.sio.connected:
-            self.sio.emit("get_lobby")
-
-    def join_lobby(self, lobbycode):
-        if self.sio.connected:
-            if lobbycode != '':
-                data = {"lobby": lobbycode}
-                self.sio.emit("join_lobby", data)
-            else:
-                self.lobbystatus = "Bitte gib eine LobbyID ein"
-
     def on_login(self, data):
         if self.sio.connected:
             message = data.get('message')
@@ -199,49 +167,6 @@ class SocketIOClient:
             self.sio.emit("not_ready")
             self.is_ready = False
 
-    # stellt die Verbindung zum Server her.
-    def connect(self):
-        try:
-            self.sio.connect(self.server_url, transports=['websocket'])
-        except:
-            print("fail")
-
-    def emit_coordinate(self):
-        if self.sio.connected:
-            data = {"message1": "Hallo", "message2": "Pascal"}
-            self.sio.emit("message", data)
-
-    # sendet Registrierungsdaten
-    def send_register_data(self, user, password):
-        if self.sio.connected:
-            if len(user) < 3 or len(password) < 6:
-               self.errormessage =  "Der Username muss mindestens 3 Zeichen lang sein. Das Passwort mindestens 6 Zeichen lang sein."
-
-            else:
-                data = {"user": user, "password": password}
-                self.sio.emit("register", data)
-
-    # sendet Login-Daten
-    def send_login_data(self, user, password):
-        if self.sio.connected:
-            if len(user) < 3 or len(password) < 6:
-                self.errormessage =  "Der Username muss mindestens 3 Zeichen lang sein.Das Passwort mindestens 6 Zeichen lang sein."
-            else:
-                data = {"user": user, "password": password}
-                var.client.playersname = user
-                var.username = user
-                self.sio.emit("login", data)
-
-    # trennt die Verbindung zum Server
-    def disconnect(self):
-        if self.sio.connected:
-            self.sio.disconnect()
-
-    # sendet eine neue Nachricht
-    def newMessage(self, message):
-        if self.sio.connected:
-            self.sio.emit('sent_message', message)
-
     def on_timer(self, countdown):
         if self.sio.connected:
             self.timer = countdown
@@ -250,9 +175,7 @@ class SocketIOClient:
         if self.sio.connected:
             self.timer = None
 
-    def client_is_ingame(self):
-        if self.sio.connected:
-            self.sio.emit("client_is_ingame")
+
 
     def on_wait_for_start(self, data):
         if self.sio.connected:
@@ -270,17 +193,6 @@ class SocketIOClient:
                 Cars.update_player(n)
         Cars.update_server_cars()
 
-
-
-    def ingame_pos(self, position, offset):
-        if var.olddata != position:
-            data = {
-                "offset": offset,
-                "pos": position
-            }
-            var.olddata = position
-            self.sio.emit("ingame_pos", data)
-
     def on_start_race(self, data):
         if self.sio.connected:
             var.game_countdown_start = data
@@ -293,5 +205,85 @@ class SocketIOClient:
             var.game_countdown_start = data
             print(data)
 
+    def client_is_ingame(self):
+        if self.sio.connected:
+            self.sio.emit("client_is_ingame")
 
+    def connect(self):
+        try:
+            self.sio.connect(self.server_url, transports=['websocket'])
+        except:
+            print("Verbindung fehlgeschlagen")
+
+    def emit_coordinate(self):
+        if self.sio.connected:
+            data = {"message1": "Hallo", "message2": "Pascal"}
+            self.sio.emit("message", data)
+
+
+    def send_register_data(self, user, password):
+        if self.sio.connected:
+            if len(user) < 3 or len(password) < 6:
+               self.errormessage =  "Der Username muss mindestens 3 Zeichen lang sein. Das Passwort mindestens 6 Zeichen lang sein."
+
+            else:
+                data = {"user": user, "password": password}
+                self.sio.emit("register", data)
+
+
+    def send_login_data(self, user, password):
+        if self.sio.connected:
+            if len(user) < 3 or len(password) < 6:
+                self.errormessage =  "Der Username muss mindestens 3 Zeichen lang sein.Das Passwort mindestens 6 Zeichen lang sein."
+            else:
+                data = {"user": user, "password": password}
+                var.client.playersname = user
+                var.username = user
+                self.sio.emit("login", data)
+
+
+    def disconnect(self):
+        if self.sio.connected:
+            self.sio.disconnect()
+
+
+    def newMessage(self, message):
+        if self.sio.connected:
+            self.sio.emit('sent_message', message)
+
+    def leave_lobby(self):
+        self.lobbymessage = ''
+        var.id_playerList = []
+        self.is_ready = False
+        self.timer = None
+        self.sio.emit("leave_lobby")
+
+    def get_lobby(self):
+        if self.sio.connected:
+            self.sio.emit("get_lobby")
+
+    def join_lobby(self, lobbycode):
+        if self.sio.connected:
+            if lobbycode != '':
+                data = {"lobby": lobbycode}
+                self.sio.emit("join_lobby", data)
+            else:
+                self.lobbystatus = "Bitte gib eine LobbyID ein"
+
+    def create_lobby(self):
+        if self.sio.connected:
+            self.sio.emit("create_lobby")
+
+    def game_leave(self):
+        if self.sio.connected:
+            self.sio.emit('game_leave')
+
+    def ingame_pos(self, position, offset):
+        if var.olddata != position:
+            data = {
+                "offset": offset,
+                "pos": position
+            }
+            var.olddata = position
+            self.sio.emit("ingame_pos", data)
 

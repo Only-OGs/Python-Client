@@ -1,15 +1,15 @@
 import threading
 import pygame
-from rendering.screens import Screens
+from menu.screens import Screens
 import rendering.globals_vars as var
 from rendering.game import Game
 from rendering.utility.util import Util
+from menu.sounds import sounds
 
 pygame.init()
+sounds.init_music()
 pygame.display.set_caption("OG Racer")
 run = True
-
-Screens.init_music()
 Screens.create_login_input()
 Screens.create_message_output()
 Screens.create_register_input()
@@ -27,6 +27,8 @@ while run:
             run = False
             break
 
+
+
         if var.menu_state == "log_menu":
             var.manager_Login.process_events(event)
 
@@ -42,11 +44,16 @@ while run:
         if var.menu_state =="ingame_lobby":
             var.manager_chat.process_events(event)
 
+    #Spielt und Pausiert die Musik
+    if var.play_music:
+        sounds.start_music()
+    else:
+        sounds.pause_music()
 
     if var.track is not None and var.singleplayer is not True:
         if not var.is_running:
             var.menu_state = "loading"
-            thread = threading.Thread(target=Screens.threaded_function, args=(2, "game"))
+            thread = threading.Thread(target=Screens.threaded_function, args=(1, "game"))
             thread.start()
         if var.isgame:
             Game()
@@ -62,14 +69,22 @@ while run:
         var.menu_state = "option_menu"
 
     elif var.buttons["Zurueck"]:
+        var.singleplayer_start = False
         var.menu_state = "main_menu"
 
+
     elif var.buttons["Jetzt Anmelden"]:
+        Util.clear_input("loginname")
+        Util.clear_input("loginpw")
         var.menu_state = "log_menu"
+
 
     elif var.buttons["Anmelden"]:
         var.client.send_login_data(var.login_name.get_text(), var.login_password.get_text())
         var.is_await = True
+        Util.clear_input("loginname")
+        Util.clear_input("loginpw")
+
 
     elif var.buttons["Schnelles Spiel"] or var.buttons["Lobby erstellen"]:
         if var.buttons["Schnelles Spiel"]:
@@ -85,6 +100,11 @@ while run:
         var.client.chat_message.clear()
         var.client.chat_player.clear()
         var.menu_state = "lobby_option"
+        var.singleplayer_start = False
+        Util.clear_input("chat")
+
+
+
 
     elif var.buttons["Bereit"]:
         var.client.notReady()
@@ -96,6 +116,7 @@ while run:
 
     elif var.buttons["Senden"]:
         var.client.newMessage(var.chat_massage.get_text())
+        Util.clear_input("chat")
 
     elif var.buttons["Lobby suchen"]:
         var.menu_state = "search_for_lobby"
@@ -103,16 +124,23 @@ while run:
     elif var.buttons["Suchen"]:
         var.client.join_lobby(var.lobby_search_input.get_text())
         var.is_await = True
+        Util.clear_input("search")
+
 
     elif var.buttons["Jetzt Registrieren"]:
+        Util.clear_input("registerpw")
+        Util.clear_input("registername")
         var.menu_state = "registration_menu"
 
     elif var.buttons["Registrieren"]:
         var.client.send_register_data(var.register_name.get_text(), var.register_password.get_text())
         var.is_await = True
+        Util.clear_input("registerpw")
+        Util.clear_input("registername")
 
     elif var.buttons["Abmelden"]:
         var.menu_state = "main_menu"
+        var.singleplayer_start = False
 
     elif var.menu_state == "option_menu":
         var.manager_option.update(tick)
@@ -128,6 +156,7 @@ while run:
 
     elif var.menu_state == "ingame_lobby":
         var.manager_chat.update(tick)
+
 
     Util.reset_buttons()
     pygame.display.update()

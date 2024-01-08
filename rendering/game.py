@@ -4,9 +4,10 @@ import rendering.globals_vars as var
 from rendering.utility.car_ai import Cars
 from rendering.utility.road import Road
 from rendering.utility.util import Util
-from rendering import gui, screens
+from menu import screens, gui
 from rendering.utility.sprite_generator import SpriteGen
 from rendering.utility.render import Render
+from menu.sounds import sounds
 
 
 class Game:
@@ -26,9 +27,12 @@ class Game:
 
     # main loop wo alles passiert
     def game_loop(self):
+        var.play_music = False
         SpriteGen.create_player()
         SpriteGen.create_background()
         timer = gui.Gui(screen=var.screen)
+        var.play_music = False
+        sounds.pause_music()
 
         while True:
             if var.escape:
@@ -51,26 +55,28 @@ class Game:
                 if not var.game_start or not var.singleplayer_start:
                     break
                 else:
-                    if var.gameStart or var.singleplayer:
-                        if event.type == pygame.KEYDOWN:
-                            if not var.paused:
+                    if not var.race_finished:
+                        if var.gameStart or var.singleplayer:
+                            if event.type == pygame.KEYDOWN:
+                                if not var.paused:
+                                    if event.key == pygame.K_LEFT:
+                                        var.keyLeft = True
+                                    if event.key == pygame.K_RIGHT:
+                                        var.keyRight = True
+                                    if event.key == pygame.K_UP:
+                                        var.keyFaster = True
+                                    if event.key == pygame.K_DOWN:
+                                        var.keySlower = True
+                            if event.type == pygame.KEYUP:
                                 if event.key == pygame.K_LEFT:
-                                    var.keyLeft = True
+                                    var.keyLeft = False
                                 if event.key == pygame.K_RIGHT:
-                                    var.keyRight = True
+                                    var.keyRight = False
                                 if event.key == pygame.K_UP:
-                                    var.keyFaster = True
+                                    var.keyFaster = False
                                 if event.key == pygame.K_DOWN:
-                                    var.keySlower = True
-                        if event.type == pygame.KEYUP:
-                            if event.key == pygame.K_LEFT:
-                                var.keyLeft = False
-                            if event.key == pygame.K_RIGHT:
-                                var.keyRight = False
-                            if event.key == pygame.K_UP:
-                                var.keyFaster = False
-                            if event.key == pygame.K_DOWN:
-                                var.keySlower = False
+                                    var.keySlower = False
+
 
             Render.render()
             timer.show_speed(speed=var.speed)
@@ -103,11 +109,15 @@ class Game:
 
             if var.game_end:
                 screens.Screens.create_leaderboard()
+
             if int(var.clock.get_fps()) == 0:
                 fps_help = 1
             else:
                 fps_help = 0
-            self.update(1 / int(var.clock.get_fps()+fps_help))
+
+
+
+            self.update(min(1 / int(var.clock.get_fps() + fps_help), 60))
 
             pygame.display.update()
             var.clock.tick(var.fps)
@@ -129,10 +139,17 @@ class Game:
             var.game_end = False
             var.client.lobbymessage = ''
             var.singleplayer_start = False
-            var.lap_count = 0
+            var.lap_count = 1
+            var.playerX = 0
+            var.client.chat_message.clear()
+            var.client.chat_player.clear()
+            var.client.time = ""
+            var.race_finished = False
+            var.play_music = True
 
     def toggle_pause(self):
         var.paused = not var.paused
+        var.keyFaster = not  var.paused
 
     # unser KeyInputHandler, hier werden die Keyinputs überprüft und das auto dementsprechend bewegt
     def update(self, dt):
