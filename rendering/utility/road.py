@@ -1,6 +1,7 @@
 import json
 import math
-import rendering.globals_vars as var
+import globals_vars as global_var
+import rendering.game_vars as game_var
 
 from rendering.utility.colors import Color
 from rendering.utility.sprite_generator import SpriteGen
@@ -14,34 +15,34 @@ class Road:
         """ Erstellt die Straße, setzt die Bot Autos so wie die Objekte am Straßenrand.
             Erstellt auch die Start- und Finish-Linie
         """
-        var.segments = []
+        game_var.segments = []
 
         Road.load_road()
-        if var.singleplayer:
+        if global_var.singleplayer:
             SpriteGen.create_bot_cars()
-            SpriteGen.create_street_objectives(var.segments)
+            SpriteGen.create_street_objectives(game_var.segments)
         else:
             SpriteGen.create_server_street_objects()
 
-        var.segments[Util.findSegment(var.playerZ)["index"] + 2]["color"] = Color.get_start()
-        var.segments[Util.findSegment(var.playerZ)["index"] + 3]["color"] = Color.get_start()
-        for n in range(var.rumbleLength):
-            var.segments[len(var.segments) - 1 - n]["color"] = Color.get_finish()
+        game_var.segments[Util.findSegment(game_var.playerZ)["index"] + 2]["color"] = Color.get_start()
+        game_var.segments[Util.findSegment(game_var.playerZ)["index"] + 3]["color"] = Color.get_start()
+        for n in range(game_var.rumbleLength):
+            game_var.segments[len(game_var.segments) - 1 - n]["color"] = Color.get_finish()
 
-        var.trackLength = len(var.segments) * var.segmentLength
+        game_var.trackLength = len(game_var.segments) * game_var.segmentLength
 
     @staticmethod
     def add_segment(curve, y):
         """ Generiert die Segmente und fügt sie dem Segments Array hinzu"""
-        n = len(var.segments)
-        var.segments.append(
+        n = len(game_var.segments)
+        game_var.segments.append(
             {
                 'index': n,
                 'p1':
                     {'world': {
                         'x': None,
-                        'y': Util.lastY(var.segments),
-                        'z': n * var.segmentLength
+                        'y': Util.lastY(game_var.segments),
+                        'z': n * game_var.segmentLength
                     },
                         'camera': {
                             'x': 0,
@@ -58,7 +59,7 @@ class Road:
                     {'world': {
                         'x': None,
                         'y': y,
-                        'z': (n + 1) * var.segmentLength
+                        'z': (n + 1) * game_var.segmentLength
                     },
                         'camera': {
                             'x': 0,
@@ -82,8 +83,8 @@ class Road:
     @staticmethod
     def add_road(enter, hold, leave, curve, y=0):
         """ Erstellt einen Straßenabschnitt"""
-        starty = Util.lastY(var.segments)
-        endy = starty + (int(y) * var.segmentLength)
+        starty = Util.lastY(game_var.segments)
+        endy = starty + (int(y) * game_var.segmentLength)
         total = int(enter) + int(hold) + int(leave)
         for n in range(int(enter)):
             Road.add_segment(Util.easeIn(0, curve, n / enter), Util.easeInOut(starty, endy, n / total))
@@ -108,14 +109,14 @@ class Road:
     @staticmethod
     def _road_color(n):
         """ Private Methode für die Farbeauswahl auf den Segmenten"""
-        if math.floor(n / var.rumbleLength) % 2 == 0:
+        if math.floor(n / game_var.rumbleLength) % 2 == 0:
             return Color.get_light()
         else:
             return Color.get_dark()
 
     @staticmethod
     def load_road():
-        if var.singleplayer:
+        if global_var.singleplayer:
             with open("road.json", "r") as f:
                 data = json.load(f)
 
@@ -127,6 +128,6 @@ class Road:
                 elif len(x) == 3:
                     Road.add_street(x[0], x[1], x[2])
         else:
-            for n in var.track:
+            for n in game_var.track:
                 Road.add_street(n.get("segment_length"), n.get("curve_strength"), n.get("hill_height"))
-            var.trackloaded = True
+            global_var.trackloaded = True

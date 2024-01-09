@@ -1,6 +1,7 @@
-from rendering.game import Game
 import socketio
-import rendering.globals_vars as var
+import globals_vars as global_var
+import rendering.game_vars as game_var
+
 from rendering.utility.car_ai import Cars
 from rendering.utility.sprite_generator import SpriteGen
 
@@ -62,6 +63,9 @@ class SocketIOClient:
         self.chat_message = []
         self.errormessage = ""
         self.is_ready = False
+        self.olddata = 0
+        self.leaderboard = []
+        self.new_car_data = []
 
 
 
@@ -70,8 +74,8 @@ class SocketIOClient:
     def on_get_leaderboard(self, data):
         if self.sio.connected:
             if data != '':
-                var.leaderboard = data
-                var.game_end = True
+                self.leaderboard = data
+                global_var.game_end = True
 
 
     def on_playerLeave(self, data):
@@ -82,13 +86,13 @@ class SocketIOClient:
     def on_load_level(self, data):
         if self.sio.connected:
             if data != '':
-                var.singleplayer = False
-                var.track = data
+                global_var.singleplayer = False
+                game_var.track = data
 
     def on_load_assets(self, data):
         if self.sio.connected:
             if data != '':
-                var.assets = data
+                global_var.assets = data
 
     def on_get_lobby(self, data):
         if self.sio.connected:
@@ -138,7 +142,7 @@ class SocketIOClient:
             if self.lobbystatus == 'joined':
                 self.lobbyJoined = True
             self.lobbyid = data.get("lobby")
-            var.id_playerList = data.get("players").split(';')
+            global_var.id_playerList = data.get("players").split(';')
 
     def on_login(self, data):
         if self.sio.connected:
@@ -179,30 +183,29 @@ class SocketIOClient:
     def on_wait_for_start(self, data):
         if self.sio.connected:
             for n in data:
-                var.player_cars.append(n)
+                global_var.player_cars.append(n)
             SpriteGen.create_Server_cars()
-            var.help_car = True
+            global_var.help_car = True
 
     def on_updated_positions(self, data):
-        var.new_car_data.clear()
+        self.new_car_data.clear()
         for n in data:
-            if n.get("id") != var.username:
-                var.new_car_data.append(n)
+            if n.get("id") != global_var.username:
+                self.new_car_data.append(n)
             else:
                 Cars.update_player(n)
         Cars.update_server_cars()
 
     def on_start_race(self, data):
         if self.sio.connected:
-            var.game_countdown_start = data
-            var.gameStart = True
-            var.game_start = True
-            print("im client wird game_start auf True gesetzt:" + str(var.game_start))
+            global_var.game_countdown_start = data
+            game_var.gameStart = True
+            global_var.game_start = True
             self.sio.emit("start_watch")
 
     def on_start_race_timer(self, data):
         if self.sio.connected:
-            var.game_countdown_start = data
+            global_var.game_countdown_start = data
 
     def client_is_ingame(self):
         if self.sio.connected:
@@ -213,11 +216,6 @@ class SocketIOClient:
             self.sio.connect(self.server_url, transports=['websocket'])
         except:
             print("Verbindung fehlgeschlagen")
-
-    def emit_coordinate(self):
-        if self.sio.connected:
-            data = {"message1": "Hallo", "message2": "Pascal"}
-            self.sio.emit("message", data)
 
 
     def send_register_data(self, user, password):
@@ -236,8 +234,8 @@ class SocketIOClient:
                 self.errormessage =  "Der Username muss mindestens 3 Zeichen lang sein.Das Passwort mindestens 6 Zeichen lang sein."
             else:
                 data = {"user": user, "password": password}
-                var.client.playersname = user
-                var.username = user
+                self.playersname = user
+                global_var.username = user
                 self.sio.emit("login", data)
 
 
@@ -252,7 +250,7 @@ class SocketIOClient:
 
     def leave_lobby(self):
         self.lobbymessage = ''
-        var.id_playerList = []
+        global_var.id_playerList = []
         self.is_ready = False
         self.timer = None
         self.sio.emit("leave_lobby")
@@ -278,11 +276,11 @@ class SocketIOClient:
             self.sio.emit('game_leave')
 
     def ingame_pos(self, position, offset):
-        if var.olddata != position:
+        if self.olddata != position:
             data = {
                 "offset": offset,
                 "pos": position
             }
-            var.olddata = position
+            self.olddata = position
             self.sio.emit("ingame_pos", data)
 

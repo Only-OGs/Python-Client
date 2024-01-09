@@ -1,7 +1,7 @@
-
 from menu.components import Components
-from menu.sounds import sounds
-import rendering.globals_vars as var
+import rendering.game_vars as game_var
+import menu.menu_vars as menu_var
+import globals_vars as var
 import pygame
 import pygame_gui
 import pygame.mixer
@@ -30,7 +30,6 @@ class Screens:
             pass
         var.play_music = True
         var.singleplayer_start = True
-        print(" var.singleplayer_start = True in multiplayerscreen:" + str(var.singleplayer_start))
         Components.init_background(screen=var.menu_screen)
         Components.create_Serverstatus_gui()
         Components.linker_button(screen=var.menu_screen, text="Anmelden", trigger="Jetzt Anmelden")
@@ -43,10 +42,10 @@ class Screens:
     def create_option_screen():
         Components.init_background(screen=var.menu_screen)
         Components.linker_button(screen=var.menu_screen, text="Zurueck", trigger="Zurueck")
-        Components.draw_text(screen=var.menu_screen, x=var.slider_width // 2 + 350, y=var.height - 150,
+        Components.draw_text(screen=var.menu_screen, x=menu_var.slider_width // 2 + 350, y=var.height - 150,
                              text="Musik Lautstaerke", size=31, color=var.LIGHT_ORANGE)
-        pygame.mixer.music.set_volume(var.music_slider.current_value)
-        var.manager_option.draw_ui(var.menu_screen)
+        pygame.mixer.music.set_volume(menu_var.music_slider.current_value)
+        menu_var.manager_option.draw_ui(var.menu_screen)
 
 
     @staticmethod
@@ -77,7 +76,7 @@ class Screens:
         Components.mittlerer_button(screen=var.menu_screen, text="Suchen", trigger="Suchen")
         Components.rechter_button(screen=var.menu_screen, text="Zurueck", trigger="Verlassen")
         Components.create_lobbystatus_gui()
-        var.manager_lobby_search.draw_ui(var.menu_screen)
+        menu_var.manager_lobby_search.draw_ui(var.menu_screen)
 
 
     @staticmethod
@@ -88,7 +87,7 @@ class Screens:
         Components.create_loginstatus_gui("error")
         Components.linker_button(screen=var.menu_screen, text="Zurueck", trigger="Mehrspieler")
         Components.log_reg_button(screen=var.menu_screen, text="Anmelden")
-        var.manager_Login.draw_ui(var.menu_screen)
+        menu_var.manager_Login.draw_ui(var.menu_screen)
 
     @staticmethod
     def create_registration_screen():
@@ -98,7 +97,7 @@ class Screens:
         Components.create_registerstatus_gui("register")
         Components.linker_button(screen=var.menu_screen, text="Zurueck", trigger="Mehrspieler")
         Components.log_reg_button(screen=var.menu_screen, text="Registrieren")
-        var.manager_register.draw_ui(var.menu_screen)
+        menu_var.manager_register.draw_ui(var.menu_screen)
 
     @staticmethod
     def create_ingameLobby():
@@ -107,10 +106,10 @@ class Screens:
 
     @staticmethod
     def create_lobby_search_input():
-        var.manager_lobby_search = pygame_gui.UIManager((var.width, var.height))
-        var.lobby_search_input = pygame_gui.elements.UITextEntryLine(
+        menu_var.manager_lobby_search = pygame_gui.UIManager((var.width, var.height))
+        menu_var.lobby_search_input = pygame_gui.elements.UITextEntryLine(
             relative_rect=pygame.Rect(((var.width - 360) // 2, (var.height - 120) // 2), (360, 60)),
-            manager=var.manager_lobby_search, object_id="#search",
+            manager=menu_var.manager_lobby_search, object_id="#search",
             placeholder_text="LobbyID")
 
     @staticmethod
@@ -132,7 +131,7 @@ class Screens:
 
     @staticmethod
     def create_leaderboard():
-        screen = var.screen
+        screen = game_var.screen
 
         rect = pygame.rect.Rect(50, 50, var.width - 100, var.height - 150)
         shape_surf = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)
@@ -140,7 +139,7 @@ class Screens:
         screen.blit(shape_surf, rect)
 
         const = 100
-        for row in var.leaderboard:
+        for row in var.client.leaderboard:
             rect = pygame.rect.Rect(90, 60+const, var.width - 170, 35)
             pygame.draw.rect(screen, var.CYAN, rect)
             Components.draw_text(screen=screen, y=75 + const, x=200, text=str(row.get("posi")), size=25, color=var.DARKBLUE)
@@ -181,55 +180,51 @@ class Screens:
         elif var.menu_state == "search_for_lobby":
             Screens.create_lobby_search()
         elif var.menu_state == "loading":
-            Screens.create_loadingscreen(screen=var.menu_screen)
-
-
-    # Initialsiert die Music
-
+            Screens.create_loadingscreen(var.menu_screen)
 
 
     # Definition aller Eingabefelder
     @staticmethod
     def create_register_input():
-        var.manager_register = pygame_gui.UIManager((var.width, var.height))
-        var.register_name = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 350), (360, 60)),
-                                                                manager=var.manager_register, object_id="#name",
+        menu_var.manager_register = pygame_gui.UIManager((var.width, var.height))
+        menu_var.register_name = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 350), (360, 60)),
+                                                                manager=menu_var.manager_register, object_id="#name",
                                                                 placeholder_text="Name")
 
-        var.register_password = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 450), (360, 60)),
-                                                                    manager=var.manager_register, object_id="#passwort",
+        menu_var.register_password = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 450), (360, 60)),
+                                                                    manager=menu_var.manager_register, object_id="#passwort",
                                                                     placeholder_text="Passwort")
 
-        var.register_password.set_text_hidden()
+        menu_var.register_password.set_text_hidden()
     @staticmethod
     def create_login_input():
-        var.manager_Login = pygame_gui.UIManager((var.width, var.height))
-        var.login_name = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 350), (360, 60)),
-                                                             manager=var.manager_Login, object_id="#name",
+        menu_var.manager_Login = pygame_gui.UIManager((var.width, var.height))
+        menu_var.login_name = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 350), (360, 60)),
+                                                             manager=menu_var.manager_Login, object_id="#name",
                                                              placeholder_text="Name")
 
-        var.login_password = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 450), (360, 60)),
-                                                                 manager=var.manager_Login, object_id="#passwort",
+        menu_var.login_password = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((800, 450), (360, 60)),
+                                                                 manager=menu_var.manager_Login, object_id="#passwort",
                                                                  placeholder_text="Passwort")
-        var.login_password.set_text_hidden()
+        menu_var.login_password.set_text_hidden()
 
 
     @staticmethod
     def create_message_output():
-        var.manager_chat = pygame_gui.UIManager((var.width, var.height))
-        var.chat_massage = pygame_gui.elements.UITextEntryLine(
+        menu_var.manager_chat = pygame_gui.UIManager((var.width, var.height))
+        menu_var.chat_massage = pygame_gui.elements.UITextEntryLine(
             relative_rect=pygame.Rect((700, 600), (var.width // 3, 60)),
-            manager=var.manager_chat, object_id="#chat",
+            manager=menu_var.manager_chat, object_id="#chat",
             placeholder_text="message")
 
     @staticmethod
     def create_music_slider():
-        var.manager_option = pygame_gui.UIManager((var.width, var.height))
-        var.music_slider = pygame_gui.elements.UIHorizontalSlider(
-            relative_rect=pygame.Rect((var.width // 2 - (var.slider_width // 2), var.height - 100),(var.slider_width, var.slider_height)),
+        menu_var.manager_option = pygame_gui.UIManager((var.width, var.height))
+        menu_var.music_slider = pygame_gui.elements.UIHorizontalSlider(
+            relative_rect=pygame.Rect((var.width // 2 - (menu_var.slider_width // 2), var.height - 100),(menu_var.slider_width, menu_var.slider_height)),
             start_value=0.025,
             value_range=((0.000), (0.05)),
-            manager=var.manager_option
+            manager=menu_var.manager_option
         )
 
 
@@ -242,11 +237,10 @@ class Screens:
         if var.game_start:
             countdown = "GO"
             color = var.VIOLETTE
-
         Components.draw_text(screen=screen, x=var.width // 2, y=var.height // 2, text=countdown, size=90, color=color)
     @staticmethod
     def create_countdown_singleplayer(screen):
-        if var.buttons["Einzelspieler"]:
+        if menu_var.buttons["Einzelspieler"]:
             countdown = ""
             color = var.RED
             if var.game_counter <= int(var.clock.get_fps()):
@@ -266,27 +260,8 @@ class Screens:
                 
                 if var.game_counter <= int(var.clock.get_fps())*6:
                     var.game_start = True
-                    print("gamestart in Screens wird auf True gesetzt: "+ str(var.game_start))
-                    var.buttons["Einzelspieler"] = False
+                    menu_var.buttons["Einzelspieler"] = False
                     var.singleplayer_start = True
-                    print("singleplayer_start in Screens wird auf True gesetzt: " + str(var.singleplayer_start))
                     var.game_counter = 0
-
             Components.draw_text(screen=screen, x=var.width // 2, y=var.height // 2, text=countdown, size=90,
                                  color=color)
-
-
-    def threaded_function(arg, text):
-        var.is_running = True
-        for i in range(arg):
-            time.sleep(1)
-        if text == "login":
-            var.client.loginmessage = ''
-        elif text == "register":
-            var.client.errormessage = ''
-        elif text == "lobby":
-            var.client.lobbymessage = ''
-        elif text == "game":
-            var.menu_state == "main_menu"
-            var.isgame = True
-        var.is_running = False

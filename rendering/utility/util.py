@@ -1,8 +1,8 @@
 import math
 import random
 import pygame
-import rendering.globals_vars as var
-
+import globals_vars as var
+import rendering.game_vars as game_var
 
 class Util:
 
@@ -133,10 +133,6 @@ class Util:
         pygame.draw.polygon(shape_surf, color, [(x - min_x, y - min_y) for x, y in points])
         surface.blit(shape_surf, target_rect)
 
-    @staticmethod
-    def reset_buttons():
-        for x in var.buttons:
-            var.buttons[x] = False
 
     @staticmethod
     def easeIn(a, b, percent):
@@ -214,46 +210,6 @@ class Util:
     # hilfsfunktion fürs rendern
     @staticmethod
     def findSegment(z):
-        return var.segments[math.floor(z / var.segmentLength) % len(var.segments)]
+        return game_var.segments[math.floor(z / game_var.segmentLength) % len(game_var.segments)]
 
-    @staticmethod
-    def do_after_await():
-        if var.is_await:
-            if var.client.logincomplete:
-                var.menu_state = "lobby_option"
-                var.client.logincomplete = False
-                var.is_await = False
-            elif var.client.registercomplete:
-                var.menu_state = "log_menu"
-                var.client.registercomplete = False
-                var.is_await = False
-            elif var.client.lobbycreated:
-                var.menu_state = "ingame_lobby"
-                var.is_await = False
-                var.client.lobbycreated = False
-            elif var.client.searchlobbyJoined and var.client.lobbyid != '':
-                var.is_await = False
-                var.client.searchlobbyJoined = False
-                var.menu_state = "ingame_lobby"
-            elif var.client.quickLobbyJoined:
-                var.is_await = False
-                var.client.quickLobbyJoined = False
-                var.menu_state = "ingame_lobby"
-            elif var.menu_state == "ingame_lobby":
-                var.is_await = False
-                var.menu_state = "ingame_lobby"
 
-    @staticmethod
-    def clear_input(text):
-        if text == "loginname":
-            var.login_name.set_text('')
-        elif text == "loginpw":
-            var.login_password.set_text('')
-        elif text == "registername":
-            var.register_name.set_text('')
-        elif text == "registerpw":
-            var.register_password.set_text('')
-        elif text == "chat":
-            var.chat_massage.set_text('')
-        elif text == "search":
-            var.lobby_search_input.set_text('')

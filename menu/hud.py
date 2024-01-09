@@ -1,5 +1,5 @@
 import pygame
-import rendering.globals_vars as var
+import globals_vars as var
 
 
 

@@ -1,10 +1,15 @@
 import threading
 import pygame
+import globals_vars as global_var
+import menu.menu_vars as menu_var
+import rendering.game_vars as game_var
+from menu.button import Button
+
 from menu.screens import Screens
-import rendering.globals_vars as var
+from menu.components import Components
 from rendering.game import Game
-from rendering.utility.util import Util
 from menu.sounds import sounds
+
 
 pygame.init()
 sounds.init_music()
@@ -23,136 +28,132 @@ while run:
             run = False
             break
 
-        if var.menu_state == "log_menu":
-            var.manager_Login.process_events(event)
+        if global_var.menu_state == "log_menu":
+            menu_var.manager_Login.process_events(event)
 
-        if var.menu_state == "registration_menu":
-            var.manager_register.process_events(event)
+        if global_var.menu_state == "registration_menu":
+            menu_var.manager_register.process_events(event)
 
-        if var.menu_state == "option_menu":
-            var.manager_option.process_events(event)
+        if global_var.menu_state == "option_menu":
+            menu_var.manager_option.process_events(event)
 
-        if var.menu_state == "search_for_lobby":
-            var.manager_lobby_search.process_events(event)
+        if global_var.menu_state == "search_for_lobby":
+            menu_var.manager_lobby_search.process_events(event)
 
-        if var.menu_state =="ingame_lobby":
-            var.manager_chat.process_events(event)
+        if global_var.menu_state =="ingame_lobby":
+            menu_var.manager_chat.process_events(event)
 
-    tick = var.clock.tick(var.fps)
-    Util.do_after_await()
+    tick = global_var.clock.tick(global_var.fps)
+    Components.do_after_await()
     Screens.screen_update()
 
 
-    if var.track is not None and var.singleplayer is not True:
-        if not var.is_running:
-            var.menu_state = "loading"
-            thread = threading.Thread(target=Screens.threaded_function, args=(1, "game"))
+    if game_var.track is not None and global_var.singleplayer is not True:
+        if not menu_var.is_running:
+            global_var.menu_state = "loading"
+            thread = threading.Thread(target=Components.start_timer_in_thread, args=(1, "game"))
             thread.start()
-        if var.isgame:
+        if global_var.isgame:
             Game()
-            var.isgame = False
+            global_var.isgame = False
 
-    if var.buttons["Einzelspieler"]:
+    if menu_var.buttons["Einzelspieler"]:
         Game()
 
-    elif var.buttons["Mehrspieler"]:
-        var.menu_state = "multiplayer_menu"
+    elif menu_var.buttons["Mehrspieler"]:
+        global_var.menu_state = "multiplayer_menu"
 
-    elif var.buttons["Optionen"]:
-        var.menu_state = "option_menu"
+    elif menu_var.buttons["Optionen"]:
+        global_var.menu_state = "option_menu"
 
-    elif var.buttons["Zurueck"]:
-        var.singleplayer_start = False
-        print("  var.singleplayer_start = False in main Zurückbutton: "+ str(var.singleplayer_start))
-        var.menu_state = "main_menu"
-
-
-    elif var.buttons["Jetzt Anmelden"]:
-        Util.clear_input("loginname")
-        Util.clear_input("loginpw")
-        var.menu_state = "log_menu"
+    elif menu_var.buttons["Zurueck"]:
+        global_var.singleplayer_start = False
+        global_var.menu_state = "main_menu"
 
 
-    elif var.buttons["Anmelden"]:
-        var.client.send_login_data(var.login_name.get_text(), var.login_password.get_text())
-        var.is_await = True
-        Util.clear_input("loginname")
-        Util.clear_input("loginpw")
+    elif menu_var.buttons["Jetzt Anmelden"]:
+        Components.clear_input("loginname")
+        Components.clear_input("loginpw")
+        global_var.menu_state = "log_menu"
 
 
-    elif var.buttons["Schnelles Spiel"] or var.buttons["Lobby erstellen"]:
-        if var.buttons["Schnelles Spiel"]:
-            var.client.get_lobby()
-            var.is_await = True
-        elif var.buttons["Lobby erstellen"]:
-            var.client.create_lobby()
-            var.id_playerList.append(var.client.playersname)
-            var.is_await = True
-
-    elif var.buttons["Verlassen"]:
-        var.client.leave_lobby()
-        var.client.chat_message.clear()
-        var.client.chat_player.clear()
-        var.menu_state = "lobby_option"
-        Util.clear_input("chat")
+    elif menu_var.buttons["Anmelden"]:
+        global_var.client.send_login_data(menu_var.login_name.get_text(), menu_var.login_password.get_text())
+        menu_var.is_await = True
+        Components.clear_input("loginname")
+        Components.clear_input("loginpw")
 
 
+    elif menu_var.buttons["Schnelles Spiel"] or menu_var.buttons["Lobby erstellen"]:
+        if menu_var.buttons["Schnelles Spiel"]:
+            global_var.client.get_lobby()
+            menu_var.is_await = True
+        elif menu_var.buttons["Lobby erstellen"]:
+            global_var.client.create_lobby()
+            global_var.id_playerList.append(global_var.client.playersname)
+            menu_var.is_await = True
+
+    elif menu_var.buttons["Verlassen"]:
+        global_var.client.leave_lobby()
+        global_var.client.chat_message.clear()
+        global_var.client.chat_player.clear()
+        global_var.menu_state = "lobby_option"
+        Components.clear_input("chat")
 
 
-    elif var.buttons["Bereit"]:
-        var.client.notReady()
-        var.is_await = True
+    elif menu_var.buttons["Bereit"]:
+        global_var.client.notReady()
+        menu_var.is_await = True
 
-    elif var.buttons["Nicht Bereit"]:
-        var.client.ready()
-        var.is_await = True
+    elif menu_var.buttons["Nicht Bereit"]:
+        global_var.client.ready()
+        menu_var.is_await = True
 
-    elif var.buttons["Senden"]:
-        var.client.newMessage(var.chat_massage.get_text())
-        Util.clear_input("chat")
+    elif menu_var.buttons["Senden"]:
+        global_var.client.newMessage(menu_var.chat_massage.get_text())
+        Components.clear_input("chat")
 
-    elif var.buttons["Lobby suchen"]:
-        var.menu_state = "search_for_lobby"
+    elif menu_var.buttons["Lobby suchen"]:
+        global_var.menu_state = "search_for_lobby"
 
-    elif var.buttons["Suchen"]:
-        var.client.join_lobby(var.lobby_search_input.get_text())
-        var.is_await = True
-        Util.clear_input("search")
-
-
-    elif var.buttons["Jetzt Registrieren"]:
-        Util.clear_input("registerpw")
-        Util.clear_input("registername")
-        var.menu_state = "registration_menu"
-
-    elif var.buttons["Registrieren"]:
-        var.client.send_register_data(var.register_name.get_text(), var.register_password.get_text())
-        var.is_await = True
-        Util.clear_input("registerpw")
-        Util.clear_input("registername")
-
-    elif var.buttons["Abmelden"]:
-        var.menu_state = "main_menu"
-        var.singleplayer_start = False
-        print("  var.singleplayer_start = False in main Abmelden: " + str(var.singleplayer_start))
-
-    elif var.menu_state == "option_menu":
-        var.manager_option.update(tick)
-
-    elif var.menu_state == "search_for_lobby":
-        var.manager_lobby_search.update(tick)
-
-    elif var.menu_state == "registration_menu":
-        var.manager_register.update(tick)
-
-    elif var.menu_state == "log_menu":
-        var.manager_Login.update(tick)
-
-    elif var.menu_state == "ingame_lobby":
-        var.manager_chat.update(tick)
+    elif menu_var.buttons["Suchen"]:
+        global_var.client.join_lobby(menu_var.lobby_search_input.get_text())
+        menu_var.is_await = True
+        Components.clear_input("search")
 
 
-    Util.reset_buttons()
+    elif menu_var.buttons["Jetzt Registrieren"]:
+        Components.clear_input("registerpw")
+        Components.clear_input("registername")
+        global_var.menu_state = "registration_menu"
+
+    elif menu_var.buttons["Registrieren"]:
+        global_var.client.send_register_data(menu_var.register_name.get_text(), menu_var.register_password.get_text())
+        menu_var.is_await = True
+        Components.clear_input("registerpw")
+        Components.clear_input("registername")
+
+    elif menu_var.buttons["Abmelden"]:
+        global_var.menu_state = "main_menu"
+        global_var.singleplayer_start = False
+
+    elif global_var.menu_state == "option_menu":
+        menu_var.manager_option.update(tick)
+
+    elif global_var.menu_state == "search_for_lobby":
+        menu_var.manager_lobby_search.update(tick)
+
+    elif global_var.menu_state == "registration_menu":
+        menu_var.manager_register.update(tick)
+
+    elif global_var.menu_state == "log_menu":
+        menu_var.manager_Login.update(tick)
+
+    elif global_var.menu_state == "ingame_lobby":
+        menu_var.manager_chat.update(tick)
+
+
+    Button.reset_buttons()
     pygame.display.update()
 
 pygame.quit()
