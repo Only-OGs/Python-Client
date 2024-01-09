@@ -4,7 +4,7 @@ import rendering.globals_vars as var
 from rendering.utility.car_ai import Cars
 from rendering.utility.road import Road
 from rendering.utility.util import Util
-from menu import screens, gui
+from menu import screens, hud
 from rendering.utility.sprite_generator import SpriteGen
 from rendering.utility.render import Render
 from menu.sounds import sounds
@@ -30,7 +30,7 @@ class Game:
         var.play_music = False
         SpriteGen.create_player()
         SpriteGen.create_background()
-        timer = gui.Gui(screen=var.screen)
+        timer = hud.Hud(screen=var.screen)
         var.play_music = False
         sounds.pause_music()
 

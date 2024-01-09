@@ -18,15 +18,15 @@ Screens.create_lobby_search_input()
 gameload = False
 
 
-def lost_connection():
+"""def lost_connection():
     if not var.client.sio.connected:
-        var.menu_state = "main_menu"
+        var.menu_state = "main_menu"""
 
 while run:
     tick = var.clock.tick(var.fps)
     Util.do_after_await()
     Screens.screen_update()
-    lost_connection()
+    """lost_connection()"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False

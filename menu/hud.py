@@ -4,14 +4,14 @@ import rendering.globals_vars as var
 
 
 '''
-In dieser Class, wird das gesamte GUI erstellt.
+In dieser Class, wird das gesamte HUD erstellt.
 Sämtliche Anzeigen werden pro X Framerate mal in der Sekunde ausgegeben.
 Im folgenden Frame werden alle Elemente mit einem Rechteck übermalt,
 um im Anschluss wieder gezeichnet zu werden.
 '''
 
 
-class Gui:
+class Hud:
 
     #init den Timer und die beste Rundenzeit
     def __init__(self, screen):
@@ -40,16 +40,16 @@ class Gui:
 
         # Multiplayer layout
         if var.client.sio.connected:
-            fast_lap = str(var.best_time).replace(";", ":")
-            last_lap = str(var.lap_time).replace(";", ":")
+            fast_lap = str(var.best_time)[:7].replace(";", ":")
+            last_lap = str(var.lap_time)[:7].replace(";", ":")
 
             text = font.render("Schnellste Runde {}".format(fast_lap), True, (var.BLACK))
             text2 = font.render("Letzte Runde: {}".format(last_lap), True, (var.BLACK))
-            self.background_gui(x=var.width // 2 - 175, y=0, width=320, color=var.TRANSPARENT_WHITE, length=80)
+            self.background_gui(x=var.width // 2 - 175, y=0, width=300, color=var.TRANSPARENT_WHITE, length=80)
             self.screen.blit(text, (var.width // 2 - 150, 0 + self.text_offste))
             self.screen.blit(text2, (var.width // 2 - 150, 0 + self.text_offste + 40))
 
-            time = str(var.current_time).replace(";", ":")
+            time = str(var.current_time)[:7].replace(";", ":")
             # schreibt die aktuelle Zeit
             text = font.render("Zeit: {}".format(time), True,(var.BLACK))
             self.background_gui(x=0, y=0, width=200, color=var.TRANSPARENT_WHITE, length=40)
@@ -77,7 +77,7 @@ class Gui:
             text = font.render("Schnellste Runde: {}:{}:{}".format(self.rec_min, self.rec_sec, self.rec_mil_sec), True, (var.BLACK))
             text2 = font.render("Letzte Runde: {}:{}:{}".format(self.last_min, self.last_sec, self.last_mil_sec), True,
                                (var.BLACK))
-            self.background_gui(x=var.width // 2 - 175, y=0, width=320, color=var.TRANSPARENT_WHITE, length=80)
+            self.background_gui(x=var.width // 2 - 175, y=0, width=300, color=var.TRANSPARENT_WHITE, length=80)
             self.screen.blit(text, (var.width // 2 - 150, 0 + self.text_offste))
             self.screen.blit(text2, (var.width // 2 - 150, 0 + self.text_offste + 40))
 
