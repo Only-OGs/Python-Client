@@ -20,9 +20,6 @@ gameload = False
 
 
 while run:
-    tick = var.clock.tick(var.fps)
-    Util.do_after_await()
-    Screens.screen_update()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -43,6 +40,10 @@ while run:
 
         if var.menu_state =="ingame_lobby":
             var.manager_chat.process_events(event)
+
+    tick = var.clock.tick(var.fps)
+    Util.do_after_await()
+    Screens.screen_update()
 
     #Spielt und Pausiert die Musik
     if var.play_music:
