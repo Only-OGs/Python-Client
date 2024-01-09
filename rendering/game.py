@@ -4,7 +4,7 @@ import rendering.globals_vars as var
 from rendering.utility.car_ai import Cars
 from rendering.utility.road import Road
 from rendering.utility.util import Util
-from menu import screens, gui
+from menu import screens, hud
 from rendering.utility.sprite_generator import SpriteGen
 from rendering.utility.render import Render
 from menu.sounds import sounds
@@ -30,9 +30,8 @@ class Game:
         var.play_music = False
         SpriteGen.create_player()
         SpriteGen.create_background()
-        timer = gui.Gui(screen=var.screen)
+        timer = hud.Hud(screen=var.screen)
         var.play_music = False
-        sounds.pause_music()
 
         while True:
             if var.escape:
@@ -83,11 +82,11 @@ class Game:
 
             if var.paused:
                 screens.Screens.create_pause_menu(var.screen)
-
+            print("connected: " + str(var.client.sio.connected) + "vargame_start:" + str(var.game_start))
+            print("singleplayer_start:" +str(var.singleplayer_start))
             if not var.singleplayer_start:
                 screens.Screens.create_countdown_singleplayer(var.screen)
                 var.game_counter += 1
-
             elif var.client.sio.connected and not var.game_start:
                 screens.Screens.create_countdown_multiplayer(var.screen)
             elif var.game_start or var.singleplayer_start:
@@ -115,8 +114,6 @@ class Game:
             else:
                 fps_help = 0
 
-
-
             self.update(min(1 / int(var.clock.get_fps() + fps_help), 60))
 
             pygame.display.update()
@@ -131,6 +128,7 @@ class Game:
             var.keyFaster = False
             var.speed = 0
             var.game_start = False
+            print("var.var.game_start = False im escape: " + str(var.game_start))
             var.game_counter = 0
             var.escape = False
             var.track = None
@@ -139,6 +137,7 @@ class Game:
             var.game_end = False
             var.client.lobbymessage = ''
             var.singleplayer_start = False
+            print("var.singleplayer_start = False im escape: "+ str(var.singleplayer_start))
             var.lap_count = 1
             var.playerX = 0
             var.client.chat_message.clear()
@@ -146,10 +145,16 @@ class Game:
             var.client.time = ""
             var.race_finished = False
             var.play_music = True
+            var.client.is_ready = False
+            var.cars.clear()
+            var.player_cars.clear()
+            var.segments.clear()
+            var.lap = ""
+
 
     def toggle_pause(self):
         var.paused = not var.paused
-        var.keyFaster = not  var.paused
+        var.keyFaster = not var.paused
 
     # unser KeyInputHandler, hier werden die Keyinputs überprüft und das auto dementsprechend bewegt
     def update(self, dt):

@@ -18,16 +18,10 @@ Screens.create_lobby_search_input()
 gameload = False
 
 while run:
-
-    tick = var.clock.tick(var.fps)
-    Util.do_after_await()
-    Screens.screen_update()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
             break
-
-
 
         if var.menu_state == "log_menu":
             var.manager_Login.process_events(event)
@@ -44,11 +38,10 @@ while run:
         if var.menu_state =="ingame_lobby":
             var.manager_chat.process_events(event)
 
-    #Spielt und Pausiert die Musik
-    if var.play_music:
-        sounds.start_music()
-    else:
-        sounds.pause_music()
+    tick = var.clock.tick(var.fps)
+    Util.do_after_await()
+    Screens.screen_update()
+
 
     if var.track is not None and var.singleplayer is not True:
         if not var.is_running:
@@ -70,6 +63,7 @@ while run:
 
     elif var.buttons["Zurueck"]:
         var.singleplayer_start = False
+        print("  var.singleplayer_start = False in main Zurückbutton: "+ str(var.singleplayer_start))
         var.menu_state = "main_menu"
 
 
@@ -100,7 +94,6 @@ while run:
         var.client.chat_message.clear()
         var.client.chat_player.clear()
         var.menu_state = "lobby_option"
-        var.singleplayer_start = False
         Util.clear_input("chat")
 
 
@@ -141,6 +134,7 @@ while run:
     elif var.buttons["Abmelden"]:
         var.menu_state = "main_menu"
         var.singleplayer_start = False
+        print("  var.singleplayer_start = False in main Abmelden: " + str(var.singleplayer_start))
 
     elif var.menu_state == "option_menu":
         var.manager_option.update(tick)

@@ -49,8 +49,8 @@ class Cars:
                         direction = -1
                 return direction * 1 / i * (car.get("speed") - var.speed) / var.maxSpeed
 
-            for n in range(len(segment.get("cars"))):
-                other_car = segment.get("cars")[n]
+
+            for other_car in segment.get("cars"):
                 other_car_w = other_car.get("sprite").get("width") * ((1 / 80) * 0.3)
                 if (car.get("speed") > other_car.get("speed")) and Util.overlap(car.get("offset"), carw,
                                                                                 other_car.get("offset"), other_car_w,

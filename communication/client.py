@@ -104,7 +104,7 @@ class SocketIOClient:
                 message = data.get('message')
                 self.lobbyid = message
     def on_connection_success(self, data):
-        print(f"Verbindung zum Server erfolgreich")
+        pass
 
     def on_newMessage(self, data):
         if self.sio.connected:
@@ -119,7 +119,6 @@ class SocketIOClient:
                 print("Übergebene Daten sind kein String")
 
     def on_search_lobby(self, data):
-        print(data)
         if self.sio.connected:
             self.lobbystatus = data.get("status")
             self.lobbymessage = data.get("message")
@@ -198,12 +197,12 @@ class SocketIOClient:
             var.game_countdown_start = data
             var.gameStart = True
             var.game_start = True
+            print("im client wird game_start auf True gesetzt:" + str(var.game_start))
             self.sio.emit("start_watch")
 
     def on_start_race_timer(self, data):
         if self.sio.connected:
             var.game_countdown_start = data
-            print(data)
 
     def client_is_ingame(self):
         if self.sio.connected:
