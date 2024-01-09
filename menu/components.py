@@ -269,7 +269,6 @@ class Components:
         #Buttons
         Components.zureuck_button(x=var.width // 3 - 300, y=var.height - 150, screen=var.menu_screen)
         Components.abmelden_button(x=var.width // 3, y=var.height - 150, screen=var.menu_screen)
-        Components.einstellungen_button(x=var.width // 3 + 300, y=var.height - 150, screen=var.menu_screen)
 
 
         # Bereitbutton
