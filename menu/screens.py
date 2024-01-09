@@ -21,12 +21,14 @@ class Screens:
         Components.mittlerer_button(screen=screen, text="Einstellungen", trigger="Optionen")
         Components.rechter_button(screen=screen, text="Mehrspieler", trigger="Mehrspieler")
 
+
     @staticmethod
     def create_mulitplayer_screen():
         if not var.client.sio.connected:
             var.client.connect()
         else:
             pass
+        var.connection = True
         var.play_music = True
         var.singleplayer_start = True
         Components.init_background(screen=var.menu_screen)
@@ -35,19 +37,23 @@ class Screens:
         Components.mittlerer_button(screen=var.menu_screen, text="Zurueck", trigger="Zurueck")
         Components.rechter_button(screen=var.menu_screen, text="Registrieren", trigger="Jetzt Registrieren")
 
+
+
     @staticmethod
     def create_option_screen():
         Components.init_background(screen=var.menu_screen)
         Components.linker_button(screen=var.menu_screen, text="Zurueck", trigger="Zurueck")
-        Components.draw_text(screen=var.menu_screen, x=var.slider_width // 2, y=var.height - 150,
-                             text="Musik Lautstaerke", size=31, color=var.WHITE)
+        Components.draw_text(screen=var.menu_screen, x=var.slider_width // 2 + 350, y=var.height - 150,
+                             text="Musik Lautstaerke", size=31, color=var.LIGHT_ORANGE)
         pygame.mixer.music.set_volume(var.music_slider.current_value)
         var.manager_option.draw_ui(var.menu_screen)
+
 
     @staticmethod
     def create_ingame_Lobby():
         Components.init_second_background(var.menu_screen)
         Components.create_ingamelobby(screen=var.menu_screen)
+
 
     @staticmethod
     def create_lobby_screen():
@@ -63,7 +69,6 @@ class Screens:
         Components.log_out_button(screen=var.menu_screen, text="Abmelden")
 
 
-
     @staticmethod
     def create_lobby_search():
         Components.init_second_background(screen=var.menu_screen)
@@ -73,6 +78,7 @@ class Screens:
         Components.rechter_button(screen=var.menu_screen, text="Zurueck", trigger="Verlassen")
         Components.create_lobbystatus_gui()
         var.manager_lobby_search.draw_ui(var.menu_screen)
+
 
     @staticmethod
     def create_log_screen():
@@ -154,7 +160,7 @@ class Screens:
 
 
     '''
-    Updated the wichtigsten Screens
+    Updated die Screens
     '''
     @staticmethod
     def screen_update():
@@ -207,6 +213,7 @@ class Screens:
                                                                  placeholder_text="Passwort")
         var.login_password.set_text_hidden()
 
+
     @staticmethod
     def create_message_output():
         var.manager_chat = pygame_gui.UIManager((var.width, var.height))
@@ -219,10 +226,10 @@ class Screens:
     def create_music_slider():
         var.manager_option = pygame_gui.UIManager((var.width, var.height))
         var.music_slider = pygame_gui.elements.UIHorizontalSlider(
-            relative_rect=pygame.Rect((var.width // 2 - (
-                    var.slider_width // 2), var.height - 100),
-                                      (var.slider_width, var.slider_height)), start_value=0.01,
-            value_range=((0.000), (0.05)), manager=var.manager_option
+            relative_rect=pygame.Rect((var.width // 2 - (var.slider_width // 2), var.height - 100),(var.slider_width, var.slider_height)),
+            start_value=0.025,
+            value_range=((0.000), (0.05)),
+            manager=var.manager_option
         )
 
 
@@ -261,7 +268,6 @@ class Screens:
                     var.game_start = True
                     var.buttons["Einzelspieler"] = False
                     var.singleplayer_start = True
-                    print(var.singleplayer_start)
                     var.game_counter = 0
 
             Components.draw_text(screen=screen, x=var.width // 2, y=var.height // 2, text=countdown, size=90,
@@ -282,4 +288,3 @@ class Screens:
             var.menu_state == "main_menu"
             var.isgame = True
         var.is_running = False
-

@@ -15,14 +15,15 @@ class Gui:
 
     #init den Timer und die beste Rundenzeit
     def __init__(self, screen):
+        #runden Zeit
         self.min = 0
         self.sec = 0
         self.mil_sec = 0
-
+        #Rekord runde
         self.rec_min = 0
         self.rec_sec = 0
         self.rec_mil_sec = 0
-
+        #letzte runde
         self.last_min = 0
         self.last_sec = 0
         self.last_mil_sec = 0
@@ -39,14 +40,18 @@ class Gui:
 
         # Multiplayer layout
         if var.client.sio.connected:
-            text = font.render("Schnellste Runde {}".format(var.best_time), True, (var.BLACK))
-            text2 = font.render("Letzte Runde: {}".format(var.lap_time), True, (var.BLACK))
-            self.background_gui(x=var.width // 2 - 175, y=0, width=300, color=var.TRANSPARENT_WHITE, length=80)
+            fast_lap = str(var.best_time).replace(";", ":")
+            last_lap = str(var.lap_time).replace(";", ":")
+
+            text = font.render("Schnellste Runde {}".format(fast_lap), True, (var.BLACK))
+            text2 = font.render("Letzte Runde: {}".format(last_lap), True, (var.BLACK))
+            self.background_gui(x=var.width // 2 - 175, y=0, width=320, color=var.TRANSPARENT_WHITE, length=80)
             self.screen.blit(text, (var.width // 2 - 150, 0 + self.text_offste))
             self.screen.blit(text2, (var.width // 2 - 150, 0 + self.text_offste + 40))
 
+            time = str(var.current_time).replace(";", ":")
             # schreibt die aktuelle Zeit
-            text = font.render("Zeit: {}".format(var.current_time), True,(var.BLACK))
+            text = font.render("Zeit: {}".format(time), True,(var.BLACK))
             self.background_gui(x=0, y=0, width=200, color=var.TRANSPARENT_WHITE, length=40)
             self.screen.blit(text, (0, 0 + self.text_offste))
 
@@ -72,7 +77,7 @@ class Gui:
             text = font.render("Schnellste Runde: {}:{}:{}".format(self.rec_min, self.rec_sec, self.rec_mil_sec), True, (var.BLACK))
             text2 = font.render("Letzte Runde: {}:{}:{}".format(self.last_min, self.last_sec, self.last_mil_sec), True,
                                (var.BLACK))
-            self.background_gui(x=var.width // 2 - 175, y=0, width=300, color=var.TRANSPARENT_WHITE, length=80)
+            self.background_gui(x=var.width // 2 - 175, y=0, width=320, color=var.TRANSPARENT_WHITE, length=80)
             self.screen.blit(text, (var.width // 2 - 150, 0 + self.text_offste))
             self.screen.blit(text2, (var.width // 2 - 150, 0 + self.text_offste + 40))
 
@@ -81,7 +86,6 @@ class Gui:
             self.background_gui(x=0, y=0, width=200, color=var.TRANSPARENT_WHITE, length=40)
             self.screen.blit(text, (0, 0 + self.text_offste))
 
-    #Beendet den Timer und setzt die neue bestzeit
     def ende_timer(self):
 
         self.last_min = self.min
@@ -100,7 +104,6 @@ class Gui:
 
         self.reset_lap()
 
-    #Setzt den neuen Record
     def set_new_record(self):
         self.rec_min = self.min
         self.rec_sec = self.sec
@@ -111,13 +114,12 @@ class Gui:
         font = pygame.font.SysFont("assets/rocket-rinder-font/RocketRinder-yV5d.ttf", 32)
         text = font.render("{} km/h".format(round(speed/100)), True, (var.BLACK))
         if var.client.sio.connected:
-            textRunde = font.render("Runde: {}".format(var.lap), True, (var.BLACK))
+            textRunde = font.render("Runde: {}/3".format(var.lap), True, (var.BLACK))
         else:
             textRunde = font.render("Runde: {}".format(var.lap_count), True, (var.BLACK))
         self.background_gui(x=var.width-150, y=0, width=150,color=var.TRANSPARENT_WHITE, length=80)
         self.screen.blit(text, (var.width-150, self.text_offste))
         self.screen.blit(textRunde, (var.width - 150, self.text_offste + 40))
-    #Übermalt die Alten GUI elemente damit diese sich nicht Stacken.
     def background_gui(self, x, y, width, color, length):
         rect = pygame.rect.Rect(x, y, width, length)
         shape_surf = pygame.Surface(pygame.Rect(rect).size, pygame.SRCALPHA)

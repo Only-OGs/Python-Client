@@ -104,6 +104,7 @@ game_counter = 0
 game_start = False
 id_playerList = []
 race_finished = False
+connection = False
 """SocketIO"""
 client = SocketIOClient()
 login_name = None

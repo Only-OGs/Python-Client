@@ -17,6 +17,12 @@ Screens.create_music_slider()
 Screens.create_lobby_search_input()
 gameload = False
 
+
+def lost_connection():
+    if not var.connection:
+        var.menu_state = "main_menu"
+
+
 while run:
 
     tick = var.clock.tick(var.fps)
@@ -26,7 +32,6 @@ while run:
         if event.type == pygame.QUIT:
             run = False
             break
-
 
 
         if var.menu_state == "log_menu":
