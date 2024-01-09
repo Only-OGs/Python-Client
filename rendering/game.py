@@ -32,7 +32,6 @@ class Game:
         SpriteGen.create_background()
         timer = hud.Hud(screen=var.screen)
         var.play_music = False
-        sounds.pause_music()
 
         while True:
             if var.escape:

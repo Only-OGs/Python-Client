@@ -17,14 +17,11 @@ Screens.create_music_slider()
 Screens.create_lobby_search_input()
 gameload = False
 
-
-
 while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
             break
-
 
         if var.menu_state == "log_menu":
             var.manager_Login.process_events(event)
@@ -45,11 +42,6 @@ while run:
     Util.do_after_await()
     Screens.screen_update()
 
-    #Spielt und Pausiert die Musik
-    if var.play_music:
-        sounds.start_music()
-    else:
-        sounds.pause_music()
 
     if var.track is not None and var.singleplayer is not True:
         if not var.is_running:
