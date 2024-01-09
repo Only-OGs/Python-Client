@@ -150,6 +150,7 @@ class Game:
             var.cars.clear()
             var.player_cars.clear()
             var.segments.clear()
+            var.lap = ""
 
 
     def toggle_pause(self):

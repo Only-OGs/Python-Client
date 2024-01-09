@@ -40,6 +40,7 @@ class Hud:
 
         # Multiplayer layout
         if var.client.sio.connected:
+
             fast_lap = str(var.best_time)[:7].replace(";", ":")
             last_lap = str(var.lap_time)[:7].replace(";", ":")
 
@@ -49,7 +50,13 @@ class Hud:
             self.screen.blit(text, (var.width // 2 - 150, 0 + self.text_offste))
             self.screen.blit(text2, (var.width // 2 - 150, 0 + self.text_offste + 40))
 
-            time = str(var.current_time)[:7].replace(";", ":")
+            time = ""
+
+            if len(str(var.current_time)) == 7:
+                time = str(var.current_time)[:6].replace(";", ":")
+            else:
+                time = str(var.current_time)[:7].replace(";", ":")
+
             # schreibt die aktuelle Zeit
             text = font.render("Zeit: {}".format(time), True,(var.BLACK))
             self.background_gui(x=0, y=0, width=200, color=var.TRANSPARENT_WHITE, length=40)
