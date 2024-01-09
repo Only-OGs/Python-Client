@@ -12,7 +12,7 @@ height = 886
 SCREEN_WIDTH = 1329
 SCREEN_HEIGHT = 886
 
-"""Colours"""
+"""Farben"""
 BLACK, WHITE, RED, VIOLETTE, CYAN, DARKBLUE, YELLOW, ORANGE = (0, 0, 0), (255, 255, 255), (255, 0, 0), (255, 6, 193), (0, 255, 234), (20, 21, 44), (234, 235, 44), (250, 128, 87)
 DARK_VIOLLETTE, DARK_CYAN, DARK_YELLOW, LIGHT_ORANGE = (186, 46, 151), (55, 214, 201), (234, 235, 117), (255, 151, 116)
 TRANSPARENT_WHITE = (255, 255, 255, 100)
@@ -70,7 +70,7 @@ gameStart = False
 #bool for leaderboard
 game_end = False
 isgame = False
-lap_count = 0
+lap_count = 1
 """Screens"""
 menu_state = "main_menu"
 escape = False
@@ -103,6 +103,7 @@ search_counter = 0
 game_counter = 0
 game_start = False
 id_playerList = []
+race_finished = False
 """SocketIO"""
 client = SocketIOClient()
 login_name = None
@@ -130,11 +131,15 @@ new_car_data = []
 paused = False
 leaderboard = []
 assets = []
+
 """HUD im Online Mouds"""
 lap = ""
 best_time = ""
 lap_time = ""
 current_time = ""
+
+"""Music"""
+play_music = True
 """Background Vars"""
 bg_sky_left = None
 bg_sky_mid = None
@@ -154,3 +159,4 @@ tree_offset = 0.0
 skySpeed = 0.001
 hillSpeed = 0.002
 treeSpeed = 0.003
+
