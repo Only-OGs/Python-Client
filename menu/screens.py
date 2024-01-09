@@ -28,7 +28,6 @@ class Screens:
             var.client.connect()
         else:
             pass
-        var.connection = True
         var.play_music = True
         var.singleplayer_start = True
         Components.init_background(screen=var.menu_screen)

@@ -146,7 +146,7 @@ class Game:
             var.client.time = ""
             var.race_finished = False
             var.play_music = True
-            var.connection = False
+            var.connection_lost = False
 
     def toggle_pause(self):
         var.paused = not var.paused

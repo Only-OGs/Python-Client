@@ -19,8 +19,9 @@ gameload = False
 
 
 def lost_connection():
-    if not var.connection:
+    if var.connection_lost:
         var.menu_state = "main_menu"
+
 
 
 while run:
@@ -28,6 +29,7 @@ while run:
     tick = var.clock.tick(var.fps)
     Util.do_after_await()
     Screens.screen_update()
+    lost_connection()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
