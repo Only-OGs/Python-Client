@@ -30,6 +30,7 @@ class Screens:
             pass
         var.play_music = True
         var.singleplayer_start = True
+        print(" var.singleplayer_start = True in multiplayerscreen:" + str(var.singleplayer_start))
         Components.init_background(screen=var.menu_screen)
         Components.create_Serverstatus_gui()
         Components.linker_button(screen=var.menu_screen, text="Anmelden", trigger="Jetzt Anmelden")
@@ -265,8 +266,10 @@ class Screens:
                 
                 if var.game_counter <= int(var.clock.get_fps())*6:
                     var.game_start = True
+                    print("gamestart in Screens wird auf True gesetzt: "+ str(var.game_start))
                     var.buttons["Einzelspieler"] = False
                     var.singleplayer_start = True
+                    print("singleplayer_start in Screens wird auf True gesetzt: " + str(var.singleplayer_start))
                     var.game_counter = 0
 
             Components.draw_text(screen=screen, x=var.width // 2, y=var.height // 2, text=countdown, size=90,

@@ -83,11 +83,11 @@ class Game:
 
             if var.paused:
                 screens.Screens.create_pause_menu(var.screen)
-
+            print("connected: " + str(var.client.sio.connected) + "vargame_start:" + str(var.game_start))
+            print("singleplayer_start:" +str(var.singleplayer_start))
             if not var.singleplayer_start:
                 screens.Screens.create_countdown_singleplayer(var.screen)
                 var.game_counter += 1
-
             elif var.client.sio.connected and not var.game_start:
                 screens.Screens.create_countdown_multiplayer(var.screen)
             elif var.game_start or var.singleplayer_start:
@@ -139,6 +139,7 @@ class Game:
             var.game_end = False
             var.client.lobbymessage = ''
             var.singleplayer_start = False
+            print("var.singleplayer_start = False im escape: "+ str(var.singleplayer_start))
             var.lap_count = 1
             var.playerX = 0
             var.client.chat_message.clear()
@@ -147,6 +148,10 @@ class Game:
             var.race_finished = False
             var.play_music = True
             var.connection_lost = False
+            var.cars.clear()
+            var.player_cars.clear()
+            var.segments.clear()
+
 
     def toggle_pause(self):
         var.paused = not var.paused

@@ -74,6 +74,7 @@ while run:
 
     elif var.buttons["Zurueck"]:
         var.singleplayer_start = False
+        print("  var.singleplayer_start = False in main Zurückbutton: "+ str(var.singleplayer_start))
         var.menu_state = "main_menu"
 
 
@@ -105,6 +106,7 @@ while run:
         var.client.chat_player.clear()
         var.menu_state = "lobby_option"
         var.singleplayer_start = False
+        print("  var.singleplayer_start = False in main Verlassen: " + str(var.singleplayer_start))
         Util.clear_input("chat")
 
 
@@ -145,6 +147,7 @@ while run:
     elif var.buttons["Abmelden"]:
         var.menu_state = "main_menu"
         var.singleplayer_start = False
+        print("  var.singleplayer_start = False in main Abmelden: " + str(var.singleplayer_start))
 
     elif var.menu_state == "option_menu":
         var.manager_option.update(tick)
