@@ -18,15 +18,11 @@ Screens.create_lobby_search_input()
 gameload = False
 
 
-"""def lost_connection():
-    if not var.client.sio.connected:
-        var.menu_state = "main_menu"""
 
 while run:
     tick = var.clock.tick(var.fps)
     Util.do_after_await()
     Screens.screen_update()
-    """lost_connection()"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -105,8 +101,6 @@ while run:
         var.client.chat_message.clear()
         var.client.chat_player.clear()
         var.menu_state = "lobby_option"
-        var.singleplayer_start = False
-        print("  var.singleplayer_start = False in main Verlassen: " + str(var.singleplayer_start))
         Util.clear_input("chat")
 
 

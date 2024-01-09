@@ -211,9 +211,7 @@ class SocketIOClient:
     def connect(self):
         try:
             self.sio.connect(self.server_url, transports=['websocket'])
-            var.connection_lost = False
         except:
-            var.connection_lost = True
             print("Verbindung fehlgeschlagen")
 
     def emit_coordinate(self):
