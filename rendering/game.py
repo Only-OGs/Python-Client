@@ -115,8 +115,6 @@ class Game:
             else:
                 fps_help = 0
 
-
-
             self.update(min(1 / int(var.clock.get_fps() + fps_help), 60))
 
             pygame.display.update()
@@ -131,6 +129,7 @@ class Game:
             var.keyFaster = False
             var.speed = 0
             var.game_start = False
+            print("var.var.game_start = False im escape: " + str(var.game_start))
             var.game_counter = 0
             var.escape = False
             var.track = None
@@ -147,7 +146,7 @@ class Game:
             var.client.time = ""
             var.race_finished = False
             var.play_music = True
-            var.connection_lost = False
+            var.client.is_ready = False
             var.cars.clear()
             var.player_cars.clear()
             var.segments.clear()
