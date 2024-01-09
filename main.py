@@ -19,13 +19,10 @@ gameload = False
 
 
 def lost_connection():
-    if var.connection_lost:
+    if not var.client.sio.connected:
         var.menu_state = "main_menu"
 
-
-
 while run:
-
     tick = var.clock.tick(var.fps)
     Util.do_after_await()
     Screens.screen_update()
