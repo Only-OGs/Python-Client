@@ -1,6 +1,5 @@
 import globals_vars as var
 import rendering.game_vars as game_var
-import globals_vars as global_var
 
 from rendering.utility.util import Util
 
@@ -70,6 +69,7 @@ class Cars:
 
     @staticmethod
     def update_server_cars():
+        """Iteriert durch jedes Auto, welches vom Server kommt, anhand der ID und updated die position wo es steht"""
         for car in game_var.cars:
             oldsegment = car.get("segment")
             for newcar in var.client.new_car_data:
@@ -90,6 +90,7 @@ class Cars:
 
     @staticmethod
     def update_player(n):
+        """Updated nur für den Spieler wichtige Variablen welche vom Server kommen"""
         var.current_time = n["current_time"]
         var.lap_time = n["lap_time"]
         var.best_time = n["best_time"]

@@ -4,6 +4,7 @@ import pygame
 import globals_vars as var
 import rendering.game_vars as game_var
 
+
 class Util:
 
     def __init__(self):
@@ -11,6 +12,7 @@ class Util:
 
     @staticmethod
     def increase(start, increment, maximum):
+        """Erhöht eine Value so das diese nur zwischen 0 und dem Maximum sein kann"""
         result = start + increment
         while result >= maximum:
             result -= maximum
@@ -28,6 +30,7 @@ class Util:
 
     @staticmethod
     def project(p, camx, camy, camz, camdepth, width, height, roadwidth):
+        """Nimmt 3D Koordinaten und transformiert diese in 2D um"""
         worldx = Util._if_none(p.get("world").get("x"))
         worldy = Util._if_none(p.get("world").get("y"))
         worldz = Util._if_none(p.get("world").get("z"))
@@ -61,10 +64,9 @@ class Util:
         else:
             return value
 
-
-
     @staticmethod
     def segment(screen, width, lanes, x1, y1, w1, x2, y2, w2, color, fog):
+        """Rendert ein Segment anhand 2D Koordinaten"""
         r1 = Util._rumble_width(w1, lanes)
         r2 = Util._rumble_width(w2, lanes)
         l1 = Util._lane_marker_width(w1, lanes)
@@ -97,12 +99,12 @@ class Util:
         pygame.draw.polygon(screen, color, [(x, y), (x + width, y), (x + width, y + height), (x, y + height)])
 
     @staticmethod
-    def _rumble_width(projectedroadwidth, lanes):
-        return projectedroadwidth / max(6, 2 * lanes)
+    def _rumble_width(projected_road_width, lanes):
+        return projected_road_width / max(6, 2 * lanes)
 
     @staticmethod
-    def _lane_marker_width(projectedroadwidth, lanes):
-        return projectedroadwidth / max(32, 8 * lanes)
+    def _lane_marker_width(projected_road_width, lanes):
+        return projected_road_width / max(32, 8 * lanes)
 
     @staticmethod
     def _polygon(screen, x1, y1, x2, y2, x3, y3, x4, y4, color):
@@ -114,6 +116,7 @@ class Util:
 
     @staticmethod
     def fog(screen, x, y, width, height, fog, color):
+        """Rendert den Fog eines Segmentes"""
         if fog < 1:
             rgb = Util.hex_to_rgb(color)
             Util.draw_polygon_alpha(screen, (rgb[0], rgb[1], rgb[2], int((1 - fog) * 255)),
@@ -123,16 +126,15 @@ class Util:
     def hex_to_rgb(hexa):
         return tuple(int(hexa[i:i + 2], 16) for i in (0, 2, 4))
 
-    # von https://stackoverflow.com/a/64630102
     @staticmethod
     def draw_polygon_alpha(surface, color, points):
+        """Rendert ein Polygon welches durchsichtig sein kann"""
         lx, ly = zip(*points)
         min_x, min_y, max_x, max_y = min(lx), min(ly), max(lx), max(ly)
         target_rect = pygame.Rect(min_x, min_y, max_x - min_x, max_y - min_y)
         shape_surf = pygame.Surface(target_rect.size, pygame.SRCALPHA)
         pygame.draw.polygon(shape_surf, color, [(x - min_x, y - min_y) for x, y in points])
         surface.blit(shape_surf, target_rect)
-
 
     @staticmethod
     def easeIn(a, b, percent):
@@ -176,9 +178,11 @@ class Util:
     @staticmethod
     def sprite(screen: pygame.Surface, width, road_width, sprite, sprite_scale, destX, destY,
                offset_x, offset_y, clip_y):
-
+        """Rendert eine Sprite anhand der Koordinaten auf dem Screen"""
         dest_w = int((sprite.get("width") * sprite_scale * width / 2) * (((1 / 80) * 0.3) * road_width))
         dest_h = int((sprite.get("height") * sprite_scale * width / 2) * (((1 / 80) * 0.3) * road_width))
+        # Limiter fürs Upscaling damit Python nicht laggt, da es sonst zu hoch skaliert
+        limiter = 7
 
         if offset_x is None:
             offset_x = 0
@@ -193,11 +197,11 @@ class Util:
         else:
             clip_h = 0
 
-        if clip_h < dest_h and (dest_w <= (sprite.get("width") * 7) or (dest_h <= sprite.get("height") * 7)):
+        if clip_h < dest_h and (dest_w <= (sprite.get("width") * limiter) or (dest_h <= sprite.get("height") * limiter)):
             img = pygame.image.load(sprite.get("asset")).convert_alpha()
             test = pygame.transform.scale(img, (dest_w, dest_h))
             test = pygame.transform.chop(test, (
-            0, test.get_height() - (test.get_height() * clip_h / dest_h), 0, sprite.get("height")))
+                0, test.get_height() - (test.get_height() * clip_h / dest_h), 0, sprite.get("height")))
             screen.blit(test, [destX, destY])
 
     @staticmethod
@@ -207,9 +211,6 @@ class Util:
         else:
             return segments[len(segments) - 1].get("p2").get("world").get("y")
 
-    # hilfsfunktion fürs rendern
     @staticmethod
     def findSegment(z):
         return game_var.segments[math.floor(z / game_var.segmentLength) % len(game_var.segments)]
-
-

@@ -8,8 +8,7 @@ class Render:
     @staticmethod
     def render_sprites(segment):
         """ Rendert Objekte am rande der Straße"""
-        for n in range(len(segment.get("sprites"))):
-            sprite = segment.get("sprites")[n]
+        for sprite in segment.get("sprites"):
             sprite_scale = segment.get("p1").get("screen").get("scale")
             sprite_x = segment.get("p1").get("screen").get("x") + (
                     sprite_scale * sprite.get("offset") * game_var.roadWidth * global_var.width / 2)
@@ -23,7 +22,7 @@ class Render:
 
     @staticmethod
     def render_cars(segment):
-        """ Rendert alle Autos"""
+        """ Rendert alle Autos in einem Segment"""
         for car in segment.get("cars"):
             sprite = car.get("sprite")
             car["percent"] = Util.percent_remaining(car.get("z"), game_var.segmentLength)
@@ -56,7 +55,7 @@ class Render:
         x = 0
         maxy = global_var.height
 
-        Render.render_background(player_y)
+        Render.render_background()
         for n in range(game_var.drawDistance):
             segment = game_var.segments[(base_segment.get("index") + n) % len(game_var.segments)]
             segment_looped = segment.get("index") < base_segment.get("index")
@@ -105,6 +104,7 @@ class Render:
 
             maxy = segment.get("p1").get("screen").get("y")
 
+        # Von Hinten nach Vorne, deswegen wird runter gezählt
         for n in range(game_var.drawDistance - 1, 0, -1):
             segment = game_var.segments[(base_segment.get("index") + n) % len(game_var.segments)]
             Render.render_sprites(segment)
@@ -113,17 +113,16 @@ class Render:
         Render.render_player(player_segment)
 
     @staticmethod
-    def render_background(player_y):
+    def render_background():
         """Methode zum Berechnen und Rendern des Parallax Background"""
         game_var.bg_sky_mid.move(game_var.sky_offset, game_var.screen)
         game_var.bg_hills_mid.move(game_var.hill_offset, game_var.screen)
         game_var.bg_tree_mid.move(game_var.tree_offset, game_var.screen)
 
-        "Alle neu berechneten Background Sprites werden gerendert"
-        game_var.background_sprite_group.draw(game_var.screen)
 
     @staticmethod
     def render_player(player_segment):
+        """Rendert das passende Asset je nach seiner Fahrtrichtung und ob er einen Hügel hinauffährt"""
         uphill = player_segment.get('p2').get('world').get('y') - player_segment.get('p1').get('world').get('y')
         bounce = (player_segment.get('index') % 3) * 1.5
         if global_var.keyLeft:

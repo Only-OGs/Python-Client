@@ -82,7 +82,7 @@ class Road:
 
     @staticmethod
     def add_road(enter, hold, leave, curve, y=0):
-        """ Erstellt einen Straßenabschnitt"""
+        """ Erstellt einen Straßenabschnitt anhand der Parameter"""
         starty = Util.lastY(game_var.segments)
         endy = starty + (int(y) * game_var.segmentLength)
         total = int(enter) + int(hold) + int(leave)
@@ -116,6 +116,7 @@ class Road:
 
     @staticmethod
     def load_road():
+        """Läd die Straße entweder von der road.json oder vom Server"""
         if global_var.singleplayer:
             with open("road.json", "r") as f:
                 data = json.load(f)
