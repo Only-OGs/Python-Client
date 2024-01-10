@@ -21,7 +21,8 @@ class Screens:
         Components.mittlerer_button(screen=screen, text="Einstellungen", trigger="Optionen")
         Components.rechter_button(screen=screen, text="Mehrspieler", trigger="Mehrspieler")
 
-
+    '''Erstellt den Mehrspieler-Bildschirm mit den Anmelde- und Registrierungsbuttons.
+'''
     @staticmethod
     def create_mulitplayer_screen():
         if not var.client.sio.connected:
@@ -37,7 +38,7 @@ class Screens:
         Components.rechter_button(screen=var.menu_screen, text="Registrieren", trigger="Jetzt Registrieren")
 
 
-
+    '''Optionen-Bildschirm mit der Möglichkeit, die Musiklautstärke zu regeln.'''
     @staticmethod
     def create_option_screen():
         Components.init_background(screen=var.menu_screen)
@@ -67,7 +68,7 @@ class Screens:
         Components.quick_game_button(screen=var.menu_screen, text="Schnelles Spiel")
         Components.log_out_button(screen=var.menu_screen, text="Abmelden")
 
-
+    '''Lobby-Suche  '''
     @staticmethod
     def create_lobby_search():
         Components.init_second_background(screen=var.menu_screen)
@@ -78,7 +79,7 @@ class Screens:
         Components.create_lobbystatus_gui()
         menu_var.manager_lobby_search.draw_ui(var.menu_screen)
 
-
+    '''Anmelde-Bildschirm'''
     @staticmethod
     def create_log_screen():
         Components.init_background(screen=var.menu_screen)
@@ -89,6 +90,7 @@ class Screens:
         Components.log_reg_button(screen=var.menu_screen, text="Anmelden")
         menu_var.manager_Login.draw_ui(var.menu_screen)
 
+    '''Registrierungs-Bildschirm'''
     @staticmethod
     def create_registration_screen():
         Components.init_background(screen=var.menu_screen)
@@ -104,13 +106,7 @@ class Screens:
         Components.init_second_background(screen=var.menu_screen)
         Components.create_ingamelobby(screen=var.menu_screen)
 
-    @staticmethod
-    def create_lobby_search_input():
-        menu_var.manager_lobby_search = pygame_gui.UIManager((var.width, var.height))
-        menu_var.lobby_search_input = pygame_gui.elements.UITextEntryLine(
-            relative_rect=pygame.Rect(((var.width - 360) // 2, (var.height - 120) // 2), (360, 60)),
-            manager=menu_var.manager_lobby_search, object_id="#search",
-            placeholder_text="LobbyID")
+
 
     @staticmethod
     def create_loadingscreen(screen):
@@ -159,7 +155,7 @@ class Screens:
 
 
     '''
-    Updated die Screens
+    Aktualisiert den Bildschirm basierend auf dem aktuellen Menüzustand.
     '''
     @staticmethod
     def screen_update():
@@ -208,6 +204,15 @@ class Screens:
                                                                  placeholder_text="Passwort")
         menu_var.login_password.set_text_hidden()
 
+    @staticmethod
+    def create_lobby_search_input():
+        menu_var.manager_lobby_search = pygame_gui.UIManager((var.width, var.height))
+        menu_var.lobby_search_input = pygame_gui.elements.UITextEntryLine(
+            relative_rect=pygame.Rect(((var.width - 360) // 2, (var.height - 120) // 2), (360, 60)),
+            manager=menu_var.manager_lobby_search, object_id="#search",
+            placeholder_text="LobbyID")
+
+
 
     @staticmethod
     def create_message_output():
@@ -226,7 +231,6 @@ class Screens:
             value_range=((0.000), (0.05)),
             manager=menu_var.manager_option
         )
-
 
 
     # Erstellt den Countdown zu beginn eines Spiels - Pro Mulitplayer und pro Singleplayer

@@ -4,13 +4,12 @@ import globals_vars as global_var
 import menu.menu_vars as menu_var
 import rendering.game_vars as game_var
 from menu.button import Button
-
 from menu.screens import Screens
 from menu.components import Components
 from rendering.game import Game
 from menu.sounds import sounds
 
-
+# Initialisert die Musik und die Eingabefelder
 pygame.init()
 sounds.init_music()
 pygame.display.set_caption("OG Racer")
@@ -27,7 +26,7 @@ while run:
         if event.type == pygame.QUIT:
             run = False
             break
-
+        # Je nach aktuellem Menüzustand werden die Ereignisse an die entsprechenden Manager weitergeleitet
         if global_var.menu_state == "log_menu":
             menu_var.manager_Login.process_events(event)
 
@@ -45,9 +44,11 @@ while run:
 
     tick = global_var.clock.tick(global_var.fps)
     Components.do_after_await()
+
+    # Aktualisiert den Bildschirm basierend auf dem aktuellen Menüzustand
     Screens.screen_update()
 
-
+    # Überprüft, ob ein Spiel gestartet werden soll (Singleplayer oder Multiplayer)
     if game_var.track is not None and global_var.singleplayer is not True:
         if not menu_var.is_running:
             global_var.menu_state = "loading"
@@ -57,9 +58,10 @@ while run:
             Game()
             global_var.isgame = False
 
+    # Startet das Einzelspieler-Spiel, wenn der entsprechende Button gedrückt wurde
     if menu_var.buttons["Einzelspieler"]:
         Game()
-
+    # Ändert den Menüzustand basierend auf den gedrückten Buttons
     elif menu_var.buttons["Mehrspieler"]:
         global_var.menu_state = "multiplayer_menu"
 
@@ -77,7 +79,7 @@ while run:
         global_var.menu_state = "log_menu"
 
 
-    elif menu_var.buttons["Anmelden"]:
+    elif menu_var.buttons["Anmelden"]: # Sendet die Anmeldedaten an den Server
         global_var.client.send_login_data(menu_var.login_name.get_text(), menu_var.login_password.get_text())
         menu_var.is_await = True
         Components.clear_input("loginname")
@@ -86,15 +88,15 @@ while run:
 
     elif menu_var.buttons["Schnelles Spiel"] or menu_var.buttons["Lobby erstellen"]:
         if menu_var.buttons["Schnelles Spiel"]:
-            global_var.client.get_lobby()
+            global_var.client.get_lobby() # Sucht die nächte offene Lobby
             menu_var.is_await = True
         elif menu_var.buttons["Lobby erstellen"]:
-            global_var.client.create_lobby()
+            global_var.client.create_lobby() # Erstellt eigene Lobby
             global_var.id_playerList.append(global_var.client.playersname)
             menu_var.is_await = True
 
     elif menu_var.buttons["Verlassen"]:
-        global_var.client.leave_lobby()
+        global_var.client.leave_lobby() #Verlässt die Lobby
         global_var.client.chat_message.clear()
         global_var.client.chat_player.clear()
         global_var.menu_state = "lobby_option"
@@ -114,7 +116,7 @@ while run:
         Components.clear_input("chat")
 
     elif menu_var.buttons["Lobby suchen"]:
-        global_var.menu_state = "search_for_lobby"
+        global_var.menu_state = "search_for_lobby"  # Führt zum "Suche Lobby"-Bildschirm
 
     elif menu_var.buttons["Suchen"]:
         global_var.client.join_lobby(menu_var.lobby_search_input.get_text())
