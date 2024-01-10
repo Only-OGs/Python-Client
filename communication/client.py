@@ -177,7 +177,7 @@ class SocketIOClient:
         if self.sio.connected:
             self.timer = countdown
 
-    def on_timer_off(self):
+    def on_timer_off(self, args):
         if self.sio.connected:
             self.timer = None
 
