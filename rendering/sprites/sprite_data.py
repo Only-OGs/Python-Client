@@ -1,10 +1,12 @@
 import random
 
 
-class Sprite:
+class SpriteData:
 
     @staticmethod
     def random_car(rand=None):
+        """Gibt ein zufälliges Auto zurück wenn kein Paramter gegeben ist, sonst das passende Auto anhand
+        festgelegter Zahlen """
         if rand is None:
             r = random.randint(0, 5)
         else:
@@ -27,6 +29,8 @@ class Sprite:
 
     @staticmethod
     def random_asset(asset=None):
+        """Gibt ein zufälliges Asset zurück wenn kein Paramter gegeben ist, sonst das passende Asset anhand
+        festgelegter Zahlen """
         if asset is None:
             r = random.randint(0, 23)
         else:
