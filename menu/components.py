@@ -165,7 +165,8 @@ class Components:
 
     # Status - GUI erstellen:
     '''
-    Zeigt die verschiedenen vom Server für den User an 
+    Zeigt den Serverstatus (Online/Offline) auf dem Bildschirm an.
+
     '''
     @staticmethod
     def create_Serverstatus_gui():
@@ -176,7 +177,7 @@ class Components:
         Components.draw_text(screen=global_var.menu_screen, x=100, y=100, text="Server:", size=17, color="WHITE")
 
 
-
+    '''Zeigt den Loginstatus oder Fehlermeldung an und startet einen Timer, um die Anzeige zu entfernen.'''
     @staticmethod
     def create_loginstatus_gui(text):
         if text == "login":
@@ -190,6 +191,7 @@ class Components:
             if not menu_var.is_running:
                 thread = threading.Thread(target=Components.start_timer_in_thread, args=(3, "login"))
                 thread.start()
+    '''Zeigt den Registerstatus oder Fehlermeldung an und startet einen Timer, um die Anzeige zu entfernen.'''
     @staticmethod
     def create_registerstatus_gui(text):
         if text == "register":
@@ -203,7 +205,7 @@ class Components:
             if not menu_var.is_running:
                 thread = threading.Thread(target=Components.start_timer_in_thread, args=(3, "register"))
                 thread.start()
-
+    '''Zeigt die Lobbystatusmeldung an und startet einen Timer, um die Anzeige zu entfernen.'''
     @staticmethod
     def create_lobbystatus_gui():
         if global_var.client.lobbymessage != '':
@@ -231,7 +233,7 @@ class Components:
             global_var.isgame = True
         menu_var.is_running = False
 
-
+    '''Warten auf die Serverantwort'''
     @staticmethod
     def do_after_await():
         if menu_var.is_await:
@@ -259,6 +261,8 @@ class Components:
                 menu_var.is_await = False
                 global_var.menu_state = "ingame_lobby"
 
+
+    '''Leert die Eingabefelder je nach übergebenem Text.'''
     @staticmethod
     def clear_input(text):
         if text == "loginname":
@@ -274,7 +278,7 @@ class Components:
         elif text == "search":
             menu_var.lobby_search_input.set_text('')
 
-
+    '''GUI-Komponenten für den Ingame-Lobby-Bildschirm.'''
     @staticmethod
     def create_ingamelobby(screen):
 

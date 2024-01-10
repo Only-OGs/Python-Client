@@ -56,7 +56,7 @@ class Button:
         screen.blit(img, (self.x - 90, self.y - 15))
 
     ''' 
-    Erstellt die Funktionalität hinter dem button.
+    Überprüft, ob der Mauszeiger über dem Button ist und die linke Maustaste gedrückt wurde.
     '''
 
     def check(self):
@@ -77,6 +77,8 @@ class Button:
 
         return action
 
+
+    '''Statische Methode, die das clicked-Flag für alle Buttons zurücksetzt.'''
     @staticmethod
     def reset_buttons():
         for x in menuvar.buttons:
